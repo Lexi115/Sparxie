@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: game
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/game/**
+              filters:
+                - StripPrefix=1
+server:
+  port: 8080
