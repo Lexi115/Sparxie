@@ -13,6 +13,7 @@
     <modules>
         <module>gacha</module>
         <module>game</module>
+        <module>gateway</module>
     </modules>
 
 </project>
