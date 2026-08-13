@@ -2,7 +2,6 @@
 target/
 *.jar
 *.war
-*.class
 
 # Version Control & Logs
 .git/
@@ -26,3 +25,4 @@ target/
 .DS_Store
 Thumbs.db
 .env
+data/

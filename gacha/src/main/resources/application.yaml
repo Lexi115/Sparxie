@@ -1,3 +1,8 @@
 spring:
   application:
     name: gacha
+
+app:
+  storage:
+    root-path: ${APP_STORAGE_ROOT:/var/lib/sparxie/gacha}
+    banners-path: ${app.storage.root-path}/banners

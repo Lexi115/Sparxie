@@ -1,10 +1,11 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -12,14 +13,22 @@ import java.util.*;
 @Repository
 public class BannerRepositoryImpl implements BannerRepository {
 
-    private final String bannerDirPath = "C:\\Users\\keite\\IdeaProjects\\Sparxie\\gacha\\src\\main\\resources\\banners";
+    private final ResourceLoader resourceLoader;
+
+    @Value("${app.storage.banners-path}")
+    private String bannerDirPath;
+
+    public BannerRepositoryImpl(final ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     @Override
-    public Optional<Banner> getById(String id) {
-        var filePath = bannerDirPath + "/" + id + ".json";
-        try (var stream = new FileInputStream(filePath)) {
+    public Optional<Banner> getById(final String id) {
+        var prefix = id.startsWith("default_") ? "classpath:data/banners" : "file:" + bannerDirPath;
+        try (var stream = resourceLoader.getResource(prefix + "/" + id + ".json").getInputStream()) {
             return Optional.of(loadBanner(stream));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             return Optional.empty();
         }
     }

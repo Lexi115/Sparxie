@@ -1,18 +1,21 @@
-package io.lexi115.sparxie.gacha.system;
+package io.lexi115.sparxie.game.economy;
 
-import io.lexi115.sparxie.gacha.banner.BannerCurrency;
-import io.lexi115.sparxie.gacha.player.PlayerNotFoundException;
+import io.lexi115.sparxie.game.banner.BannerCurrency;
+import io.lexi115.sparxie.game.player.PlayerNotFoundException;
+import io.lexi115.sparxie.game.system.InsufficientFundsException;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class EconomyClientImpl implements EconomyClient {
 
     private final Map<String, Map<BannerCurrency, Integer>> map = new HashMap<>(Map.of(
-        "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
-            BannerCurrency.LIMITED_TICKET, 999999999,
-            BannerCurrency.STANDARD_TICKET, 2
-        )))
+            "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
+                    BannerCurrency.LIMITED_TICKET, 999999999,
+                    BannerCurrency.STANDARD_TICKET, 2
+            )))
     );
 
     @Override

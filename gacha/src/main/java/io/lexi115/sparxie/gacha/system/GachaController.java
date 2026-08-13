@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.gacha.system;
 
-import io.lexi115.sparxie.gacha.banner.BannerMapper;
-import io.lexi115.sparxie.gacha.banner.BannerPullRequest;
+import io.lexi115.sparxie.gacha.banner.dto.BannerMapper;
+import io.lexi115.sparxie.gacha.banner.dto.BannerPullRequest;
 import io.lexi115.sparxie.gacha.banner.dto.BannerPullResultDto;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

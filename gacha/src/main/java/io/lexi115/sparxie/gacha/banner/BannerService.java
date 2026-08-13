@@ -1,9 +1,8 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import io.lexi115.sparxie.gacha.banner.dto.BannerMapper;
 import io.lexi115.sparxie.gacha.cache.Cache;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 
 @Service
 public class BannerService {
@@ -31,29 +30,21 @@ public class BannerService {
         if (cachedBanner != null) {
             return cachedBanner;
         }
-        var bannerTypeString = Arrays.stream(id.split("_")).findFirst().orElse(null);
-        if (bannerTypeString == null) {
-            return null;
-        }
-        var cachedTemplate = cache.get(bannerTypeString + "_default");
-        if (cachedTemplate == null) {
-            return null;
-        }
         var edits = bannerRepository.getById(id).orElse(null);
-        if (edits == null) {
+        if (edits == null || edits.getType() == null) {
             return null;
         }
-
-        var merged = bannerMapper.merge(cachedTemplate, edits);
+        var cachedTemplate = cache.get("default_" + edits.getType().name().toLowerCase());
+        var merged = cachedTemplate == null ? edits : bannerMapper.merge(cachedTemplate, edits);
         cache.set(id, merged, config.getCacheForMillis());
         return merged;
     }
 
     private void init() {
-        var defaultCharacterBanner = bannerRepository.getById("character_default").orElseThrow();
-        var defaultWeaponBanner = bannerRepository.getById("weapon_default").orElseThrow();
-        cache.set(defaultCharacterBanner.getId(), defaultCharacterBanner);
-        cache.set(defaultWeaponBanner.getId(), defaultWeaponBanner);
+        for (var type : BannerType.values()) {
+            bannerRepository.getById("default_" + type.name().toLowerCase())
+                    .ifPresent(defaultBanner -> cache.set(defaultBanner.getId(), defaultBanner));
+        }
     }
 
 }

@@ -1,0 +1,33 @@
+package io.lexi115.sparxie.gacha.banner;
+
+import io.lexi115.sparxie.gacha.banner.dto.BannerDetailsDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerMapper;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/banner")
+public class BannerController {
+    private final BannerService bannerService;
+    private final BannerMapper bannerMapper;
+
+    public BannerController(final BannerService bannerService, final BannerMapper bannerMapper) {
+        this.bannerService = bannerService;
+        this.bannerMapper = bannerMapper;
+    }
+
+    @GetMapping("/{id}")
+    public BannerDto getById(@PathVariable final String id) {
+        var banner = bannerService.getById(id);
+        return bannerMapper.toDto(banner);
+    }
+
+    @GetMapping("/details/{id}")
+    public BannerDetailsDto getDetailsById(@PathVariable final String id) {
+        var banner = bannerService.getById(id);
+        return bannerMapper.toDetailsDto(banner);
+    }
+}

@@ -1,10 +1,13 @@
-package io.lexi115.sparxie.gacha.system;
+package io.lexi115.sparxie.game.economy;
 
-import io.lexi115.sparxie.gacha.banner.BannerCurrency;
+import io.lexi115.sparxie.game.banner.BannerCurrency;
 
 public interface EconomyClient {
     int getBalance(String playerId, BannerCurrency currency);
+
     void setBalance(String playerId, BannerCurrency currency, final int amount);
+
     void deposit(String playerId, BannerCurrency currency, final int amount);
+
     void withdraw(String playerId, BannerCurrency currency, final int amount);
 }

@@ -21,7 +21,7 @@ public class Banner implements Cloneable {
     private Map<StarRarity, NavigableMap<Integer, Double>> rarityRates;
     private Map<StarRarity, Double> winRates;
 
-    public PulledBannerItem pull(PlayerPity playerPity) {
+    public PulledBannerItem pull(final PlayerPity playerPity) {
         var fourStarPity = playerPity.getPity(type, StarRarity.FOUR);
         var fiveStarPity = playerPity.getPity(type, StarRarity.FIVE);
         var fourStarRate = getRarityRates(StarRarity.FOUR, fourStarPity);
@@ -59,13 +59,6 @@ public class Banner implements Cloneable {
         }
         var probability = thresholdsMap.floorEntry(pityValue);
         return probability == null ? 0.0 : probability.getValue();
-    }
-
-    public int getCost(int pullAmount) {
-        if (pullAmount < 0) {
-            throw new IllegalArgumentException("Amount cannot be negative");
-        }
-        return this.costs.getOrDefault(pullAmount, costs.getOrDefault(1, 0) * pullAmount);
     }
 
     @Override

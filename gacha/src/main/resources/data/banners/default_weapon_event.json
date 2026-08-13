@@ -1,6 +1,6 @@
 {
-  "id": "weapon_default",
-  "name": "template weapon banner",
+  "id": "default_weapon_event",
+  "name": "default_weapon_event",
   "type": "weapon_event",
   "currency": "limited_ticket",
   "costs": {

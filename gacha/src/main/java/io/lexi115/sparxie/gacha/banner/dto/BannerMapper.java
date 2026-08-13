@@ -1,19 +1,18 @@
-package io.lexi115.sparxie.gacha.banner;
+package io.lexi115.sparxie.gacha.banner.dto;
 
-import io.lexi115.sparxie.gacha.banner.dto.BannerItemDto;
-import io.lexi115.sparxie.gacha.banner.dto.BannerPullResultDto;
-import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItemDto;
-import org.springframework.stereotype.Component;
+import io.lexi115.sparxie.gacha.banner.Banner;
+import io.lexi115.sparxie.gacha.banner.BannerItem;
+import io.lexi115.sparxie.gacha.banner.PulledBannerItem;
+import io.lexi115.sparxie.gacha.util.EnumMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
-@Component
-public class BannerMapper {
+@Mapper(componentModel = "spring", uses = EnumMapper.class)
+public interface BannerMapper {
 
-    public Banner merge(final Banner template, final Banner edits) {
+    default Banner merge(final Banner template, final Banner edits) {
         if (template == null || edits == null) {
             return null;
         }
@@ -60,16 +59,18 @@ public class BannerMapper {
         return merged;
     }
 
-    public BannerPullResultDto toDto(final BannerPullResult original) {
-        var pulledItemsDtoList = original.items().stream().map(this::toDto).toList();
-        return new BannerPullResultDto(original.bannerType().toString().toLowerCase(), pulledItemsDtoList);
-    }
+    BannerPullResultDto toDto(BannerPullResult original);
 
-    public PulledBannerItemDto toDto(final PulledBannerItem original) {
-        return new PulledBannerItemDto(toDto(original.item()), original.outcome().toString().toLowerCase());
-    }
+    BannerDto toDto(Banner original);
 
-    public BannerItemDto toDto(final BannerItem original) {
-        return new BannerItemDto(original.id(), original.rarity().toString().toLowerCase());
+    BannerDetailsDto toDetailsDto(Banner original);
+
+    @Mapping(source = "item", target = "itemId")
+    PulledBannerItemDto toDto(PulledBannerItem original);
+
+    List<Long> mapToIds(List<BannerItem> value);
+
+    default Long mapToId(final BannerItem item) {
+        return item == null ? null : item.id();
     }
 }

@@ -1,8 +1,8 @@
 {
-  "id": "character_default",
-  "name": "template character banner",
-  "type": "character_event",
-  "currency": "limited_ticket",
+  "id": "default_standard_event",
+  "name": "default_standard_event",
+  "type": "standard_event",
+  "currency": "standard_ticket",
   "costs": {
     "1": 1
   },

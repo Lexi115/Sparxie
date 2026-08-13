@@ -3,9 +3,13 @@ services:
     container_name: gacha
     build:
       context: ./gacha
+    env_file:
+      - gacha/.env
     ports:
       - "8082:8080"
     restart: on-failure
+    volumes:
+      - ./gacha/data:/var/lib/sparxie/gacha
 
   game:
     container_name: game
