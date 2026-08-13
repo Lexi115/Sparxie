@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.system;
+package io.lexi115.sparxie.gacha.event;
 
 import java.util.List;
 

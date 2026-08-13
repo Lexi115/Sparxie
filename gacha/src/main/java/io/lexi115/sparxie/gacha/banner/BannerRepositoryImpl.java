@@ -12,7 +12,7 @@ import java.util.*;
 @Repository
 public class BannerRepositoryImpl implements BannerRepository {
 
-    private final String bannerDirPath = "/Users/lexi/IdeaProjects/sparxie-prototype-2/src/main/resources/banners";
+    private final String bannerDirPath = "C:\\Users\\keite\\IdeaProjects\\Sparxie\\gacha\\src\\main\\resources\\banners";
 
     @Override
     public Optional<Banner> getById(String id) {

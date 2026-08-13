@@ -4,9 +4,8 @@ import io.lexi115.sparxie.gacha.banner.BannerNotFoundException;
 import io.lexi115.sparxie.gacha.banner.BannerPullRequest;
 import io.lexi115.sparxie.gacha.banner.BannerPullResult;
 import io.lexi115.sparxie.gacha.banner.BannerService;
+import io.lexi115.sparxie.gacha.event.ItemsPulledEvent;
 import io.lexi115.sparxie.gacha.messaging.MessagePublisher;
-
-import java.util.List;
 
 public class GachaGateway {
 
@@ -22,7 +21,7 @@ public class GachaGateway {
         this.messagePublisher = messagePublisher;
     }
 
-    public List<BannerPullResult> pull(final BannerPullRequest request) {
+    public BannerPullResult pull(final BannerPullRequest request) {
         var banner = bannerService.getById(request.bannerId());
         if (banner == null) {
             throw new BannerNotFoundException();
@@ -33,13 +32,13 @@ public class GachaGateway {
         economyClient.withdraw(playerId, banner.getCurrency(), banner.getCost(request.amount()));
 
         // pull
-        var results = gachaService.pull(request);
-        var itemIds = results.stream().map(result -> result.item().id()).toList();
+        var result = gachaService.pull(request);
+        var itemIds = result.items().stream().map(pulledItem -> pulledItem.item().id()).toList();
 
         // send event to inventory microservice
         var event = new ItemsPulledEvent(playerId, itemIds);
         messagePublisher.publish(event, ItemsPulledEvent.class, "gacha-topic");
 
-        return results;
+        return result;
     }
 }

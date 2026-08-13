@@ -4,6 +4,6 @@ import java.util.List;
 
 public record BannerPullResult(
         BannerType bannerType,
-        List<BannerItem> items
+        List<PulledBannerItem> items
 ) {
 }

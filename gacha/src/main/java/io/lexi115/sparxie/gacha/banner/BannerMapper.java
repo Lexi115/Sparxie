@@ -1,5 +1,8 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import io.lexi115.sparxie.gacha.banner.dto.BannerItemDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerPullResultDto;
+import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItemDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -57,4 +60,16 @@ public class BannerMapper {
         return merged;
     }
 
+    public BannerPullResultDto toDto(final BannerPullResult original) {
+        var pulledItemsDtoList = original.items().stream().map(this::toDto).toList();
+        return new BannerPullResultDto(original.bannerType().toString().toLowerCase(), pulledItemsDtoList);
+    }
+
+    public PulledBannerItemDto toDto(final PulledBannerItem original) {
+        return new PulledBannerItemDto(toDto(original.item()), original.outcome().toString().toLowerCase());
+    }
+
+    public BannerItemDto toDto(final BannerItem original) {
+        return new BannerItemDto(original.id(), original.rarity().toString().toLowerCase());
+    }
 }

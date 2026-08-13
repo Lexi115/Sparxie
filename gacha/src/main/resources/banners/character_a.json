@@ -1,0 +1,15 @@
+{
+  "id": "character_a",
+  "name": "character A",
+  "type": "character_event",
+  "winPool": {
+    "four": [
+      1,
+      2,
+      3444444
+    ],
+    "five": [
+      4
+    ]
+  }
+}

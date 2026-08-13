@@ -21,7 +21,7 @@ public class Banner implements Cloneable {
     private Map<StarRarity, NavigableMap<Integer, Double>> rarityRates;
     private Map<StarRarity, Double> winRates;
 
-    public BannerItem pull(PlayerPity playerPity) {
+    public PulledBannerItem pull(PlayerPity playerPity) {
         var fourStarPity = playerPity.getPity(type, StarRarity.FOUR);
         var fiveStarPity = playerPity.getPity(type, StarRarity.FIVE);
         var fourStarRate = getRarityRates(StarRarity.FOUR, fourStarPity);
@@ -29,24 +29,12 @@ public class Banner implements Cloneable {
         var randomizer = ThreadLocalRandom.current();
         var roll = randomizer.nextDouble();
 
-        // 5-star
-        if (roll < fiveStarRate) {
-            var outcome = decideOutcome(StarRarity.FIVE, playerPity.isGuaranteed(type, StarRarity.FIVE));
-            var item = chooseItem(StarRarity.FIVE, outcome);
-            return new BannerPullResult(type, item, outcome, fiveStarPity + 1, fiveStarPity + 1);
-        }
-
-        // 4-star
-        if (roll < fourStarRate + fiveStarRate) {
-            var outcome = decideOutcome(StarRarity.FOUR, playerPity.isGuaranteed(type, StarRarity.FOUR));
-            var item = chooseItem(StarRarity.FOUR, outcome);
-            return new BannerPullResult(type, item, outcome, fourStarPity + 1, fiveStarPity + 1);
-        }
-
-        // 3-star
-        var outcome = decideOutcome(StarRarity.THREE, false);
-        var item = chooseItem(StarRarity.THREE, outcome);
-        return new BannerPullResult(type, item, outcome, 1, fiveStarPity + 1);
+        var starRarity = (roll < fiveStarRate) ? StarRarity.FIVE
+                : (roll < fourStarRate + fiveStarRate) ? StarRarity.FOUR
+                  : StarRarity.THREE;
+        var outcome = decideOutcome(starRarity, playerPity.isGuaranteed(type, starRarity));
+        var item = chooseItem(starRarity, outcome);
+        return new PulledBannerItem(item, outcome);
     }
 
     private BannerItem chooseItem(StarRarity rarity, BannerPullOutcome outcome) {
@@ -60,8 +48,8 @@ public class Banner implements Cloneable {
         var randomizer = ThreadLocalRandom.current();
         return rarity == StarRarity.THREE ? BannerPullOutcome.LOSS
                 : guaranteed ? BannerPullOutcome.GUARANTEED
-                : (randomizer.nextDouble() < winRates.get(rarity)) ? BannerPullOutcome.WIN
-                : BannerPullOutcome.LOSS;
+                  : (randomizer.nextDouble() < winRates.get(rarity)) ? BannerPullOutcome.WIN
+                    : BannerPullOutcome.LOSS;
     }
 
     private Double getRarityRates(StarRarity rarity, Integer pityValue) {
