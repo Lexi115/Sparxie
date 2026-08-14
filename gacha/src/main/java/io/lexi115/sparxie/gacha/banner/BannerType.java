@@ -2,7 +2,9 @@ package io.lexi115.sparxie.gacha.banner;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
+@Getter
 public enum BannerType {
     CHARACTER_EVENT("character_event"),
     WEAPON_EVENT("weapon_event"),

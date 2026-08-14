@@ -1,10 +1,8 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.banner.dto.BannerDetailsDto;
-import io.lexi115.sparxie.gacha.banner.dto.BannerDto;
-import io.lexi115.sparxie.gacha.banner.dto.BannerPullResult;
-import io.lexi115.sparxie.gacha.banner.dto.BannerPullResultDto;
+import io.lexi115.sparxie.gacha.banner.dto.*;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.*;
 
@@ -60,25 +58,32 @@ public interface BannerMapper {
 
     BannerPullResultDto toDto(BannerPullResult original);
 
+    @Mapping(source = "item", target = "itemId")
+    PulledBannerItemDto map(PulledBannerItem original);
+
     BannerDto toDto(Banner original);
 
     BannerDetailsDto toDetailsDto(Banner original);
 
-    Map<Integer, List<Long>> mapPool(Map<StarRarity, List<BannerItem>> pool);
-
-    Map<Integer, Double> mapRates(Map<StarRarity, Double> rates);
-
-    Map<Integer, NavigableMap<Integer, Double>> mapRarity(Map<StarRarity, NavigableMap<Integer, Double>> rarityRates);
-
-    default Long map(final BannerItem item) {
-        return item == null ? null : item.id();
+    default Long map(final BannerItem original) {
+        return original == null ? null : original.id();
     }
 
-    default Integer map(final StarRarity rarity) {
-        return rarity == null ? null : rarity.toJson();
+    default String map(final BannerType original) {
+        return original == null ? null : original.getValue();
     }
 
-    default StarRarity map(final Integer value) {
-        return value == null ? null : StarRarity.fromJson(String.valueOf(value));
+    default String map(final BannerCurrency original) {
+        return original == null ? null : original.getValue();
     }
+
+    default Integer map(final StarRarity original) {
+        return original == null ? null : original.getValue();
+    }
+
+    default String map(final BannerPullOutcome original) {
+        return original == null ? null : original.getValue();
+    }
+
+    List<Long> map(List<BannerItem> original);
 }
