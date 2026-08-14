@@ -7,7 +7,6 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 @Repository
@@ -24,27 +23,31 @@ public class BannerRepositoryImpl implements BannerRepository {
 
     @Override
     public Optional<Banner> getById(final String id) {
-        var prefix = id.startsWith("default_") ? "classpath:data/banners" : "file:" + bannerDirPath;
-        try (var stream = resourceLoader.getResource(prefix + "/" + id + ".json").getInputStream()) {
-            return Optional.of(loadBanner(stream));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
-        }
+        return loadBanner(id, false);
     }
 
-    private Banner loadBanner(final InputStream stream) {
-        var objectMapper = new ObjectMapper();
-        var rootNode = objectMapper.reader().readTree(stream);
-        var banner = new Banner();
+    @Override
+    public Optional<Banner> getDefaultById(final String id) {
+        return loadBanner(id, true);
+    }
 
-        setBannerInfo(banner, rootNode);
-        setPools(banner, rootNode);
-        setRarityRates(banner, rootNode);
-        setWinRates(banner, rootNode);
-        setCosts(banner, rootNode);
+    private Optional<Banner> loadBanner(final String id, final boolean isDefault) {
+        var prefix = isDefault ? "classpath:data/banners" : "file:" + bannerDirPath;
+        try (var stream = resourceLoader.getResource(prefix + "/" + id + ".json").getInputStream()) {
+            var objectMapper = new ObjectMapper();
+            var rootNode = objectMapper.reader().readTree(stream);
+            var banner = new Banner();
 
-        return banner;
+            setBannerInfo(banner, rootNode);
+            setPools(banner, rootNode);
+            setRarityRates(banner, rootNode);
+            setWinRates(banner, rootNode);
+            setCosts(banner, rootNode);
+
+            return Optional.of(banner);
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     private void setBannerInfo(final Banner banner, final JsonNode rootNode) {
@@ -58,7 +61,7 @@ public class BannerRepositoryImpl implements BannerRepository {
             banner.setType(BannerType.valueOf(rootNode.get("type").asString().toUpperCase()));
         }
         if (rootNode.has("currency")) {
-            banner.setCurrency(BannerCurrency.fromJson(rootNode.get("currency").asString()));
+            banner.setCurrency(BannerCurrency.valueOf(rootNode.get("currency").asString().toUpperCase()));
         }
     }
 
@@ -120,7 +123,7 @@ public class BannerRepositoryImpl implements BannerRepository {
                 if (rarityNode != null) {
                     var rarityList = new ArrayList<BannerItem>();
                     for (JsonNode itemNode : rarityNode) {
-                        var itemId = itemNode.asLong();
+                        var itemId = itemNode.asString();
                         var item = new BannerItem(itemId, rarity);
                         rarityList.add(item);
                     }

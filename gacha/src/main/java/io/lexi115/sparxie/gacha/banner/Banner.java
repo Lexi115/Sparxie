@@ -1,7 +1,8 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItem;
 import io.lexi115.sparxie.gacha.player.PlayerPity;
+import io.lexi115.sparxie.gacha.warp.WarpOutcome;
+import io.lexi115.sparxie.gacha.warp.WarpResultItem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,7 @@ public class Banner implements Cloneable {
     private Map<StarRarity, NavigableMap<Integer, Double>> rarityRates;
     private Map<StarRarity, Double> winRates;
 
-    public PulledBannerItem pull(final PlayerPity playerPity) {
+    public WarpResultItem pull(final PlayerPity playerPity) {
         var fourStarPity = playerPity.getPity(type, StarRarity.FOUR);
         var fiveStarPity = playerPity.getPity(type, StarRarity.FIVE);
         var fourStarRate = getRarityRates(StarRarity.FOUR, fourStarPity);
@@ -35,22 +36,22 @@ public class Banner implements Cloneable {
                 : StarRarity.THREE;
         var outcome = decideOutcome(starRarity, playerPity.isGuaranteed(type, starRarity));
         var item = chooseItem(starRarity, outcome);
-        return new PulledBannerItem(item, outcome);
+        return new WarpResultItem(item, outcome);
     }
 
-    private BannerItem chooseItem(StarRarity rarity, BannerPullOutcome outcome) {
+    private BannerItem chooseItem(StarRarity rarity, WarpOutcome outcome) {
         var randomizer = ThreadLocalRandom.current();
         var chosenList = (rarity == StarRarity.THREE) ? lossPool.get(rarity)
-                : (outcome != BannerPullOutcome.LOSS) ? winPool.get(rarity) : lossPool.get(rarity);
+                : (outcome != WarpOutcome.LOSS) ? winPool.get(rarity) : lossPool.get(rarity);
         return chosenList.get(randomizer.nextInt(chosenList.size()));
     }
 
-    private BannerPullOutcome decideOutcome(StarRarity rarity, boolean guaranteed) {
+    private WarpOutcome decideOutcome(StarRarity rarity, boolean guaranteed) {
         var randomizer = ThreadLocalRandom.current();
-        return rarity == StarRarity.THREE ? BannerPullOutcome.LOSS
-                : guaranteed ? BannerPullOutcome.GUARANTEED
-                : (randomizer.nextDouble() < winRates.get(rarity)) ? BannerPullOutcome.WIN
-                : BannerPullOutcome.LOSS;
+        return rarity == StarRarity.THREE ? WarpOutcome.LOSS
+                : guaranteed ? WarpOutcome.GUARANTEED
+                : (randomizer.nextDouble() < winRates.get(rarity)) ? WarpOutcome.WIN
+                : WarpOutcome.LOSS;
     }
 
     private Double getRarityRates(StarRarity rarity, Integer pityValue) {

@@ -21,11 +21,10 @@ public class BannerService {
         this.bannerMapper = bannerMapper;
         this.cache = cache;
         this.config = config;
-        init();
     }
 
     public Banner getById(final String id) {
-        var cachedBanner = cache.get(id);
+        var cachedBanner = cache.get(id).orElse(null);
         if (cachedBanner != null) {
             return cachedBanner;
         }
@@ -33,17 +32,22 @@ public class BannerService {
         if (edits == null || edits.getType() == null) {
             return null;
         }
-        var cachedTemplate = cache.get("default_" + edits.getType().name().toLowerCase());
+
+        // Load default banner for specific type.
+        var defaultBannerId = "default_" + edits.getType().name().toLowerCase();
+        var cachedTemplate = cache.get(defaultBannerId).orElse(getDefaultById(defaultBannerId));
+
         var merged = cachedTemplate == null ? edits : bannerMapper.merge(cachedTemplate, edits);
         cache.set(id, merged, config.getCacheForMillis());
         return merged;
     }
 
-    private void init() {
-        for (var type : BannerType.values()) {
-            bannerRepository.getById("default_" + type.name().toLowerCase())
-                    .ifPresent(defaultBanner -> cache.set(defaultBanner.getId(), defaultBanner));
+    private Banner getDefaultById(final String id) {
+        var defaultBanner = bannerRepository.getDefaultById(id).orElse(null);
+        if (defaultBanner == null) {
+            return null;
         }
+        cache.set(defaultBanner.getId(), defaultBanner);
+        return defaultBanner;
     }
-
 }

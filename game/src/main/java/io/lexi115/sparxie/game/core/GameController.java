@@ -1,7 +1,7 @@
-package io.lexi115.sparxie.game.system;
+package io.lexi115.sparxie.game.core;
 
-import io.lexi115.sparxie.game.banner.BannerPullRequest;
-import io.lexi115.sparxie.game.banner.BannerPullResultDto;
+import io.lexi115.sparxie.game.warp.dto.WarpRequest;
+import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +18,7 @@ public class GameController {
     }
 
     @PostMapping("/performWarp")
-    public BannerPullResultDto performWarp(@Valid @RequestBody final BannerPullRequest request) {
+    public WarpResultDto performWarp(@Valid @RequestBody final WarpRequest request) {
         return gameService.performWarp(request);
     }
 }

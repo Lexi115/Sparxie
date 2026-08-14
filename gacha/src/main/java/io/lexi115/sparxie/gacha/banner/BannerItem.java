@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.gacha.banner;
 
 public record BannerItem(
-        Long id,
+        String id,
         StarRarity rarity
 ) {
 }

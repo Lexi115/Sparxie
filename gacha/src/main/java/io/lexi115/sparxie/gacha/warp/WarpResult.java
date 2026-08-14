@@ -1,11 +1,11 @@
-package io.lexi115.sparxie.gacha.banner.dto;
+package io.lexi115.sparxie.gacha.warp;
 
 import io.lexi115.sparxie.gacha.banner.BannerType;
 
 import java.util.List;
 
-public record BannerPullResult(
+public record WarpResult(
         BannerType bannerType,
-        List<PulledBannerItem> items
+        List<WarpResultItem> items
 ) {
 }

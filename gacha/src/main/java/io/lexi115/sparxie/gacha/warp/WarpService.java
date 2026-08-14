@@ -1,34 +1,35 @@
-package io.lexi115.sparxie.gacha.system;
+package io.lexi115.sparxie.gacha.warp;
 
 import io.lexi115.sparxie.gacha.banner.BannerNotFoundException;
 import io.lexi115.sparxie.gacha.banner.BannerService;
-import io.lexi115.sparxie.gacha.banner.dto.BannerPullRequest;
-import io.lexi115.sparxie.gacha.banner.dto.BannerPullResult;
-import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItem;
 import io.lexi115.sparxie.gacha.player.PlayerNotFoundException;
 import io.lexi115.sparxie.gacha.player.PlayerService;
+import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
-public class GachaService {
+public class WarpService {
 
     private final BannerService bannerService;
     private final PlayerService playerService;
-    private final GachaTransactionRepository gachaTransactionRepository;
+    private final WarpTransactionRepository warpTransactionRepository;
 
-    public GachaService(BannerService bannerService, PlayerService playerService, GachaTransactionRepository gachaTransactionRepository) {
+    public WarpService(BannerService bannerService, PlayerService playerService, WarpTransactionRepository warpTransactionRepository) {
         this.bannerService = bannerService;
         this.playerService = playerService;
-        this.gachaTransactionRepository = gachaTransactionRepository;
+        this.warpTransactionRepository = warpTransactionRepository;
     }
 
-    public BannerPullResult pull(final BannerPullRequest request) {
-        // Check cached results if present
-        var transaction = gachaTransactionRepository.getById(request.transactionId()).orElse(null);
-        if (transaction != null) {
-            return transaction.results();
+    public WarpResult pull(final WarpRequest request) {
+        // Check cached result if present
+        var transactionUuid = UUID.fromString(request.transactionId());
+        var cachedTransaction = warpTransactionRepository.getById(transactionUuid).orElse(null);
+        if (cachedTransaction != null) {
+            return cachedTransaction.result();
         }
 
         var player = playerService.getById(request.playerId());
@@ -44,19 +45,19 @@ public class GachaService {
             throw new IllegalArgumentException("Amount of pulls cannot be 0 or less");
         }
 
-        var pulledItems = new ArrayList<PulledBannerItem>();
+        var pulledItems = new ArrayList<WarpResultItem>();
         var bannerType = banner.getType();
         var playerPity = player.getPity();
-        PulledBannerItem item;
+        WarpResultItem item;
         for (int i = 0; i < pullAmount; i++) {
             item = banner.pull(playerPity);
             pulledItems.add(item);
             playerPity.updatePity(bannerType, item);
         }
 
-        var result = new BannerPullResult(bannerType, pulledItems);
-        transaction = new GachaTransaction(request.transactionId(), result);
-        gachaTransactionRepository.save(transaction);
+        var result = new WarpResult(bannerType, pulledItems);
+        var transaction = new WarpTransaction(transactionUuid, player.getId(), Instant.now(), result);
+        warpTransactionRepository.save(transaction);
         playerService.savePlayer(player);
         return result;
     }

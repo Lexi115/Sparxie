@@ -1,7 +1,0 @@
-package io.lexi115.sparxie.gacha.banner.dto;
-
-public record PulledBannerItemDto(
-        Long itemId,
-        String outcome
-) {
-}

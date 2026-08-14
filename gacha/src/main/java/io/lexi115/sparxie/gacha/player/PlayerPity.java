@@ -1,9 +1,9 @@
 package io.lexi115.sparxie.gacha.player;
 
-import io.lexi115.sparxie.gacha.banner.BannerPullOutcome;
 import io.lexi115.sparxie.gacha.banner.BannerType;
 import io.lexi115.sparxie.gacha.banner.StarRarity;
-import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItem;
+import io.lexi115.sparxie.gacha.warp.WarpOutcome;
+import io.lexi115.sparxie.gacha.warp.WarpResultItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,13 +59,13 @@ public class PlayerPity {
                 .put(rarity, value);
     }
 
-    public void updatePity(final BannerType bannerType, final PulledBannerItem pulledBannerItem) {
-        var pulledRarity = pulledBannerItem.item().rarity();
-        var resultOutcome = pulledBannerItem.outcome();
+    public void updatePity(final BannerType bannerType, final WarpResultItem warpResultItem) {
+        var pulledRarity = warpResultItem.item().rarity();
+        var resultOutcome = warpResultItem.outcome();
         incrementPity(bannerType, StarRarity.FOUR);
         incrementPity(bannerType, StarRarity.FIVE);
         if (pulledRarity != StarRarity.THREE) {
-            setGuaranteed(bannerType, pulledRarity, resultOutcome == BannerPullOutcome.LOSS);
+            setGuaranteed(bannerType, pulledRarity, resultOutcome == WarpOutcome.LOSS);
             resetPity(bannerType, pulledRarity);
         }
     }

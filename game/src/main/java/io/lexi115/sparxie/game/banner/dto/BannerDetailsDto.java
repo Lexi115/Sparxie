@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.banner;
+package io.lexi115.sparxie.game.banner.dto;
 
 import java.util.Map;
 

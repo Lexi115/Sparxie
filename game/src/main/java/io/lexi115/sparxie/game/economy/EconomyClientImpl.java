@@ -1,7 +1,6 @@
 package io.lexi115.sparxie.game.economy;
 
 import io.lexi115.sparxie.game.player.PlayerNotFoundException;
-import io.lexi115.sparxie.game.system.InsufficientFundsException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,8 +11,8 @@ public class EconomyClientImpl implements EconomyClient {
 
     private final Map<String, Map<String, Integer>> map = new HashMap<>(Map.of(
             "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
-                    "limited_ticket", 999999999,
-                    "standard_ticket", 2
+                    "LIMITED_TICKET", 999999999,
+                    "STANDARD_TICKET", 2
             )))
     );
 

@@ -1,8 +1,8 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.banner.dto.*;
+import io.lexi115.sparxie.gacha.banner.dto.BannerDetailsDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.*;
 
@@ -56,34 +56,17 @@ public interface BannerMapper {
         return merged;
     }
 
-    BannerPullResultDto toDto(BannerPullResult original);
-
-    @Mapping(source = "item", target = "itemId")
-    PulledBannerItemDto map(PulledBannerItem original);
-
     BannerDto toDto(Banner original);
 
     BannerDetailsDto toDetailsDto(Banner original);
 
-    default Long map(final BannerItem original) {
+    default String map(final BannerItem original) {
         return original == null ? null : original.id();
-    }
-
-    default String map(final BannerType original) {
-        return original == null ? null : original.getValue();
-    }
-
-    default String map(final BannerCurrency original) {
-        return original == null ? null : original.getValue();
     }
 
     default Integer map(final StarRarity original) {
         return original == null ? null : original.getValue();
     }
 
-    default String map(final BannerPullOutcome original) {
-        return original == null ? null : original.getValue();
-    }
-
-    List<Long> map(List<BannerItem> original);
+    List<String> map(List<BannerItem> original);
 }
