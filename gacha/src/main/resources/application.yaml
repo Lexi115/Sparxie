@@ -4,5 +4,5 @@ spring:
 
 app:
   storage:
-    root-path: ${APP_STORAGE_ROOT:C:/Users/keite/IdeaProjects/Sparxie/gacha/data}
+    root-path: ${APP_STORAGE_ROOT:/var/lib/sparxie/gacha}
     banners-path: ${app.storage.root-path}/banners

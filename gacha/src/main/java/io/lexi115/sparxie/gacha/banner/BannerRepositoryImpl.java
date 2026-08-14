@@ -58,7 +58,7 @@ public class BannerRepositoryImpl implements BannerRepository {
             banner.setType(BannerType.valueOf(rootNode.get("type").asString().toUpperCase()));
         }
         if (rootNode.has("currency")) {
-            banner.setCurrency(BannerCurrency.fromJson(rootNode.get("currency").asString()));
+            banner.setCurrency(BannerCurrency.valueOf(rootNode.get("currency").asString().toUpperCase()));
         }
     }
 

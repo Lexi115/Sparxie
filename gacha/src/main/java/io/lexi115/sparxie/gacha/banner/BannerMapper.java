@@ -69,19 +69,7 @@ public interface BannerMapper {
         return original == null ? null : original.id();
     }
 
-    default String map(final BannerType original) {
-        return original == null ? null : original.getValue();
-    }
-
-    default String map(final BannerCurrency original) {
-        return original == null ? null : original.getValue();
-    }
-
     default Integer map(final StarRarity original) {
-        return original == null ? null : original.getValue();
-    }
-
-    default String map(final BannerPullOutcome original) {
         return original == null ? null : original.getValue();
     }
 

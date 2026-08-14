@@ -26,9 +26,9 @@ public class GachaService {
 
     public BannerPullResult pull(final BannerPullRequest request) {
         // Check cached results if present
-        var transaction = gachaTransactionRepository.getById(request.transactionId()).orElse(null);
-        if (transaction != null) {
-            return transaction.results();
+        var cachedTransaction = gachaTransactionRepository.getById(request.transactionId()).orElse(null);
+        if (cachedTransaction != null) {
+            return cachedTransaction.results();
         }
 
         var player = playerService.getById(request.playerId());
@@ -55,7 +55,7 @@ public class GachaService {
         }
 
         var result = new BannerPullResult(bannerType, pulledItems);
-        transaction = new GachaTransaction(request.transactionId(), result);
+        var transaction = new GachaTransaction(request.transactionId(), result);
         gachaTransactionRepository.save(transaction);
         playerService.savePlayer(player);
         return result;
