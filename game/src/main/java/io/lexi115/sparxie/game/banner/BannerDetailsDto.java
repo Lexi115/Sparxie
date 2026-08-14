@@ -6,7 +6,7 @@ public record BannerDetailsDto(
         String id,
         String name,
         String type,
-        BannerCurrency currency,
+        String currency,
         Map<Integer, Integer> costs
 ) {
     public int getCost(final int pullAmount) {

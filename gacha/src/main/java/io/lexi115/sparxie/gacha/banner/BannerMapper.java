@@ -1,15 +1,14 @@
-package io.lexi115.sparxie.gacha.banner.dto;
+package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.banner.Banner;
-import io.lexi115.sparxie.gacha.banner.BannerItem;
-import io.lexi115.sparxie.gacha.banner.PulledBannerItem;
-import io.lexi115.sparxie.gacha.util.EnumMapper;
+import io.lexi115.sparxie.gacha.banner.dto.BannerDetailsDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerDto;
+import io.lexi115.sparxie.gacha.banner.dto.BannerPullResult;
+import io.lexi115.sparxie.gacha.banner.dto.BannerPullResultDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.*;
 
-@Mapper(componentModel = "spring", uses = EnumMapper.class)
+@Mapper(componentModel = "spring")
 public interface BannerMapper {
 
     default Banner merge(final Banner template, final Banner edits) {
@@ -65,12 +64,21 @@ public interface BannerMapper {
 
     BannerDetailsDto toDetailsDto(Banner original);
 
-    @Mapping(source = "item", target = "itemId")
-    PulledBannerItemDto toDto(PulledBannerItem original);
+    Map<Integer, List<Long>> mapPool(Map<StarRarity, List<BannerItem>> pool);
 
-    List<Long> mapToIds(List<BannerItem> value);
+    Map<Integer, Double> mapRates(Map<StarRarity, Double> rates);
 
-    default Long mapToId(final BannerItem item) {
+    Map<Integer, NavigableMap<Integer, Double>> mapRarity(Map<StarRarity, NavigableMap<Integer, Double>> rarityRates);
+
+    default Long map(final BannerItem item) {
         return item == null ? null : item.id();
+    }
+
+    default Integer map(final StarRarity rarity) {
+        return rarity == null ? null : rarity.toJson();
+    }
+
+    default StarRarity map(final Integer value) {
+        return value == null ? null : StarRarity.fromJson(String.valueOf(value));
     }
 }

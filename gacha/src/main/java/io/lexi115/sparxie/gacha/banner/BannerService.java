@@ -1,6 +1,5 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.banner.dto.BannerMapper;
 import io.lexi115.sparxie.gacha.cache.Cache;
 import org.springframework.stereotype.Service;
 

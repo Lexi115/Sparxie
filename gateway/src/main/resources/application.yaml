@@ -6,9 +6,17 @@ spring:
       server:
         webmvc:
           routes:
+            # Game
             - id: game
               uri: http://game:8080
               predicates:
                 - Path=/api/game/**
+              filters:
+                - StripPrefix=1
+            # Banner
+            - id: banner
+              uri: http://game:8080
+              predicates:
+                - Path=/api/banner/**
               filters:
                 - StripPrefix=1

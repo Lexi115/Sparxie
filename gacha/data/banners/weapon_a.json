@@ -3,12 +3,12 @@
   "name": "weapon A",
   "type": "weapon_event",
   "winPool": {
-    "four": [
+    "4": [
       1,
       2,
       3444444
     ],
-    "five": [
+    "5": [
       4
     ]
   }

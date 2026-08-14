@@ -1,13 +1,11 @@
 package io.lexi115.sparxie.game.economy;
 
-import io.lexi115.sparxie.game.banner.BannerCurrency;
-
 public interface EconomyClient {
-    int getBalance(String playerId, BannerCurrency currency);
+    int getBalance(String playerId, String currency);
 
-    void setBalance(String playerId, BannerCurrency currency, final int amount);
+    void setBalance(String playerId, String currency, final int amount);
 
-    void deposit(String playerId, BannerCurrency currency, final int amount);
+    void deposit(String playerId, String currency, final int amount);
 
-    void withdraw(String playerId, BannerCurrency currency, final int amount);
+    void withdraw(String playerId, String currency, final int amount);
 }

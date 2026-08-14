@@ -1,6 +1,5 @@
 package io.lexi115.sparxie.game.economy;
 
-import io.lexi115.sparxie.game.banner.BannerCurrency;
 import io.lexi115.sparxie.game.player.PlayerNotFoundException;
 import io.lexi115.sparxie.game.system.InsufficientFundsException;
 import org.springframework.stereotype.Service;
@@ -11,15 +10,15 @@ import java.util.Map;
 @Service
 public class EconomyClientImpl implements EconomyClient {
 
-    private final Map<String, Map<BannerCurrency, Integer>> map = new HashMap<>(Map.of(
+    private final Map<String, Map<String, Integer>> map = new HashMap<>(Map.of(
             "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
-                    BannerCurrency.LIMITED_TICKET, 999999999,
-                    BannerCurrency.STANDARD_TICKET, 2
+                    "limited_ticket", 999999999,
+                    "standard_ticket", 2
             )))
     );
 
     @Override
-    public int getBalance(String playerId, BannerCurrency currency) {
+    public int getBalance(String playerId, String currency) {
         if (currency == null) {
             throw new IllegalArgumentException("Currency must not be null");
         }
@@ -31,7 +30,7 @@ public class EconomyClientImpl implements EconomyClient {
     }
 
     @Override
-    public void setBalance(String playerId, BannerCurrency currency, int amount) {
+    public void setBalance(String playerId, String currency, int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount must not be negative");
         }
@@ -43,12 +42,12 @@ public class EconomyClientImpl implements EconomyClient {
     }
 
     @Override
-    public void deposit(String playerId, BannerCurrency currency, int amount) {
+    public void deposit(String playerId, String currency, int amount) {
         setBalance(playerId, currency, getBalance(playerId, currency) + amount);
     }
 
     @Override
-    public void withdraw(String playerId, BannerCurrency currency, int amount) {
+    public void withdraw(String playerId, String currency, int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount must not be negative");
         }

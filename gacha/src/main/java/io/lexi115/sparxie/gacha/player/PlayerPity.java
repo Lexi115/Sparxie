@@ -2,8 +2,8 @@ package io.lexi115.sparxie.gacha.player;
 
 import io.lexi115.sparxie.gacha.banner.BannerPullOutcome;
 import io.lexi115.sparxie.gacha.banner.BannerType;
-import io.lexi115.sparxie.gacha.banner.PulledBannerItem;
 import io.lexi115.sparxie.gacha.banner.StarRarity;
+import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItem;
 
 import java.util.HashMap;
 import java.util.Map;

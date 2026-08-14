@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameService {
 
-    private final BannerClient bannerClient;
+    private final BannerService bannerService;
     private final GachaClient gachaClient;
     private final EconomyClient economyClient;
     private final MessagePublisher messagePublisher;
 
-    public GameService(final BannerClient bannerClient, GachaClient gachaClient, EconomyClient economyClient, MessagePublisher messagePublisher) {
-        this.bannerClient = bannerClient;
+    public GameService(final BannerService bannerService, GachaClient gachaClient, EconomyClient economyClient, MessagePublisher messagePublisher) {
+        this.bannerService = bannerService;
         this.gachaClient = gachaClient;
         this.economyClient = economyClient;
         this.messagePublisher = messagePublisher;
     }
 
     public BannerPullResultDto performWarp(final BannerPullRequest request) {
-        var bannerDetails = bannerClient.getDetailsById(request.bannerId());
+        var bannerDetails = bannerService.getDetailsById(request.bannerId());
         if (bannerDetails == null) {
             throw new BannerNotFoundException();
         }

@@ -58,7 +58,7 @@ public class BannerRepositoryImpl implements BannerRepository {
             banner.setType(BannerType.valueOf(rootNode.get("type").asString().toUpperCase()));
         }
         if (rootNode.has("currency")) {
-            banner.setCurrency(BannerCurrency.valueOf(rootNode.get("currency").asString().toUpperCase()));
+            banner.setCurrency(BannerCurrency.fromJson(rootNode.get("currency").asString()));
         }
     }
 
@@ -116,7 +116,7 @@ public class BannerRepositoryImpl implements BannerRepository {
         var poolNode = rootNode.get(poolNameKey);
         if (poolNode != null) {
             for (StarRarity rarity : StarRarity.values()) {
-                var rarityNode = poolNode.get(rarity.name().toLowerCase());
+                var rarityNode = poolNode.get(rarity.getValue().toString());
                 if (rarityNode != null) {
                     var rarityList = new ArrayList<BannerItem>();
                     for (JsonNode itemNode : rarityNode) {
@@ -136,7 +136,7 @@ public class BannerRepositoryImpl implements BannerRepository {
         var ratesNode = rootNode.get("rarityRates");
         if (ratesNode != null) {
             for (StarRarity rarity : StarRarity.values()) {
-                var rarityNode = ratesNode.get(rarity.name().toLowerCase());
+                var rarityNode = ratesNode.get(rarity.getValue().toString());
                 if (rarityNode != null) {
                     var rarityMap = new TreeMap<Integer, Double>();
                     rarityNode.forEachEntry((thresholdKey, rateNode)
@@ -153,7 +153,7 @@ public class BannerRepositoryImpl implements BannerRepository {
         var ratesNode = rootNode.get("winRates");
         if (ratesNode != null) {
             for (StarRarity rarity : StarRarity.values()) {
-                var rarityNode = ratesNode.get(rarity.name().toLowerCase());
+                var rarityNode = ratesNode.get(rarity.getValue().toString());
                 if (rarityNode != null) {
                     map.put(rarity, rarityNode.doubleValue());
                 }

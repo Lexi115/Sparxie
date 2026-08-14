@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import io.lexi115.sparxie.gacha.banner.dto.PulledBannerItem;
 import io.lexi115.sparxie.gacha.player.PlayerPity;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Banner implements Cloneable {
 
         var starRarity = (roll < fiveStarRate) ? StarRarity.FIVE
                 : (roll < fourStarRate + fiveStarRate) ? StarRarity.FOUR
-                  : StarRarity.THREE;
+                : StarRarity.THREE;
         var outcome = decideOutcome(starRarity, playerPity.isGuaranteed(type, starRarity));
         var item = chooseItem(starRarity, outcome);
         return new PulledBannerItem(item, outcome);
@@ -48,8 +49,8 @@ public class Banner implements Cloneable {
         var randomizer = ThreadLocalRandom.current();
         return rarity == StarRarity.THREE ? BannerPullOutcome.LOSS
                 : guaranteed ? BannerPullOutcome.GUARANTEED
-                  : (randomizer.nextDouble() < winRates.get(rarity)) ? BannerPullOutcome.WIN
-                    : BannerPullOutcome.LOSS;
+                : (randomizer.nextDouble() < winRates.get(rarity)) ? BannerPullOutcome.WIN
+                : BannerPullOutcome.LOSS;
     }
 
     private Double getRarityRates(StarRarity rarity, Integer pityValue) {

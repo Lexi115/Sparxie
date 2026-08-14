@@ -13,9 +13,9 @@ public record BannerDto(
         String type,
         String currency,
         Map<Integer, Integer> costs,
-        Map<String, List<Long>> winPool,
-        Map<String, List<Long>> lossPool,
-        Map<String, NavigableMap<Integer, Double>> rarityRates,
-        Map<String, Double> winRates
+        Map<Integer, List<Long>> winPool,
+        Map<Integer, List<Long>> lossPool,
+        Map<Integer, NavigableMap<Integer, Double>> rarityRates,
+        Map<Integer, Double> winRates
 ) {
 }
