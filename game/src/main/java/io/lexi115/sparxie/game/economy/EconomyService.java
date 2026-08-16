@@ -10,7 +10,7 @@ public class EconomyService {
         this.economyClient = economyClient;
     }
 
-    public void withdraw(final String playerId, final String currency, final int amount) {
-        economyClient.withdraw(playerId, currency, amount);
+    public void withdraw(final String transactionId, final String playerId, final String currency, final int amount) {
+        economyClient.withdraw(transactionId, playerId, currency, amount);
     }
 }

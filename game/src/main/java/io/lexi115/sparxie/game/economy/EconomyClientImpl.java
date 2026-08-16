@@ -16,6 +16,8 @@ public class EconomyClientImpl implements EconomyClient {
             )))
     );
 
+    private final Map<String, String> transactionsMap = new HashMap<>();
+
     @Override
     public int getBalance(String playerId, String currency) {
         if (currency == null) {
@@ -46,7 +48,10 @@ public class EconomyClientImpl implements EconomyClient {
     }
 
     @Override
-    public void withdraw(String playerId, String currency, int amount) {
+    public void withdraw(String transactionId, String playerId, String currency, int amount) {
+        if (transactionsMap.containsKey(transactionId)) {
+            return;
+        }
         if (amount < 0) {
             throw new IllegalArgumentException("Amount must not be negative");
         }
@@ -57,5 +62,6 @@ public class EconomyClientImpl implements EconomyClient {
             throw new InsufficientFundsException("Not enough currency");
         }
         setBalance(playerId, currency, newBalance);
+        transactionsMap.put(transactionId, "done");
     }
 }
