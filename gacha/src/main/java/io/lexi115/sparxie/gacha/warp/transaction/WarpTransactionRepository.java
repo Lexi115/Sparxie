@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.warp;
+package io.lexi115.sparxie.gacha.warp.transaction;
 
 import java.util.Optional;
 import java.util.UUID;

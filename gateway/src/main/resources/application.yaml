@@ -6,16 +6,16 @@ spring:
       server:
         webmvc:
           routes:
-            # Game
+            # Game Microservice
             - id: game
-              uri: http://game:8080
+              uri: ${GAME_SERVICE_BASE_URI:http://game:8080}
               predicates:
                 - Path=/api/game/**
               filters:
                 - StripPrefix=1
-            # Banner
+            # Banner Microservice
             - id: banner
-              uri: http://game:8080
+              uri: ${BANNER_SERVICE_BASE_URI:http://game:8080}
               predicates:
                 - Path=/api/banner/**
               filters:

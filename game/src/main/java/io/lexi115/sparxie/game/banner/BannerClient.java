@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "gacha", contextId = "bannerClient", url = "http://gacha:8080/banner")
+@FeignClient(name = "gacha", contextId = "bannerClient", url = "${app.http.banner-client-uri}")
 public interface BannerClient {
     @GetMapping("/{id}")
     BannerDto getById(@PathVariable String id);

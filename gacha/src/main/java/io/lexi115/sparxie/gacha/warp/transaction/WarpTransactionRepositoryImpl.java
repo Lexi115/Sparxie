@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.warp;
+package io.lexi115.sparxie.gacha.warp.transaction;
 
 import org.springframework.stereotype.Repository;
 
