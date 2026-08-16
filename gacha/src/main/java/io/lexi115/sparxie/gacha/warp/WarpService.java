@@ -1,13 +1,11 @@
 package io.lexi115.sparxie.gacha.warp;
 
-import io.lexi115.sparxie.gacha.banner.BannerNotFoundException;
 import io.lexi115.sparxie.gacha.banner.BannerService;
 import io.lexi115.sparxie.gacha.cache.Lock;
-import io.lexi115.sparxie.gacha.player.PlayerNotFoundException;
 import io.lexi115.sparxie.gacha.player.PlayerService;
 import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
 import io.lexi115.sparxie.gacha.warp.transaction.WarpTransaction;
-import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionRepository;
+import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,13 +17,13 @@ public class WarpService {
 
     private final BannerService bannerService;
     private final PlayerService playerService;
-    private final WarpTransactionRepository warpTransactionRepository;
+    private final WarpTransactionService warpTransactionService;
     private final Lock warpLock;
 
-    public WarpService(BannerService bannerService, PlayerService playerService, WarpTransactionRepository warpTransactionRepository, Lock warpLock) {
+    public WarpService(BannerService bannerService, PlayerService playerService, WarpTransactionService warpTransactionService, Lock warpLock) {
         this.bannerService = bannerService;
         this.playerService = playerService;
-        this.warpTransactionRepository = warpTransactionRepository;
+        this.warpTransactionService = warpTransactionService;
         this.warpLock = warpLock;
     }
 
@@ -39,20 +37,13 @@ public class WarpService {
 
         try {
             var transactionUuid = UUID.fromString(request.transactionId());
-            var cachedTransaction = warpTransactionRepository.getById(transactionUuid).orElse(null);
+            var cachedTransaction = warpTransactionService.getById(transactionUuid);
             if (cachedTransaction != null) {
                 return cachedTransaction.result();
             }
 
-            var player = playerService.getById(playerId);
-            if (player == null) {
-                throw new PlayerNotFoundException();
-            }
-
+            var player = playerService.getById(UUID.fromString(playerId));
             var banner = bannerService.getById(request.bannerId());
-            if (banner == null) {
-                throw new BannerNotFoundException();
-            }
 
             var pullAmount = request.amount();
             if (pullAmount <= 0) {
@@ -71,7 +62,7 @@ public class WarpService {
 
             var result = new WarpResult(bannerType, pulledItems);
             var transaction = new WarpTransaction(transactionUuid, player.getId(), Instant.now(), result);
-            warpTransactionRepository.save(transaction);
+            warpTransactionService.saveTransaction(transaction);
             playerService.savePlayer(player);
 
             return result;

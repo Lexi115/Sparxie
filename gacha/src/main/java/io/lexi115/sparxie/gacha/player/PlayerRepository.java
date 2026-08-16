@@ -4,7 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PlayerRepository {
-    Optional<Player> getById(UUID id);
+    Optional<Player> findById(UUID id);
+
     void save(Player player);
-    void delete(Player player);
+
+    void deleteById(UUID id);
 }

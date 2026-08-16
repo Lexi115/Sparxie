@@ -21,7 +21,7 @@ public class WarpTransactionService {
         var transactionUuid = UUID.fromString(transactionId);
         var playerUuid = UUID.fromString(playerId);
 
-        var oldTransaction = warpTransactionRepository.getById(transactionUuid).orElse(null);
+        var oldTransaction = warpTransactionRepository.findById(transactionUuid).orElse(null);
         if (oldTransaction != null) {
             return oldTransaction;
         }
@@ -31,7 +31,7 @@ public class WarpTransactionService {
             warpTransactionRepository.save(newTransaction);
             return newTransaction;
         } catch (Exception e) { // duplicate key
-            return warpTransactionRepository.getById(transactionUuid)
+            return warpTransactionRepository.findById(transactionUuid)
                     .orElseThrow(() -> new IllegalStateException("Transaction should exist but wasn't found."));
         }
     }

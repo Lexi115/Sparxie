@@ -17,7 +17,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public Optional<Player> getById(UUID id) {
+    public Optional<Player> findById(UUID id) {
         return Optional.ofNullable(map.get(id));
     }
 
@@ -27,7 +27,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     }
 
     @Override
-    public void delete(Player player) {
-        map.remove(player.getId());
+    public void deleteById(UUID id) {
+        map.remove(id);
     }
 }

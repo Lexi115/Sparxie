@@ -28,25 +28,22 @@ public class BannerService {
         if (cachedBanner != null) {
             return cachedBanner;
         }
-        var edits = bannerRepository.getById(id).orElse(null);
+        var edits = bannerRepository.findById(id).orElse(null);
         if (edits == null || edits.getType() == null) {
-            return null;
+            throw new BannerNotFoundException(id);
         }
 
         // Load default banner for specific type.
         var defaultBannerId = "default_" + edits.getType().name().toLowerCase();
         var cachedTemplate = cache.get(defaultBannerId).orElse(getDefaultById(defaultBannerId));
-
-        var merged = cachedTemplate == null ? edits : bannerMapper.merge(cachedTemplate, edits);
+        var merged = bannerMapper.merge(cachedTemplate, edits);
         cache.set(id, merged, config.getCacheForMillis());
         return merged;
     }
 
     private Banner getDefaultById(final String id) {
-        var defaultBanner = bannerRepository.getDefaultById(id).orElse(null);
-        if (defaultBanner == null) {
-            return null;
-        }
+        var defaultBanner = bannerRepository.findDefaultById(id)
+                .orElseThrow(() -> new BannerNotFoundException(id));
         cache.set(defaultBanner.getId(), defaultBanner);
         return defaultBanner;
     }

@@ -22,12 +22,12 @@ public class BannerRepositoryImpl implements BannerRepository {
     }
 
     @Override
-    public Optional<Banner> getById(final String id) {
+    public Optional<Banner> findById(final String id) {
         return loadBanner(id, false);
     }
 
     @Override
-    public Optional<Banner> getDefaultById(final String id) {
+    public Optional<Banner> findDefaultById(final String id) {
         return loadBanner(id, true);
     }
 

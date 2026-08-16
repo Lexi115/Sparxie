@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface WarpTransactionRepository {
-    Optional<WarpTransaction> getById(UUID id);
+    Optional<WarpTransaction> findById(UUID id);
 
     void save(WarpTransaction transaction);
 }

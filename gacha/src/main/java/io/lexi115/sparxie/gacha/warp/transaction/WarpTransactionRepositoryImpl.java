@@ -13,7 +13,7 @@ public class WarpTransactionRepositoryImpl implements WarpTransactionRepository 
     private final Map<UUID, WarpTransaction> map = new HashMap<>();
 
     @Override
-    public Optional<WarpTransaction> getById(final UUID id) {
+    public Optional<WarpTransaction> findById(final UUID id) {
         return Optional.ofNullable(map.get(id));
     }
 
