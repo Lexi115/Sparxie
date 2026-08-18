@@ -3,6 +3,7 @@ package io.lexi115.sparxie.game.inventory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InventoryService {
@@ -13,7 +14,7 @@ public class InventoryService {
         this.inventoryClient = inventoryClient;
     }
 
-    public void addItems(String transactionId, String playerId, List<String> itemIds) {
+    public void addItems(UUID transactionId, UUID playerId, List<String> itemIds) {
         inventoryClient.addItems(transactionId, playerId, itemIds);
     }
 }

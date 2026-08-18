@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Service
 public class WarpService {
@@ -36,13 +35,13 @@ public class WarpService {
         }
 
         try {
-            var transactionUuid = UUID.fromString(request.transactionId());
+            var transactionUuid = request.transactionId();
             var cachedTransaction = warpTransactionService.getById(transactionUuid);
             if (cachedTransaction != null) {
                 return cachedTransaction.result();
             }
 
-            var player = playerService.getById(UUID.fromString(playerId));
+            var player = playerService.getById(playerId);
             var banner = bannerService.getById(request.bannerId());
 
             var pullAmount = request.amount();

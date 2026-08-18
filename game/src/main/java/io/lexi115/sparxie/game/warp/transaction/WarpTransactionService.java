@@ -17,21 +17,18 @@ public class WarpTransactionService {
         this.outboxEventService = outboxEventService;
     }
 
-    public WarpTransaction getOrCreateTransaction(final String transactionId, final String playerId) {
-        var transactionUuid = UUID.fromString(transactionId);
-        var playerUuid = UUID.fromString(playerId);
-
-        var oldTransaction = warpTransactionRepository.findById(transactionUuid).orElse(null);
+    public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
+        var oldTransaction = warpTransactionRepository.findById(transactionId).orElse(null);
         if (oldTransaction != null) {
             return oldTransaction;
         }
 
-        var newTransaction = new WarpTransaction(transactionUuid, playerUuid, Instant.now(), WarpTransactionStatus.PENDING);
+        var newTransaction = new WarpTransaction(transactionId, playerId, Instant.now(), WarpTransactionStatus.PENDING);
         try {
             warpTransactionRepository.save(newTransaction);
             return newTransaction;
         } catch (Exception e) { // duplicate key
-            return warpTransactionRepository.findById(transactionUuid)
+            return warpTransactionRepository.findById(transactionId)
                     .orElseThrow(() -> new IllegalStateException("Transaction should exist but wasn't found."));
         }
     }

@@ -1,11 +1,13 @@
 package io.lexi115.sparxie.game.economy;
 
+import java.util.UUID;
+
 public interface EconomyClient {
-    int getBalance(String playerId, String currency);
+    int getBalance(UUID playerId, String currency);
 
-    void setBalance(String playerId, String currency, int amount);
+    void setBalance(UUID playerId, String currency, int amount);
 
-    void deposit(String playerId, String currency, int amount);
+    void deposit(UUID playerId, String currency, int amount);
 
-    void withdraw(String transactionId, String playerId, String currency, int amount);
+    void withdraw(UUID transactionId, UUID playerId, String currency, int amount);
 }

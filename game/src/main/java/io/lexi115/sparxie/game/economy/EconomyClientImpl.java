@@ -5,21 +5,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class EconomyClientImpl implements EconomyClient {
 
-    private final Map<String, Map<String, Integer>> map = new HashMap<>(Map.of(
-            "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
+    private final Map<UUID, Map<String, Integer>> map = new HashMap<>(Map.of(
+            UUID.fromString("1bbad0cc-4a14-4c5e-8254-f851ffa30907"), new HashMap<>(Map.of(
                     "LIMITED_TICKET", 999999999,
                     "STANDARD_TICKET", 999999999
             )))
     );
 
-    private final Map<String, String> transactionsMap = new HashMap<>();
+    private final Map<UUID, String> transactionsMap = new HashMap<>();
 
     @Override
-    public int getBalance(String playerId, String currency) {
+    public int getBalance(UUID playerId, String currency) {
         if (currency == null) {
             throw new IllegalArgumentException("Currency must not be null");
         }
@@ -31,7 +32,7 @@ public class EconomyClientImpl implements EconomyClient {
     }
 
     @Override
-    public void setBalance(String playerId, String currency, int amount) {
+    public void setBalance(UUID playerId, String currency, int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount must not be negative");
         }
@@ -43,12 +44,12 @@ public class EconomyClientImpl implements EconomyClient {
     }
 
     @Override
-    public void deposit(String playerId, String currency, int amount) {
+    public void deposit(UUID playerId, String currency, int amount) {
         setBalance(playerId, currency, getBalance(playerId, currency) + amount);
     }
 
     @Override
-    public void withdraw(String transactionId, String playerId, String currency, int amount) {
+    public void withdraw(UUID transactionId, UUID playerId, String currency, int amount) {
         if (transactionsMap.containsKey(transactionId)) {
             return;
         }

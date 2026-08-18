@@ -4,10 +4,11 @@ import io.lexi115.sparxie.game.messaging.Event;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public record WarpPerformedEvent(
-        String transactionId,
-        String playerId,
+        UUID transactionId,
+        UUID playerId,
         Instant createdAt,
         List<String> itemIds
 ) implements Event {

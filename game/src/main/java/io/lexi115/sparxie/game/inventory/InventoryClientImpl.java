@@ -5,14 +5,15 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class InventoryClientImpl implements InventoryClient {
 
-    private final Map<String, String> transactionsMap = new HashMap<>();
+    private final Map<UUID, String> transactionsMap = new HashMap<>();
 
     @Override
-    public void addItems(String transactionId, String playerId, List<String> itemIds) {
+    public void addItems(UUID transactionId, UUID playerId, List<String> itemIds) {
         if (transactionsMap.containsKey(transactionId)) {
             System.out.println("INVENTORY: already processed!");
             return;
