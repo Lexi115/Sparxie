@@ -12,7 +12,7 @@ public class EconomyClientImpl implements EconomyClient {
     private final Map<String, Map<String, Integer>> map = new HashMap<>(Map.of(
             "1bbad0cc-4a14-4c5e-8254-f851ffa30907", new HashMap<>(Map.of(
                     "LIMITED_TICKET", 999999999,
-                    "STANDARD_TICKET", 2
+                    "STANDARD_TICKET", 999999999
             )))
     );
 
