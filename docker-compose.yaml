@@ -9,7 +9,7 @@ services:
       - "8082:8080"
     restart: on-failure
     volumes:
-      - ./gacha/data:/var/lib/sparxie/gacha
+      - gacha_data:/var/lib/sparxie/gacha
 
   game:
     container_name: game
@@ -34,3 +34,11 @@ services:
     restart: on-failure
     depends_on:
       - game
+
+volumes:
+  gacha_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${GACHA_DATA_PATH}"
