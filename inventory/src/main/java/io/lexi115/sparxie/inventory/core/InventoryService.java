@@ -31,11 +31,18 @@ public class InventoryService {
         try {
             var transaction = inventoryTransactionService.getOrCreateTransaction(transactionId, playerId);
             if (transaction.isCompleted()) {
+                System.out.println("transaction already completed!");
                 return;
             }
             var player = playerService.getById(playerId);
             itemIds.forEach(itemId -> giveItem(player, itemId));
             inventoryTransactionService.commitTransaction(transaction);
+            System.out.println("---- CHARS ----");
+            player.getCharacters().forEach(System.out::println);
+            System.out.println("---- WEAPONS ----");
+            player.getWeapons().forEach(System.out::println);
+            System.out.println("---- ----");
+            System.out.println("transaction committed: " + transactionId);
         } finally {
             playerLock.release(lockName);
         }
@@ -44,16 +51,24 @@ public class InventoryService {
     private void giveItem(final Player player, final String itemId) {
         switch (itemId.split("_")[0]) {
             case "char":
-                var character = characterService.getById(itemId);
                 try {
+                    var character = characterService.getById(itemId);
+                    System.out.println("char found: " + itemId);
                     player.giveCharacter(character);
-                } catch (NumberOfCopiesExceededException e) {
+                } catch (NumberOfCopiesExceededException e) { // TODO handle errors!!!!!
                     System.out.println("copies exceeded! " + itemId);
+                } catch (Exception e) {
+                    System.out.println("char not found: " + itemId);
                 }
                 break;
             case "lc":
-                var weapon = weaponService.getById(itemId);
-                player.giveWeapon(weapon);
+                try {
+                    var weapon = weaponService.getById(itemId);
+                    System.out.println("weapon found: " + itemId);
+                    player.giveWeapon(weapon);
+                } catch (Exception e) {
+                    System.out.println("weapon not found: " + itemId);
+                }
                 break;
             default:
                 break;

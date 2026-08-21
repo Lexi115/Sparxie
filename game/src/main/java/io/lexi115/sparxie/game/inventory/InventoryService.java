@@ -1,20 +1,20 @@
 package io.lexi115.sparxie.game.inventory;
 
+import io.lexi115.sparxie.game.inventory.dto.ItemAddRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class InventoryService {
 
-    private InventoryClient inventoryClient;
-
-    public InventoryService(final InventoryClient inventoryClient) {
-        this.inventoryClient = inventoryClient;
-    }
+    private final InventoryClient inventoryClient;
 
     public void addItems(UUID transactionId, UUID playerId, List<String> itemIds) {
-        inventoryClient.addItems(transactionId, playerId, itemIds);
+        var request = new ItemAddRequest(transactionId, playerId, itemIds);
+        inventoryClient.addItems(request);
     }
 }

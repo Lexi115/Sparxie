@@ -2,15 +2,14 @@ package io.lexi115.sparxie.inventory.player;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
+@ToString
 public class PlayerWeapon {
-    private final String weaponId;
-
-    private Integer copies = 1;
-
-    public void incrementCopies() {
-        this.copies++;
-    }
+    private final UUID id = UUID.randomUUID();
+    private final String itemId;
 }

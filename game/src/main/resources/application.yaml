@@ -6,3 +6,4 @@ app:
   http:
     warp-client-uri: ${WARP_CLIENT_URI:http://gacha:8080/warp}
     banner-client-uri: ${BANNER_CLIENT_URI:http://gacha:8080/banner}
+    inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}

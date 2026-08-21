@@ -8,7 +8,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class PlayerService {
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     public Player getById(final UUID id) {
         return playerRepository.findById(id)

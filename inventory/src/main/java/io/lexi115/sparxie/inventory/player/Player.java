@@ -30,15 +30,6 @@ public class Player {
     }
 
     public void giveWeapon(final Weapon weapon) {
-        var it = weapons.iterator();
-        PlayerWeapon existingPlayerWeapon;
-        while (it.hasNext()) {
-            existingPlayerWeapon = it.next();
-            if (existingPlayerWeapon.getWeaponId().equals(weapon.id())) {
-                existingPlayerWeapon.incrementCopies();
-                return;
-            }
-        }
         weapons.add(new PlayerWeapon(weapon.id()));
     }
 }

@@ -8,7 +8,6 @@ import io.lexi115.sparxie.game.warp.WarpService;
 import io.lexi115.sparxie.game.warp.dto.WarpRequest;
 import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
 import io.lexi115.sparxie.game.warp.dto.WarpResultItemDto;
-import io.lexi115.sparxie.game.warp.event.WarpPerformedEvent;
 import io.lexi115.sparxie.game.warp.transaction.WarpTransactionService;
 import org.springframework.stereotype.Service;
 
@@ -51,9 +50,7 @@ public class GameService {
         var warpResult = warpService.pull(request);
         var pulledItemIds = warpResult.items().stream().map(WarpResultItemDto::itemId).toList();
         inventoryService.addItems(transactionId, playerId, pulledItemIds);
-
-        var event = new WarpPerformedEvent(transactionId, playerId, transaction.getCreatedAt(), pulledItemIds);
-        warpTransactionService.commitTransaction(transaction, event);
+        warpTransactionService.commitTransaction(transaction, pulledItemIds);
 
         return warpResult;
     }

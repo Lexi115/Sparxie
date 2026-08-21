@@ -1,10 +1,13 @@
 package io.lexi115.sparxie.inventory.player;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class PlayerRepositoryImpl implements PlayerRepository {
 
     private final HashMap<UUID, Player> map = new HashMap<>();
