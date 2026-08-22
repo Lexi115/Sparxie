@@ -17,6 +17,6 @@ public class InventoryController {
 
     @PostMapping
     public void addItems(@Valid @RequestBody final ItemAddRequest request) {
-        inventoryService.addItems(request.transactionId(), request.playerId(), request.itemIds());
+        inventoryService.addItems(request.transactionId(), request.playerId(), request.items());
     }
 }

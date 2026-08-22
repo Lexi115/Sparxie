@@ -5,7 +5,7 @@ import io.lexi115.sparxie.game.warp.event.WarpPerformedEvent;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -35,11 +35,11 @@ public class WarpTransactionService {
     }
 
     //@Transactional
-    public void commitTransaction(final WarpTransaction transaction, final List<String> pulledItemIds) {
+    public void commitTransaction(final WarpTransaction transaction, final Map<String, Long> items) {
         transaction.setStatus(WarpTransactionStatus.COMPLETED);
         warpTransactionRepository.save(transaction);
         var event = new WarpPerformedEvent(
-                transaction.getTransactionId(), transaction.getPlayerId(), transaction.getCreatedAt(), pulledItemIds);
+                transaction.getTransactionId(), transaction.getPlayerId(), transaction.getCreatedAt(), items);
         outboxEventService.scheduleEvent(event, "gacha-topic");
     }
 

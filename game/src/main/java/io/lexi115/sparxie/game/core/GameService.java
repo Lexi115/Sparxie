@@ -11,6 +11,10 @@ import io.lexi115.sparxie.game.warp.dto.WarpResultItemDto;
 import io.lexi115.sparxie.game.warp.transaction.WarpTransactionService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class GameService {
 
@@ -48,10 +52,19 @@ public class GameService {
 
         economyService.withdraw(transactionId, playerId, bannerDetails.currency(), bannerDetails.getCost(request.amount()));
         var warpResult = warpService.pull(request);
-        var pulledItemIds = warpResult.items().stream().map(WarpResultItemDto::itemId).toList();
-        inventoryService.addItems(transactionId, playerId, pulledItemIds);
-        warpTransactionService.commitTransaction(transaction, pulledItemIds);
+        var countedItems = countItems(warpResult.items());
+        inventoryService.addItems(transactionId, playerId, countedItems);
+        warpTransactionService.commitTransaction(transaction, countedItems);
 
         return warpResult;
+    }
+
+    private Map<String, Long> countItems(List<WarpResultItemDto> pulledItems) {
+        var map = new HashMap<String, Long>();
+        pulledItems.forEach(pulledItem -> {
+            var itemId = pulledItem.itemId();
+            map.put(itemId, map.getOrDefault(itemId, 0L) + 1);
+        });
+        return map;
     }
 }

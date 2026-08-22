@@ -1,34 +1,45 @@
 package io.lexi115.sparxie.inventory.player;
 
-import io.lexi115.sparxie.inventory.character.Character;
-import io.lexi115.sparxie.inventory.material.Material;
-import io.lexi115.sparxie.inventory.weapon.Weapon;
+import io.lexi115.sparxie.inventory.core.ItemType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Getter
 public class Player {
     private final UUID id;
-    private final Map<String, PlayerCharacter> characters = new HashMap<>();
-    private final List<PlayerWeapon> weapons = new ArrayList<>();
+    private final Map<String, Long> characters = new HashMap<>();
+    private final Map<String, Long> weapons = new HashMap<>();
     private final Map<String, Long> materials = new HashMap<>();
 
-    public void giveCharacter(final Character character) {
-        characters.computeIfAbsent(character.id(), PlayerCharacter::new).incrementCopies();
-    }
-
-    public void giveWeapon(final Weapon weapon) {
-        weapons.add(new PlayerWeapon(weapon.id()));
-    }
-
-    public void giveMaterial(final Material material, final Long amount) {
+    public void giveItem(final String itemId, final ItemType itemType, final Long amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
-        var materialId = material.name();
-        materials.put(materialId, materials.getOrDefault(materialId, 0L) + amount);
+        switch (itemType) {
+            case CHARACTER -> characters.merge(itemId, 1L, Long::sum);
+            case WEAPON -> weapons.merge(itemId, 1L, Long::sum);
+            case MATERIAL -> materials.merge(itemId, 1L, Long::sum);
+        }
+    }
+
+    public void consumeItem(final String itemId, final ItemType itemType, final Long amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        var itemMap = switch (itemType) {
+            case CHARACTER -> characters;
+            case WEAPON -> weapons;
+            case MATERIAL -> materials;
+        };
+        var newQuantity = itemMap.getOrDefault(itemId, 0L) - amount;
+        if (newQuantity < 0) {
+            throw new NotEnoughItemsException(itemId);
+        }
+        itemMap.put(itemId, newQuantity);
     }
 }

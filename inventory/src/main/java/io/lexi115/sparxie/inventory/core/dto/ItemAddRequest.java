@@ -2,12 +2,12 @@ package io.lexi115.sparxie.inventory.core.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public record ItemAddRequest(
         @NotNull UUID transactionId,
         @NotNull UUID playerId,
-        @NotNull List<String> itemIds
+        @NotNull Map<String, Long> items
 ) {
 }
