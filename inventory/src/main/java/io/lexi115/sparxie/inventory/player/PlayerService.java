@@ -14,4 +14,6 @@ public class PlayerService {
         return playerRepository.findById(id)
                 .orElseThrow(() -> new PlayerNotFoundException(id.toString()));
     }
+
+
 }

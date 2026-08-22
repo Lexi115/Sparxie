@@ -13,7 +13,7 @@ public class PlayerCharacter {
     private final UUID id = UUID.randomUUID();
     private final String characterId;
 
-    private Integer copies = 1;
+    private Integer copies = 0;
 
     public void incrementCopies() {
         if (this.copies == 7) {

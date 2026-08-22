@@ -1,35 +1,34 @@
 package io.lexi115.sparxie.inventory.player;
 
 import io.lexi115.sparxie.inventory.character.Character;
+import io.lexi115.sparxie.inventory.material.Material;
 import io.lexi115.sparxie.inventory.weapon.Weapon;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Getter
 public class Player {
     private final UUID id;
-    private final List<PlayerCharacter> characters = new ArrayList<>();
+    private final Map<String, PlayerCharacter> characters = new HashMap<>();
     private final List<PlayerWeapon> weapons = new ArrayList<>();
+    private final Map<String, Long> materials = new HashMap<>();
 
     public void giveCharacter(final Character character) {
-        var it = characters.iterator();
-        PlayerCharacter existingPlayerCharacter;
-        while (it.hasNext()) {
-            existingPlayerCharacter = it.next();
-            if (existingPlayerCharacter.getCharacterId().equals(character.id())) {
-                existingPlayerCharacter.incrementCopies();
-                return;
-            }
-        }
-        characters.add(new PlayerCharacter(character.id()));
+        characters.computeIfAbsent(character.id(), PlayerCharacter::new).incrementCopies();
     }
 
     public void giveWeapon(final Weapon weapon) {
         weapons.add(new PlayerWeapon(weapon.id()));
+    }
+
+    public void giveMaterial(final Material material, final Long amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+        var materialId = material.name();
+        materials.put(materialId, materials.getOrDefault(materialId, 0L) + amount);
     }
 }
