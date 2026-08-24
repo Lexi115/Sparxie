@@ -165,12 +165,12 @@ public class BannerRepositoryImpl implements BannerRepository {
         return map;
     }
 
-    private Map<Integer, Integer> loadCosts(final JsonNode rootNode) {
-        var map = new HashMap<Integer, Integer>();
+    private Map<Integer, Long> loadCosts(final JsonNode rootNode) {
+        var map = new HashMap<Integer, Long>();
         var costsNode = rootNode.get("costs");
         if (costsNode != null) {
             costsNode.forEachEntry((pullAmount, costNode)
-                    -> map.put(Integer.parseInt(pullAmount), costNode.intValue(0)));
+                    -> map.put(Integer.parseInt(pullAmount), costNode.longValue(0)));
         }
         return map;
     }

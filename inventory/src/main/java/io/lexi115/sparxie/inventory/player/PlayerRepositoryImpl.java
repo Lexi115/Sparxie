@@ -23,4 +23,9 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     public Optional<Player> findById(final UUID id) {
         return Optional.ofNullable(map.get(id));
     }
+
+    @Override
+    public void save(Player player) {
+        map.put(player.getId(), player);
+    }
 }

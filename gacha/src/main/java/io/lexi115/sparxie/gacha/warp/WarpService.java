@@ -52,7 +52,6 @@ public class WarpService {
             var pulledItems = new ArrayList<WarpResultItem>();
             var bannerType = banner.getType();
             var playerPity = player.getPity();
-
             for (int i = 0; i < pullAmount; i++) {
                 WarpResultItem item = banner.pull(playerPity);
                 pulledItems.add(item);

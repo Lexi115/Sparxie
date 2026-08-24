@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.inventory;
 
-import io.lexi115.sparxie.game.inventory.dto.ItemAddRequest;
+import io.lexi115.sparxie.game.inventory.dto.ItemRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +13,13 @@ public class InventoryService {
 
     private final InventoryClient inventoryClient;
 
-    public void addItems(UUID transactionId, UUID playerId, Map<String, Long> items) {
-        var request = new ItemAddRequest(transactionId, playerId, items);
-        inventoryClient.addItems(request);
+    public void giveItems(UUID transactionId, UUID playerId, Map<String, Long> items) {
+        var request = new ItemRequest(transactionId, playerId, items);
+        inventoryClient.giveItems(request);
+    }
+
+    public void consumeItems(UUID transactionId, UUID playerId, Map<String, Long> items) {
+        var request = new ItemRequest(transactionId, playerId, items);
+        inventoryClient.consumeItems(request);
     }
 }

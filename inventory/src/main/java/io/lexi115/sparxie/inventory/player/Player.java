@@ -21,9 +21,9 @@ public class Player {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
         switch (itemType) {
-            case CHARACTER -> characters.merge(itemId, 1L, Long::sum);
-            case WEAPON -> weapons.merge(itemId, 1L, Long::sum);
-            case MATERIAL -> materials.merge(itemId, 1L, Long::sum);
+            case CHARACTER -> characters.merge(itemId, amount, Long::sum);
+            case WEAPON -> weapons.merge(itemId, amount, Long::sum);
+            case MATERIAL -> materials.merge(itemId, amount, Long::sum);
         }
     }
 

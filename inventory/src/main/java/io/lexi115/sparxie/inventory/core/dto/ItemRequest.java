@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
-public record ItemAddRequest(
+public record ItemRequest(
         @NotNull UUID transactionId,
         @NotNull UUID playerId,
         @NotNull Map<String, Long> items

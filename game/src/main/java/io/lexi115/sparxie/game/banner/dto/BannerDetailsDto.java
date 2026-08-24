@@ -7,12 +7,12 @@ public record BannerDetailsDto(
         String name,
         String type,
         String currency,
-        Map<Integer, Integer> costs
+        Map<Integer, Long> costs
 ) {
-    public int getCost(final int pullAmount) {
+    public Long getCost(final int pullAmount) {
         if (pullAmount < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
-        return this.costs.getOrDefault(pullAmount, costs.getOrDefault(1, 0) * pullAmount);
+        return this.costs.getOrDefault(pullAmount, costs.getOrDefault(1, 0L) * pullAmount);
     }
 }

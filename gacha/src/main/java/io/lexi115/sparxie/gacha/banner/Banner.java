@@ -16,7 +16,7 @@ public class Banner implements Cloneable {
     private String name;
     private BannerType type;
     private BannerCurrency currency;
-    private Map<Integer, Integer> costs;
+    private Map<Integer, Long> costs;
 
     private Map<StarRarity, List<BannerItem>> winPool;
     private Map<StarRarity, List<BannerItem>> lossPool;

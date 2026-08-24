@@ -17,4 +17,9 @@ public class WeaponRepositoryImpl implements WeaponRepository {
     public Optional<Weapon> findById(final String id) {
         return Optional.ofNullable(map.get(id));
     }
+
+    @Override
+    public boolean existsById(String id) {
+        return map.containsKey(id);
+    }
 }

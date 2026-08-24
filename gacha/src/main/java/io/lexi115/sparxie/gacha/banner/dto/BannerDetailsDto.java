@@ -7,6 +7,6 @@ public record BannerDetailsDto(
         String name,
         String type,
         String currency,
-        Map<Integer, Integer> costs
+        Map<Integer, Long> costs
 ) {
 }

@@ -4,4 +4,6 @@ import java.util.Optional;
 
 public interface CharacterRepository {
     Optional<Character> findById(String id);
+
+    boolean existsById(String id);
 }

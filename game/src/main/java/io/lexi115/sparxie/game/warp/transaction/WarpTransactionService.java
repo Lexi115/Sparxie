@@ -18,6 +18,7 @@ public class WarpTransactionService {
         this.outboxEventService = outboxEventService;
     }
 
+    // @Transactional
     public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
         var oldTransaction = warpTransactionRepository.findById(transactionId).orElse(null);
         if (oldTransaction != null) {

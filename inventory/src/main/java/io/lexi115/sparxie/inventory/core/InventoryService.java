@@ -3,7 +3,6 @@ package io.lexi115.sparxie.inventory.core;
 import io.lexi115.sparxie.inventory.cache.Lock;
 import io.lexi115.sparxie.inventory.character.CharacterService;
 import io.lexi115.sparxie.inventory.core.transaction.InventoryTransactionService;
-import io.lexi115.sparxie.inventory.player.NumberOfCopiesExceededException;
 import io.lexi115.sparxie.inventory.player.Player;
 import io.lexi115.sparxie.inventory.player.PlayerService;
 import io.lexi115.sparxie.inventory.weapon.WeaponService;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,23 @@ public class InventoryService {
     private final InventoryTransactionService inventoryTransactionService;
     private final Lock playerLock;
 
+    public void giveItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
+        executeTransaction(transactionId, playerId, player ->
+                items.forEach((itemId, amount) ->
+                        withValidItem(itemId, amount, (realItemId, itemType) -> player.giveItem(realItemId, itemType, amount))
+                ));
+    }
+
+    public void consumeItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
+        executeTransaction(transactionId, playerId, player ->
+                items.forEach((itemId, amount) ->
+                        withValidItem(itemId, amount, (realItemId, itemType) -> player.consumeItem(realItemId, itemType, amount))
+                ));
+    }
+
     // @Transactional
-    public void addItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
+    public void executeTransaction(final UUID transactionId, final UUID playerId, final Consumer<Player> action) {
+        System.out.println("INVENTORY TRANSACTION ID: " + transactionId);
         var lockName = "inventory_lock_" + playerId;
         if (!playerLock.acquire(lockName)) {
             throw new RuntimeException("lock");
@@ -31,56 +47,49 @@ public class InventoryService {
         try {
             var transaction = inventoryTransactionService.getOrCreateTransaction(transactionId, playerId);
             if (transaction.isCompleted()) {
-                System.out.println("transaction already completed!");
                 return;
             }
             var player = playerService.getById(playerId);
-            items.forEach((itemId, amount) -> giveItem(player, itemId, amount));
+            action.accept(player);
+            playerService.savePlayer(player);
+            printPlayerInventory(player); // TODO debug
             inventoryTransactionService.commitTransaction(transaction);
-            System.out.println("---- CHARS ----");
-            player.getCharacters().forEach((id, am) -> System.out.println(id + " (" + am + ")"));
-            System.out.println("---- WEAPONS ----");
-            player.getWeapons().forEach((id, am) -> System.out.println(id + " (" + am + ")"));
-            System.out.println("---- MATERIALS ----");
-            player.getMaterials().forEach((id, am) -> System.out.println(id + " (" + am + ")"));
-            System.out.println("---- ----");
-            System.out.println("transaction committed: " + transactionId);
         } finally {
             playerLock.release(lockName);
         }
     }
 
-    private void giveItem(final Player player, final String itemId, final Long amount) {
+    private void withValidItem(final String itemId, final Long amount, BiConsumer<String, ItemType> action) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount cannot be 0 or less");
         }
-        switch (itemId.split("_")[0]) {
-            case "char":
-                try {
-                    var character = characterService.getById(itemId);
-                    System.out.println("char found: " + itemId);
-                    player.giveItem(character.id(), ItemType.CHARACTER, amount);
-                } catch (NumberOfCopiesExceededException e) { // TODO handle errors!!!!!
-                    System.out.println("copies exceeded! " + itemId);
-                } catch (Exception e) {
-                    System.out.println("char not found: " + itemId);
-                }
-                break;
-            case "lc":
-                try {
-                    var weapon = weaponService.getById(itemId);
-                    System.out.println("weapon found: " + itemId);
-                    player.giveItem(weapon.id(), ItemType.WEAPON, amount);
-                } catch (Exception e) {
-                    System.out.println("weapon not found: " + itemId);
-                }
-                break;
-            default:
-                try {
-                    player.giveItem(itemId, ItemType.MATERIAL, amount);
-                } catch (Exception e) {
-                    System.out.println("material not found: " + itemId);
-                }
-        }
+        var realItemId = itemId.toLowerCase().trim();
+        var itemType = switch (realItemId.split("_")[0]) {
+            case "char" -> ItemType.CHARACTER;
+            case "lc" -> ItemType.WEAPON;
+            default -> ItemType.MATERIAL;
+        };
+        //todo rimetti quando ci saranno tutti ID validi salvati
+//        if (!itemExists(realItemId, itemType)) {
+//            throw new IllegalArgumentException("Invalid ID");
+//        }
+        action.accept(realItemId, itemType);
+    }
+
+    private boolean itemExists(final String itemId, final ItemType itemType) {
+        return switch (itemType) {
+            case CHARACTER -> characterService.existsById(itemId);
+            case WEAPON -> weaponService.existsById(itemId);
+            case MATERIAL -> true;
+        };
+    }
+
+    private void printPlayerInventory(Player player) {
+        System.out.println("---- CHARACTERS ----");
+        player.getCharacters().forEach((id, amount) -> System.out.println(id + "(" + amount + ")"));
+        System.out.println("---- WEAPONS ----");
+        player.getWeapons().forEach((id, amount) -> System.out.println(id + "(" + amount + ")"));
+        System.out.println("---- MATERIALS ----");
+        player.getMaterials().forEach((id, amount) -> System.out.println(id + "(" + amount + ")"));
     }
 }

@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.inventory.core;
 
-import io.lexi115.sparxie.inventory.core.dto.ItemAddRequest;
+import io.lexi115.sparxie.inventory.core.dto.ItemRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +15,13 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @PostMapping
-    public void addItems(@Valid @RequestBody final ItemAddRequest request) {
-        inventoryService.addItems(request.transactionId(), request.playerId(), request.items());
+    @PostMapping("/give")
+    public void giveItems(@Valid @RequestBody final ItemRequest request) {
+        inventoryService.giveItems(request.transactionId(), request.playerId(), request.items());
+    }
+
+    @PostMapping("/consume")
+    public void consumeItems(@Valid @RequestBody final ItemRequest request) {
+        inventoryService.consumeItems(request.transactionId(), request.playerId(), request.items());
     }
 }

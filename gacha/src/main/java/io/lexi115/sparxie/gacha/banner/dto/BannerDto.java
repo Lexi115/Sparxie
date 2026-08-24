@@ -12,7 +12,7 @@ public record BannerDto(
         String name,
         String type,
         String currency,
-        Map<Integer, Integer> costs,
+        Map<Integer, Long> costs,
         Map<Integer, List<String>> winPool,
         Map<Integer, List<String>> lossPool,
         Map<Integer, NavigableMap<Integer, Double>> rarityRates,

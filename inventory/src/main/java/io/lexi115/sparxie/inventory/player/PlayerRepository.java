@@ -5,4 +5,6 @@ import java.util.UUID;
 
 public interface PlayerRepository {
     Optional<Player> findById(UUID id);
+
+    void save(Player player);
 }
