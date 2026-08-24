@@ -2,7 +2,6 @@ package io.lexi115.sparxie.game.core;
 
 import io.lexi115.sparxie.game.banner.BannerService;
 import io.lexi115.sparxie.game.inventory.InventoryService;
-import io.lexi115.sparxie.game.util.UuidHelper;
 import io.lexi115.sparxie.game.warp.WarpService;
 import io.lexi115.sparxie.game.warp.dto.WarpRequest;
 import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
@@ -23,7 +22,6 @@ public class GameService {
     private final WarpService warpService;
     private final WarpTransactionService warpTransactionService;
     private final InventoryService inventoryService;
-    private final UuidHelper uuidHelper;
 
     public WarpResultDto performWarp(final WarpRequest request) {
         var bannerDetails = bannerService.getDetailsById(request.bannerId());
@@ -37,20 +35,18 @@ public class GameService {
         }
 
         // Deduct tickets (if not done already)
-        var consumeItemUuid = uuidHelper.generateNameUuid(transactionId + "_consume");
-        inventoryService.consumeItems(consumeItemUuid, playerId, Map.of(
+        inventoryService.consumeItems(transactionId, playerId, Map.of(
                 bannerDetails.currency(), bannerDetails.getCost(request.amount())));
 
         // Pull and give items (if not done already)
         var warpResult = warpService.pull(request);
         var countedItems = countItems(warpResult.items());
-        var giveItemUuid = uuidHelper.generateNameUuid(transactionId + "_give");
-        inventoryService.giveItems(giveItemUuid, playerId, countedItems);
+        inventoryService.giveItems(transactionId, playerId, countedItems);
         warpTransactionService.commitTransaction(transaction, countedItems);
         return warpResult;
     }
 
-    private Map<String, Long> countItems(List<WarpResultItemDto> pulledItems) {
+    private Map<String, Long> countItems(final List<WarpResultItemDto> pulledItems) {
         var map = new HashMap<String, Long>();
         pulledItems.forEach(pulledItem -> {
             var itemId = pulledItem.itemId();

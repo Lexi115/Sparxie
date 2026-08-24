@@ -5,6 +5,7 @@ import io.lexi115.sparxie.inventory.character.CharacterService;
 import io.lexi115.sparxie.inventory.core.transaction.InventoryTransactionService;
 import io.lexi115.sparxie.inventory.player.Player;
 import io.lexi115.sparxie.inventory.player.PlayerService;
+import io.lexi115.sparxie.inventory.util.UuidHelper;
 import io.lexi115.sparxie.inventory.weapon.WeaponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,19 @@ public class InventoryService {
     private final WeaponService weaponService;
     private final InventoryTransactionService inventoryTransactionService;
     private final Lock playerLock;
+    private final UuidHelper uuidHelper;
 
     public void giveItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
-        executeTransaction(transactionId, playerId, player ->
+        var actionUuid = uuidHelper.generateNameUuid(transactionId + "_give");
+        executeTransaction(actionUuid, playerId, player ->
                 items.forEach((itemId, amount) ->
                         withValidItem(itemId, amount, (realItemId, itemType) -> player.giveItem(realItemId, itemType, amount))
                 ));
     }
 
     public void consumeItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
-        executeTransaction(transactionId, playerId, player ->
+        var actionUuid = uuidHelper.generateNameUuid(transactionId + "_consume");
+        executeTransaction(actionUuid, playerId, player ->
                 items.forEach((itemId, amount) ->
                         withValidItem(itemId, amount, (realItemId, itemType) -> player.consumeItem(realItemId, itemType, amount))
                 ));

@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.util;
+package io.lexi115.sparxie.inventory.util;
 
 import org.springframework.stereotype.Component;
 

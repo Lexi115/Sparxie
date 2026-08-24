@@ -46,6 +46,16 @@ services:
       - "8083:8080"
     restart: on-failure
 
+  shop:
+    container_name: shop
+    build:
+      context: ./shop
+    env_file:
+      - ./shop/.env
+    ports:
+      - "8084:8080"
+    restart: on-failure
+
 volumes:
   gacha_data:
     driver: local
