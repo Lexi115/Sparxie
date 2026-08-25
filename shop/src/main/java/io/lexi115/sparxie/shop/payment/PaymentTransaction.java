@@ -1,17 +1,17 @@
-package io.lexi115.sparxie.shop.transaction;
+package io.lexi115.sparxie.shop.payment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class ShopTransaction {
+public class PaymentTransaction {
     private UUID transactionId;
     private UUID playerId;
     private Instant createdAt;
-    private Map<String, Long> items;
+    private BigDecimal price;
 }

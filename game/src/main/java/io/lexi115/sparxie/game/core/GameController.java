@@ -17,8 +17,13 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @PostMapping("/performWarp")
+    @PostMapping("/pull")
     public WarpResultDto performWarp(@Valid @RequestBody final WarpRequest request) {
         return gameService.performWarp(request);
+    }
+
+    @PostMapping("/purchase")
+    public void performWarp(@Valid @RequestBody final PurchaseRequest request) {
+        gameService.performPurchase(request);
     }
 }

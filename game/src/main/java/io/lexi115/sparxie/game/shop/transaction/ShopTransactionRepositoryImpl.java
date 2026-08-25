@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.shop.transaction;
+package io.lexi115.sparxie.game.shop.transaction;
 
 import org.springframework.stereotype.Repository;
 
