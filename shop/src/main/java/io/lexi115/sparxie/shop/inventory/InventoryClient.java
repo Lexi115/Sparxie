@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(value = "inventory", contextId = "inventoryClient", url = "${app.http.inventory-client-uri}")
 public interface InventoryClient {
     @PostMapping("/give")
-    void giveItems(@Valid @RequestBody ItemRequest request);
+    void giveItems(@Valid @RequestBody MultipleItemsRequest request);
 
     @PostMapping("/consume")
-    void consumeItems(@Valid @RequestBody ItemRequest request);
+    void consumeItems(@Valid @RequestBody MultipleItemsRequest request);
 }

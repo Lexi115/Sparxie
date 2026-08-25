@@ -1,8 +1,7 @@
-package io.lexi115.sparxie.shop.core;
+package io.lexi115.sparxie.game.shop;
 
-import io.lexi115.sparxie.shop.core.dto.PurchaseJadesRequest;
-import io.lexi115.sparxie.shop.game.GameCurrency;
-import io.lexi115.sparxie.shop.inventory.dto.SingleItemRequest;
+import io.lexi115.sparxie.game.inventory.dto.SingleItemRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseJadesRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,14 +17,11 @@ public class ShopController {
 
     @PostMapping("/purchaseJades")
     public void purchaseJades(@Valid @RequestBody final PurchaseJadesRequest request) {
-        shopService.buyItem(
-                request.transactionId(), request.playerId(), GameCurrency.STELLAR_JADE.name().toLowerCase(),
-                request.amount(), BuyMethod.FAKE_MONEY);
+        shopService.purchaseJades(request);
     }
 
     @PostMapping("/exchangeWithJades")
     public void exchangeWithJades(@Valid @RequestBody final SingleItemRequest request) {
-        shopService.buyItem(
-                request.transactionId(), request.playerId(), request.itemId(), request.amount(), BuyMethod.JADES);
+        shopService.exchangeWithJades(request);
     }
 }

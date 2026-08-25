@@ -35,12 +35,12 @@ public class ShopService {
             if (buyMethod == BuyMethod.FAKE_MONEY) {
                 // fake
             } else if (buyMethod == BuyMethod.JADES) {
-                var costInJades = exchangeRate.getCostInJades(itemId);
-                if (costInJades == null) {
+                var singleItemCost = exchangeRate.getCostInJades(itemId);
+                if (singleItemCost == null) {
                     throw new RuntimeException("Cannot buy this item: " + itemId);
                 }
                 inventoryService.consumeItems(transactionId, playerId,
-                        Map.of(GameCurrency.STELLAR_JADE.name(), costInJades));
+                        Map.of(GameCurrency.STELLAR_JADE.name(), singleItemCost * amount));
             }
 
             var itemsToGive = Map.of(itemId, amount);

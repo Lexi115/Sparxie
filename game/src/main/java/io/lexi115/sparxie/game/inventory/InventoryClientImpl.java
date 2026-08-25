@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.inventory;
 
-import io.lexi115.sparxie.game.inventory.dto.ItemRequest;
+import io.lexi115.sparxie.game.inventory.dto.MultipleItemsRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class InventoryClientImpl implements InventoryClient {
     private final Map<UUID, String> transactionsMap = new HashMap<>();
 
     @Override
-    public void giveItems(final ItemRequest request) {
+    public void giveItems(final MultipleItemsRequest request) {
         if (transactionsMap.containsKey(request.transactionId())) {
             System.out.println("INVENTORY: already processed!");
             return;
@@ -22,7 +22,7 @@ public class InventoryClientImpl implements InventoryClient {
     }
 
     @Override
-    public void consumeItems(ItemRequest request) {
+    public void consumeItems(MultipleItemsRequest request) {
 
     }
 }
