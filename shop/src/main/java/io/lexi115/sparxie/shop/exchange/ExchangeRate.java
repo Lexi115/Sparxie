@@ -14,6 +14,6 @@ public class ExchangeRate {
     ));
 
     public Long getCostInJades(final String itemId) {
-        return exchangeMap.getOrDefault(itemId, null);
+        return exchangeMap.getOrDefault(itemId.toUpperCase(), null);
     }
 }
