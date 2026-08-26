@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Range;
 
 import java.util.UUID;
 
-
 public record WarpRequest(
         @NotNull UUID transactionId,
         @NotBlank String bannerId,

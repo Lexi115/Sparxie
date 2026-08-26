@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.cache;
+package io.lexi115.sparxie.gacha.concurrent;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class LockImpl implements Lock {
+public class LockImpl implements Lock { //todo replace with redisson
 
     private final Map<String, Boolean> lockMap = new HashMap<>();
 

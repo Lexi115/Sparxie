@@ -1,50 +1,24 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.cache.Cache;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BannerService {
-
+    private final BannerTemplateService bannerTemplateService;
     private final BannerRepository bannerRepository;
-    private final BannerMapper bannerMapper;
-    private final Cache<Banner> cache;
-    private final BannerConfig config;
 
-    public BannerService(
-            final BannerRepository bannerRepository,
-            final BannerMapper bannerMapper,
-            final Cache<Banner> cache,
-            final BannerConfig config
-    ) {
-        this.bannerRepository = bannerRepository;
-        this.bannerMapper = bannerMapper;
-        this.cache = cache;
-        this.config = config;
-    }
-
+    @Cacheable("banners")
     public Banner getById(final String id) {
-        var cachedBanner = cache.get(id).orElse(null);
-        if (cachedBanner != null) {
-            return cachedBanner;
-        }
-        var edits = bannerRepository.findById(id).orElse(null);
-        if (edits == null || edits.getType() == null) {
+        var editsBanner = bannerRepository.findById(id).orElse(null);
+        if (editsBanner == null || editsBanner.getType() == null) {
             throw new BannerNotFoundException(id);
         }
-
         // Load default banner for specific type.
-        var defaultBannerId = "default_" + edits.getType().name().toLowerCase();
-        var cachedTemplate = cache.get(defaultBannerId).orElse(getDefaultById(defaultBannerId));
-        var merged = bannerMapper.merge(cachedTemplate, edits);
-        cache.set(id, merged, config.getCacheForMillis());
-        return merged;
-    }
-
-    private Banner getDefaultById(final String id) {
-        var defaultBanner = bannerRepository.findDefaultById(id)
-                .orElseThrow(() -> new BannerNotFoundException(id));
-        cache.set(defaultBanner.getId(), defaultBanner);
-        return defaultBanner;
+        var defaultBannerId = "default_" + editsBanner.getType().name().toLowerCase();
+        var defaultBanner = bannerTemplateService.getById(defaultBannerId);
+        return defaultBanner.mergeWith(editsBanner);
     }
 }

@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.cache;
+package io.lexi115.sparxie.gacha.concurrent;
 
 public interface Lock {
     boolean acquire(String lockName);

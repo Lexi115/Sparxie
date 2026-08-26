@@ -4,6 +4,7 @@ import io.lexi115.sparxie.gacha.player.PlayerPity;
 import io.lexi115.sparxie.gacha.warp.WarpOutcome;
 import io.lexi115.sparxie.gacha.warp.WarpResultItem;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
@@ -11,19 +12,48 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @Setter
-public class Banner implements Cloneable {
+@NoArgsConstructor
+public class Banner {
     private String id;
     private String name;
     private BannerType type;
     private BannerCurrency currency;
     private Map<Integer, Long> costs;
-
     private Map<StarRarity, List<BannerItem>> winPool;
     private Map<StarRarity, List<BannerItem>> lossPool;
     private Map<StarRarity, NavigableMap<Integer, Double>> rarityRates;
     private Map<StarRarity, Double> winRates;
 
-    public WarpResultItem pull(final PlayerPity playerPity) {
+    public Banner(final Banner source) {
+        this.id = source.id;
+        this.name = source.name;
+        this.type = source.type;
+        this.currency = source.currency;
+        if (source.costs != null) {
+            this.setCosts(new HashMap<>(source.costs));
+        }
+        if (source.winPool != null) {
+            var clonedWinPool = new HashMap<>(source.winPool);
+            clonedWinPool.replaceAll((_, list) -> new ArrayList<>(list));
+            this.setWinPool(clonedWinPool);
+        }
+        if (source.lossPool != null) {
+            var clonedLossPool = new HashMap<>(source.lossPool);
+            clonedLossPool.replaceAll((_, list) -> new ArrayList<>(list));
+            this.setLossPool(clonedLossPool);
+        }
+        if (source.rarityRates != null) {
+            var clonedRarityRates = new HashMap<>(source.rarityRates);
+            clonedRarityRates.replaceAll((_, map) -> new TreeMap<>(map));
+            this.setRarityRates(clonedRarityRates);
+        }
+        if (source.winRates != null) {
+            this.setWinRates(new HashMap<>(source.winRates));
+        }
+    }
+
+
+    public WarpResultItem pullItem(final PlayerPity playerPity) {
         var fourStarPity = playerPity.getPity(type, StarRarity.FOUR);
         var fiveStarPity = playerPity.getPity(type, StarRarity.FIVE);
         var fourStarRate = getRarityRates(StarRarity.FOUR, fourStarPity);
@@ -63,40 +93,48 @@ public class Banner implements Cloneable {
         return probability == null ? 0.0 : probability.getValue();
     }
 
-    @Override
-    public Banner clone() {
-        try {
-            Banner clone = (Banner) super.clone();
-
-            if (this.costs != null) {
-                clone.setCosts(new HashMap<>(this.costs));
-            }
-
-            if (this.winPool != null) {
-                var clonedWinPool = new HashMap<>(this.winPool);
-                clonedWinPool.replaceAll((_, list) -> new ArrayList<>(list));
-                clone.setWinPool(clonedWinPool);
-            }
-
-            if (this.lossPool != null) {
-                var clonedLossPool = new HashMap<>(this.lossPool);
-                clonedLossPool.replaceAll((_, list) -> new ArrayList<>(list));
-                clone.setLossPool(clonedLossPool);
-            }
-
-            if (this.rarityRates != null) {
-                var clonedRarityRates = new HashMap<>(this.rarityRates);
-                clonedRarityRates.replaceAll((_, map) -> new TreeMap<>(map));
-                clone.setRarityRates(clonedRarityRates);
-            }
-
-            if (this.winRates != null) {
-                clone.setWinRates(new HashMap<>(this.winRates));
-            }
-
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+    public Banner mergeWith(final Banner editBanner) {
+        var mergedBanner = new Banner(this);
+        if (editBanner == null) {
+            return mergedBanner;
         }
+        if (editBanner.getId() != null) {
+            mergedBanner.setId(editBanner.getId());
+        }
+        if (editBanner.getName() != null) {
+            mergedBanner.setName(editBanner.getName());
+        }
+        if (editBanner.getType() != null) {
+            mergedBanner.setType(editBanner.getType());
+        }
+        if (editBanner.getCosts() != null) {
+            var cost = Optional.ofNullable(mergedBanner.getCosts()).orElse(new HashMap<>());
+            cost.putAll(editBanner.getCosts());
+            mergedBanner.setCosts(cost);
+        }
+        if (editBanner.getWinPool() != null) {
+            var winPool = Optional.ofNullable(mergedBanner.getWinPool()).orElse(new HashMap<>());
+            editBanner.getWinPool().forEach((rarity, list)
+                    -> winPool.put(rarity, new ArrayList<>(list)));
+            mergedBanner.setWinPool(winPool);
+        }
+        if (editBanner.getLossPool() != null) {
+            var lossPool = Optional.ofNullable(mergedBanner.getLossPool()).orElse(new HashMap<>());
+            editBanner.getLossPool().forEach((rarity, list)
+                    -> lossPool.put(rarity, new ArrayList<>(list)));
+            mergedBanner.setLossPool(lossPool);
+        }
+        if (editBanner.getRarityRates() != null) {
+            var rarityRates = Optional.ofNullable(mergedBanner.getRarityRates()).orElse(new HashMap<>());
+            editBanner.getRarityRates().forEach((rarity, map)
+                    -> rarityRates.put(rarity, new TreeMap<>(map)));
+            mergedBanner.setRarityRates(rarityRates);
+        }
+        if (editBanner.getWinRates() != null) {
+            var winRates = Optional.ofNullable(mergedBanner.getWinRates()).orElse(new HashMap<>());
+            winRates.putAll(editBanner.getWinRates());
+            mergedBanner.setWinRates(winRates);
+        }
+        return mergedBanner;
     }
 }

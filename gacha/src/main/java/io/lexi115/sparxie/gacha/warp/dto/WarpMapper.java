@@ -1,9 +1,9 @@
-package io.lexi115.sparxie.gacha.warp;
+package io.lexi115.sparxie.gacha.warp.dto;
 
 import io.lexi115.sparxie.gacha.banner.BannerItem;
 import io.lexi115.sparxie.gacha.banner.StarRarity;
-import io.lexi115.sparxie.gacha.warp.dto.WarpResultDto;
-import io.lexi115.sparxie.gacha.warp.dto.WarpResultItemDto;
+import io.lexi115.sparxie.gacha.warp.WarpResult;
+import io.lexi115.sparxie.gacha.warp.WarpResultItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

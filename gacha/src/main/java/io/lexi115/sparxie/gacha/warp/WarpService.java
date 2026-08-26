@@ -1,71 +1,63 @@
 package io.lexi115.sparxie.gacha.warp;
 
+import io.lexi115.sparxie.gacha.banner.Banner;
 import io.lexi115.sparxie.gacha.banner.BannerService;
-import io.lexi115.sparxie.gacha.cache.Lock;
+import io.lexi115.sparxie.gacha.concurrent.Lock;
+import io.lexi115.sparxie.gacha.player.Player;
 import io.lexi115.sparxie.gacha.player.PlayerService;
 import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
-import io.lexi115.sparxie.gacha.warp.transaction.WarpTransaction;
 import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class WarpService {
 
     private final BannerService bannerService;
     private final PlayerService playerService;
     private final WarpTransactionService warpTransactionService;
-    private final Lock warpLock;
-
-    public WarpService(BannerService bannerService, PlayerService playerService, WarpTransactionService warpTransactionService, Lock warpLock) {
-        this.bannerService = bannerService;
-        this.playerService = playerService;
-        this.warpTransactionService = warpTransactionService;
-        this.warpLock = warpLock;
-    }
+    private final Lock playerLock;
 
     // @Transactional
-    public WarpResult pull(final WarpRequest request) {
+    public WarpResult performWarp(final WarpRequest request) {
+        var transactionId = request.transactionId();
         var playerId = request.playerId();
         var lockName = "warp_lock_" + playerId;
-        if (!warpLock.acquire(lockName)) {
-            throw new WarpException("Please wait before making another warp!");
+        if (!playerLock.acquire(lockName)) {
+            throw new WarpLockedException("Please wait a bit before making another pull!");
         }
-
         try {
-            var transactionUuid = request.transactionId();
-            var cachedTransaction = warpTransactionService.getById(transactionUuid);
+            var player = playerService.getById(playerId);
+            var banner = bannerService.getById(request.bannerId());
+            var cachedTransaction = warpTransactionService.getById(transactionId);
             if (cachedTransaction != null) {
                 return cachedTransaction.result();
             }
-
-            var player = playerService.getById(playerId);
-            var banner = bannerService.getById(request.bannerId());
-
-            var pullAmount = request.amount();
-            if (pullAmount <= 0) {
-                throw new IllegalArgumentException("Amount of pulls cannot be 0 or less");
-            }
-
-            var pulledItems = new ArrayList<WarpResultItem>();
-            var bannerType = banner.getType();
-            var playerPity = player.getPity();
-            for (int i = 0; i < pullAmount; i++) {
-                WarpResultItem item = banner.pull(playerPity);
-                pulledItems.add(item);
-                playerPity.updatePity(bannerType, item);
-            }
-
-            var result = new WarpResult(bannerType, pulledItems);
-            var transaction = new WarpTransaction(transactionUuid, player.getId(), Instant.now(), result);
+            var result = pullItems(banner, player, request.amount());
+            var transaction = warpTransactionService.createTransaction(transactionId, playerId, result);
             warpTransactionService.saveTransaction(transaction);
             playerService.savePlayer(player);
-
             return result;
         } finally {
-            warpLock.release(lockName);
+            playerLock.release(lockName);
         }
+    }
+
+    private WarpResult pullItems(final Banner banner, final Player player, final Integer amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount of pulls cannot be 0 or less.");
+        }
+        var pulledItems = new ArrayList<WarpResultItem>();
+        var bannerType = banner.getType();
+        var playerPity = player.getPity();
+        for (int i = 0; i < amount; i++) {
+            var item = banner.pullItem(playerPity);
+            pulledItems.add(item);
+            playerPity.updatePity(bannerType, item);
+        }
+        return new WarpResult(bannerType, pulledItems);
     }
 }

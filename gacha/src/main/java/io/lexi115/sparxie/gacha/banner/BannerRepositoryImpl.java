@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
@@ -10,16 +11,13 @@ import java.io.IOException;
 import java.util.*;
 
 @Repository
+@RequiredArgsConstructor
 public class BannerRepositoryImpl implements BannerRepository {
 
     private final ResourceLoader resourceLoader;
 
     @Value("${app.storage.banners-path}")
     private String bannerDirPath;
-
-    public BannerRepositoryImpl(final ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
 
     @Override
     public Optional<Banner> findById(final String id) {
