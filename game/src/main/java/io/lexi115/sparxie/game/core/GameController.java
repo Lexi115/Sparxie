@@ -23,7 +23,7 @@ public class GameController {
     }
 
     @PostMapping("/purchase")
-    public void performWarp(@Valid @RequestBody final PurchaseRequest request) {
+    public void performPurchase(@Valid @RequestBody final PurchaseRequest request) {
         gameService.performPurchase(request);
     }
 }
