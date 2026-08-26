@@ -20,10 +20,3 @@ spring:
                 - Path=/api/banner/**
               filters:
                 - StripPrefix=1
-            # Shop
-            - id: shop
-              uri: ${SHOP_SERVICE_BASE_URI:http://game:8080}
-              predicates:
-                - Path=/api/shop/**
-              filters:
-                - StripPrefix=1
