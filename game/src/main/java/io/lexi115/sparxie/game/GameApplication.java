@@ -3,12 +3,14 @@ package io.lexi115.sparxie.game;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableFeignClients
+@EnableScheduling
 public class GameApplication {
 
-    public static void main(String[] args) {
+    static void main(final String[] args) {
         SpringApplication.run(GameApplication.class, args);
     }
 

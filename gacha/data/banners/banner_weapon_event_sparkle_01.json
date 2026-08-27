@@ -1,0 +1,15 @@
+{
+  "id": "banner_weapon_event_sparkle_01",
+  "name": "Earthly Escapade",
+  "type": "weapon_event",
+  "winPool": {
+    "4": [
+      "lc_planetary_rendezvous",
+      "lc_under_the_blue_sky",
+      "lc_geniuses_repose"
+    ],
+    "5": [
+      "lc_earthly_escapade"
+    ]
+  }
+}

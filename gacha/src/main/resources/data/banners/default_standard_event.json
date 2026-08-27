@@ -1,0 +1,77 @@
+{
+  "id": "default_standard_event",
+  "name": "Default Standard Event",
+  "type": "standard_event",
+  "currency": "standard_ticket",
+  "costs": {
+    "1": 1
+  },
+  "winPool": {
+    "4": [
+      "char_default_4_star",
+      "lc_default_4_star"
+    ],
+    "5": [
+      "char_default_5_star",
+      "lc_default_5_star"
+    ]
+  },
+  "lossPool": {
+    "3": [
+      "lc_meshing_cogs",
+      "lc_multiplication",
+      "lc_collapsing_sky",
+      "lc_chorus"
+    ],
+    "4": [
+      "lc_dance_dance_dance",
+      "lc_planetary_rendezvous",
+      "lc_day_one_of_my_new_life",
+      "lc_make_the_world_clamor"
+    ],
+    "5": [
+      "lc_night_on_the_milky_way",
+      "lc_in_the_name_of_the_world",
+      "lc_but_the_battle_isnt_over",
+      "lc_moment_of_victory",
+      "lc_something_irreplaceable",
+      "lc_sleep_like_the_dead",
+      "lc_time_waits_for_no_one"
+    ]
+  },
+  "rarityRates": {
+    "3": {
+      "0": 1.0
+    },
+    "4": {
+      "0": 0.051,
+      "8": 0.561,
+      "9": 1.0
+    },
+    "5": {
+      "0": 0.006,
+      "73": 0.066,
+      "74": 0.126,
+      "75": 0.186,
+      "76": 0.246,
+      "77": 0.306,
+      "78": 0.366,
+      "79": 0.426,
+      "80": 0.486,
+      "81": 0.546,
+      "82": 0.606,
+      "83": 0.666,
+      "84": 0.726,
+      "85": 0.786,
+      "86": 0.846,
+      "87": 0.906,
+      "88": 0.966,
+      "89": 1.0
+    }
+  },
+  "winRates": {
+    "3": 1.0,
+    "4": 0.5,
+    "5": 0.5
+  }
+}

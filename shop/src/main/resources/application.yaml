@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: shop
+
+app:
+  http:
+    inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}

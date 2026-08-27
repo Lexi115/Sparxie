@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: inventory
+  cache:
+    type: caffeine
+    cache-names: characters, weapons
+    caffeine:
+      spec: expireAfterWrite=12h,maximumSize=1000

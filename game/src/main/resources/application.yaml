@@ -1,3 +1,10 @@
 spring:
   application:
     name: game
+
+app:
+  http:
+    warp-client-uri: ${WARP_CLIENT_URI:http://gacha:8080/warp}
+    banner-client-uri: ${BANNER_CLIENT_URI:http://gacha:8080/banner}
+    inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
+    shop-client-uri: ${SHOP_CLIENT_URI:http://shop:8080/shop}

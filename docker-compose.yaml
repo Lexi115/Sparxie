@@ -1,28 +1,65 @@
 services:
-  gacha:
-    container_name: gacha
-    build:
-      context: ./gacha
-    ports:
-      - "8082:8080"
-    restart: on-failure
-
-  game:
-    container_name: game
-    build:
-      context: ./game
-    ports:
-      - "8081:8080"
-    restart: on-failure
-    depends_on:
-      - gacha
-
   gateway:
     container_name: gateway
     build:
       context: ./gateway
+    env_file:
+      - ./gateway/.env
     ports:
       - "8080:8080"
     restart: on-failure
     depends_on:
       - game
+
+  game:
+    container_name: game
+    build:
+      context: ./game
+    env_file:
+      - ./game/.env
+    ports:
+      - "8081:8080"
+    restart: on-failure
+    depends_on:
+      - gacha
+      - inventory
+
+  gacha:
+    container_name: gacha
+    build:
+      context: ./gacha
+    env_file:
+      - ./gacha/.env
+    ports:
+      - "8082:8080"
+    restart: on-failure
+    volumes:
+      - gacha_data:/var/lib/sparxie/gacha
+
+  inventory:
+    container_name: inventory
+    build:
+      context: ./inventory
+    env_file:
+      - ./inventory/.env
+    ports:
+      - "8083:8080"
+    restart: on-failure
+
+  shop:
+    container_name: shop
+    build:
+      context: ./shop
+    env_file:
+      - ./shop/.env
+    ports:
+      - "8084:8080"
+    restart: on-failure
+
+volumes:
+  gacha_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${GACHA_DATA_PATH}"
