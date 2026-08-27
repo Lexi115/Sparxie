@@ -7,7 +7,6 @@ import io.lexi115.sparxie.game.warp.transaction.WarpTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -24,7 +23,7 @@ public class WarpService {
         return warpTransactionService.getOrCreateTransaction(transactionId, playerId);
     }
 
-    public void commitTransaction(final WarpTransaction transaction, final Map<String, Long> items) {
-        warpTransactionService.commitTransaction(transaction, items);
+    public void commitTransaction(final WarpTransaction transaction) {
+        warpTransactionService.commitTransaction(transaction);
     }
 }

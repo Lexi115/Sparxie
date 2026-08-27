@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.game.shop.transaction;
 
+import io.lexi115.sparxie.game.shop.ShopCurrency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,10 @@ public class ShopTransaction {
     private Instant createdAt;
 
     @Setter
-    private BigDecimal price;
+    private ShopCurrency currency;
+
+    @Setter
+    private BigDecimal price = BigDecimal.ZERO;
 
     @Setter
     private Map<String, Long> items;
@@ -25,7 +29,12 @@ public class ShopTransaction {
     @Setter
     private ShopTransactionStatus status;
 
-    public ShopTransaction(final UUID transactionId, final UUID playerId, final Instant createdAt, final ShopTransactionStatus status) {
+    public ShopTransaction(
+            final UUID transactionId,
+            final UUID playerId,
+            final Instant createdAt,
+            final ShopTransactionStatus status
+    ) {
         this.transactionId = transactionId;
         this.playerId = playerId;
         this.createdAt = createdAt;

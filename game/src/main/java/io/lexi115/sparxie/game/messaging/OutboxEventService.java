@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.game.messaging;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
@@ -8,14 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OutboxEventService {
     private final OutboxEventRepository outboxEventRepository;
     private final ObjectMapper objectMapper;
-
-    public OutboxEventService(final OutboxEventRepository outboxEventRepository, final ObjectMapper objectMapper) {
-        this.outboxEventRepository = outboxEventRepository;
-        this.objectMapper = objectMapper;
-    }
 
     public List<OutboxEvent> getSomeOutboxEvents() {
         return outboxEventRepository.findTop100ByOrderByCreatedAtAsc();

@@ -2,21 +2,18 @@ package io.lexi115.sparxie.game.warp.transaction;
 
 import io.lexi115.sparxie.game.messaging.OutboxEventService;
 import io.lexi115.sparxie.game.warp.event.WarpPerformedEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class WarpTransactionService {
     private final WarpTransactionRepository warpTransactionRepository;
     private final OutboxEventService outboxEventService;
-
-    public WarpTransactionService(final WarpTransactionRepository warpTransactionRepository, final OutboxEventService outboxEventService) {
-        this.warpTransactionRepository = warpTransactionRepository;
-        this.outboxEventService = outboxEventService;
-    }
 
     // @Transactional
     public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
@@ -25,7 +22,8 @@ public class WarpTransactionService {
             return oldTransaction;
         }
 
-        var newTransaction = new WarpTransaction(transactionId, playerId, Instant.now(), WarpTransactionStatus.PENDING);
+        var newTransaction = new WarpTransaction(
+                transactionId, playerId, Instant.now(), WarpTransactionStatus.PENDING, new HashMap<>());
         try {
             warpTransactionRepository.save(newTransaction);
             return newTransaction;
@@ -36,13 +34,15 @@ public class WarpTransactionService {
     }
 
     //@Transactional
-    public void commitTransaction(final WarpTransaction transaction, final Map<String, Long> items) {
+    public void commitTransaction(final WarpTransaction transaction) {
         transaction.setStatus(WarpTransactionStatus.COMPLETED);
         warpTransactionRepository.save(transaction);
         var event = new WarpPerformedEvent(
-                transaction.getTransactionId(), transaction.getPlayerId(), transaction.getCreatedAt(), items);
-        outboxEventService.scheduleEvent(event, "gacha-topic");
+                transaction.getTransactionId(),
+                transaction.getPlayerId(),
+                transaction.getCreatedAt(),
+                transaction.getItems()
+        );
+        outboxEventService.scheduleEvent(event, "warp-topic");
     }
-
-
 }

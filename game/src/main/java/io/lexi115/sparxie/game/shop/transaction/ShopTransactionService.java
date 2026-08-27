@@ -1,5 +1,7 @@
 package io.lexi115.sparxie.game.shop.transaction;
 
+import io.lexi115.sparxie.game.messaging.OutboxEventService;
+import io.lexi115.sparxie.game.shop.event.PurchasePerformedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ShopTransactionService {
     private final ShopTransactionRepository shopTransactionRepository;
+    private final OutboxEventService outboxEventService;
 
     // @Transactional
     public ShopTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
@@ -32,5 +35,14 @@ public class ShopTransactionService {
     public void commitTransaction(final ShopTransaction transaction) {
         transaction.setStatus(ShopTransactionStatus.COMPLETED);
         shopTransactionRepository.save(transaction);
+        var event = new PurchasePerformedEvent(
+                transaction.getTransactionId(),
+                transaction.getPlayerId(),
+                transaction.getCreatedAt(),
+                transaction.getCurrency(),
+                transaction.getPrice(),
+                transaction.getItems()
+        );
+        outboxEventService.scheduleEvent(event, "shop-topic");
     }
 }

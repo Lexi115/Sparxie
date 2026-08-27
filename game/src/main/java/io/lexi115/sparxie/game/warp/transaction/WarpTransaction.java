@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -18,6 +19,9 @@ public class WarpTransaction {
 
     @Setter
     private WarpTransactionStatus status;
+
+    @Setter
+    private Map<String, Long> items;
 
     public boolean isCompleted() {
         return this.status == WarpTransactionStatus.COMPLETED;

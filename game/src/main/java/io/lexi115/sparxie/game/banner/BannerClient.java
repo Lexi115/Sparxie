@@ -6,7 +6,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-// TODO fare error decoders
 @FeignClient(name = "gacha", contextId = "bannerClient", url = "${app.http.banner-client-uri}")
 public interface BannerClient {
     @GetMapping("/{id}")

@@ -11,6 +11,7 @@ import io.lexi115.sparxie.game.warp.dto.WarpResultItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +41,14 @@ public class GameService {
 
         // Pull and give items (if not done already)
         var warpResult = warpService.pull(request);
-        var countedItems = countItems(warpResult.items());
-        inventoryService.giveItems(transactionId, playerId, countedItems);
-        warpService.commitTransaction(transaction, countedItems);
+        var groupedItems = groupItems(warpResult.items());
+        inventoryService.giveItems(transactionId, playerId, groupedItems);
+        transaction.setItems(groupedItems);
+        warpService.commitTransaction(transaction);
         return warpResult;
     }
 
-    private Map<String, Long> countItems(final List<WarpResultItemDto> pulledItems) {
+    private Map<String, Long> groupItems(final List<WarpResultItemDto> pulledItems) {
         var map = new HashMap<String, Long>();
         pulledItems.forEach(pulledItem -> {
             var itemId = pulledItem.itemId();
@@ -66,13 +68,17 @@ public class GameService {
         }
 
         var shopItem = shopService.getItemById(itemId);
-        var itemCurrency = shopItem.currency();
-        if (itemCurrency == ShopCurrency.MONEY) {
+        var shopItemCurrency = shopItem.currency();
+        var shopItemCost = shopItem.cost() * itemAmount;
+        if (shopItemCurrency == ShopCurrency.MONEY) {
             shopService.purchaseItem(transactionId, playerId, itemId, itemAmount);
         } else {
-            var currencyItem = Map.of(itemCurrency.name(), shopItem.cost() * itemAmount);
-            inventoryService.consumeItems(transactionId, playerId, currencyItem);
+            inventoryService.consumeItems(transactionId, playerId, Map.of(
+                    shopItemCurrency.name(), shopItemCost)
+            );
         }
+        transaction.setCurrency(shopItemCurrency);
+        transaction.setPrice(BigDecimal.valueOf(shopItemCost));
         inventoryService.giveItems(transactionId, playerId, Map.of(itemId, itemAmount));
         shopService.commitTransaction(transaction);
     }
