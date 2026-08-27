@@ -2,7 +2,7 @@ package io.lexi115.sparxie.inventory.error;
 
 import io.lexi115.sparxie.inventory.character.CharacterNotFoundException;
 import io.lexi115.sparxie.inventory.core.InventoryLockedException;
-import io.lexi115.sparxie.inventory.core.NotEnoughItemsException;
+import io.lexi115.sparxie.inventory.item.NotEnoughItemsException;
 import io.lexi115.sparxie.inventory.player.PlayerNotFoundException;
 import io.lexi115.sparxie.inventory.weapon.WeaponNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -51,6 +51,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNPROCESSABLE_CONTENT,
                 ErrorCode.ERR_NOT_ENOUGH_ITEMS,
                 Map.of(
+                        "itemId", e.getItemId(),
                         "possessedAmount", e.getPossessedAmount(),
                         "requiredAmount", e.getRequiredAmount()
                 )

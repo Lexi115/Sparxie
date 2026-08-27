@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.inventory.player;
 
-import io.lexi115.sparxie.inventory.core.ItemType;
-import io.lexi115.sparxie.inventory.core.NotEnoughItemsException;
+import io.lexi115.sparxie.inventory.item.ItemType;
+import io.lexi115.sparxie.inventory.item.NotEnoughItemsException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

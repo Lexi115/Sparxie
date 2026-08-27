@@ -3,6 +3,7 @@ package io.lexi115.sparxie.inventory.core;
 import io.lexi115.sparxie.inventory.character.CharacterService;
 import io.lexi115.sparxie.inventory.concurrent.Lock;
 import io.lexi115.sparxie.inventory.core.transaction.InventoryTransactionService;
+import io.lexi115.sparxie.inventory.item.ItemType;
 import io.lexi115.sparxie.inventory.player.Player;
 import io.lexi115.sparxie.inventory.player.PlayerService;
 import io.lexi115.sparxie.inventory.util.UuidHelper;

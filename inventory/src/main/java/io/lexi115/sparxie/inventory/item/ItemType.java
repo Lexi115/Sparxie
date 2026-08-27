@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.inventory.core;
+package io.lexi115.sparxie.inventory.item;
 
 public enum ItemType {
     CHARACTER,
