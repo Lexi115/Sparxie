@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.shop.cache;
+package io.lexi115.sparxie.shop.concurrent;
 
 import org.springframework.stereotype.Component;
 

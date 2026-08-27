@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.shop.core;
 
-import io.lexi115.sparxie.shop.cache.Lock;
+import io.lexi115.sparxie.shop.concurrent.Lock;
+import io.lexi115.sparxie.shop.item.ShopItem;
 import io.lexi115.sparxie.shop.item.ShopItemService;
 import io.lexi115.sparxie.shop.payment.PaymentGateway;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class ShopService {
     public void purchaseItem(final UUID transactionId, final UUID playerId, final String itemId, final Long amount) {
         var lockName = "shop_lock_" + playerId;
         if (!playerLock.acquire(lockName)) {
-            throw new RuntimeException("lock");
+            throw new ShopLockedException("Please wait a bit before using the shop again!");
         }
         try {
             var shopItem = getItemById(itemId);

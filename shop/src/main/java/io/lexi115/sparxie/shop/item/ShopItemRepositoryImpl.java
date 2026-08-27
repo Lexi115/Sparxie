@@ -1,7 +1,6 @@
 package io.lexi115.sparxie.shop.item;
 
 import io.lexi115.sparxie.shop.core.ShopCurrency;
-import io.lexi115.sparxie.shop.core.ShopItem;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.shop.core;
 
 import io.lexi115.sparxie.shop.core.dto.PurchaseRequest;
-import io.lexi115.sparxie.shop.core.dto.ShopItemDto;
+import io.lexi115.sparxie.shop.item.dto.ShopItemDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

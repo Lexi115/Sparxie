@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.inventory.player;
 
 import io.lexi115.sparxie.inventory.core.ItemType;
+import io.lexi115.sparxie.inventory.core.NotEnoughItemsException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -36,9 +37,10 @@ public class Player {
             case WEAPON -> weapons;
             case MATERIAL -> materials;
         };
-        var newQuantity = itemMap.getOrDefault(itemId, 0L) - amount;
+        var possessedAmount = itemMap.getOrDefault(itemId, 0L);
+        var newQuantity = possessedAmount - amount;
         if (newQuantity < 0) {
-            throw new NotEnoughItemsException(itemId);
+            throw new NotEnoughItemsException(itemId, possessedAmount, Math.abs(newQuantity));
         }
         itemMap.put(itemId, newQuantity);
     }

@@ -12,7 +12,7 @@ public class PlayerService {
 
     public Player getById(final UUID id) {
         return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(id.toString()));
+                .orElseThrow(() -> new PlayerNotFoundException(id));
     }
 
     public void savePlayer(final Player player) {
