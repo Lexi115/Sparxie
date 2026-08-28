@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: user
+
+app:
+  http:
+    zitadel-client-uri: ${ZITADEL_CLIENT_URI:http://zitadel:8080}

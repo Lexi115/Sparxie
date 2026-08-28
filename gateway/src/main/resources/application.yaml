@@ -20,3 +20,10 @@ spring:
                 - Path=/api/banner/**
               filters:
                 - StripPrefix=1
+            # User
+            - id: user
+              uri: ${USER_SERVICE_BASE_URI:http://user:8080}
+              predicates:
+                - Path=/api/user/**
+              filters:
+                - StripPrefix=1

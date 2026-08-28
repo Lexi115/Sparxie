@@ -56,6 +56,16 @@ services:
       - "8084:8080"
     restart: on-failure
 
+  user:
+    container_name: user
+    build:
+      context: ./user
+    env_file:
+      - ./user/.env
+    ports:
+      - "8085:8080"
+    restart: on-failure
+
 volumes:
   gacha_data:
     driver: local

@@ -1,0 +1,28 @@
+# Maven / Java
+target/
+*.jar
+*.war
+*.class
+
+# Version Control & Logs
+.git/
+.gitignore
+*.log
+
+# IDE Configuration
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+.springBeans
+.sts4-cache
+.apt_generated
+
+# Other
+.DS_Store
+Thumbs.db
+.env
