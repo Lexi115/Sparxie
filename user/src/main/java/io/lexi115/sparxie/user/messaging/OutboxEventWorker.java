@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.messaging;
+package io.lexi115.sparxie.user.messaging;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

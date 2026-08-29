@@ -8,8 +8,9 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
-    depends_on:
+    profiles:
       - game
+      - user
 
   game:
     container_name: game
@@ -20,9 +21,8 @@ services:
     ports:
       - "8081:8080"
     restart: on-failure
-    depends_on:
-      - gacha
-      - inventory
+    profiles:
+      - game
 
   gacha:
     container_name: gacha
@@ -35,6 +35,8 @@ services:
     restart: on-failure
     volumes:
       - gacha_data:/var/lib/sparxie/gacha
+    profiles:
+      - game
 
   inventory:
     container_name: inventory
@@ -45,6 +47,8 @@ services:
     ports:
       - "8083:8080"
     restart: on-failure
+    profiles:
+      - game
 
   shop:
     container_name: shop
@@ -55,6 +59,8 @@ services:
     ports:
       - "8084:8080"
     restart: on-failure
+    profiles:
+      - game
 
   user:
     container_name: user
@@ -65,6 +71,8 @@ services:
     ports:
       - "8085:8080"
     restart: on-failure
+    profiles:
+      - user
 
 volumes:
   gacha_data:

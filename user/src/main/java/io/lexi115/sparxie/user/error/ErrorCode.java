@@ -1,0 +1,9 @@
+package io.lexi115.sparxie.user.error;
+
+public enum ErrorCode {
+    ERR_USER_NOT_FOUND,
+    ERR_USERNAME_ALREADY_IN_USE,
+    ERR_INVALID_CREDENTIALS,
+    ERR_AUTHENTICATION_ERROR,
+    ERR_VALIDATION_FAILED
+}

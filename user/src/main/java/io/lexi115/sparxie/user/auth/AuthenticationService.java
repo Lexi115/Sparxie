@@ -13,19 +13,23 @@ import java.util.UUID;
 public class AuthenticationService {
     private final AuthenticationClient authenticationClient;
 
-    public RegisterResponse registerUser(String username, String password) {
+    public RegisterResponse registerUser(final String username, final String password) {
         return authenticationClient.registerUser(username, password);
     }
 
-    public LoginResponse loginUser(String username, String password) {
+    public LoginResponse loginUser(final String username, final String password) {
         return authenticationClient.loginUser(username, password);
     }
 
-    public void deleteUser(UUID id) {
-        authenticationClient.deleteUser(id);
+    public void deleteUser(final UUID userId) {
+        authenticationClient.deleteUser(userId);
     }
 
-    public RefreshTokenResponse refreshUserToken(String username, String refreshToken) {
-        return authenticationClient.refreshUserToken(username, refreshToken);
+    public RefreshTokenResponse refreshUserToken(final UUID userId, final String refreshToken) {
+        return authenticationClient.refreshUserToken(userId, refreshToken);
+    }
+
+    public void changePassword(final UUID userId, final String oldPassword, final String newPassword) {
+        authenticationClient.changePassword(userId, oldPassword, newPassword);
     }
 }

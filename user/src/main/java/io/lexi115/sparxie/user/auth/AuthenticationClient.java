@@ -11,9 +11,9 @@ public interface AuthenticationClient {
 
     LoginResponse loginUser(String username, String password);
 
-    void deleteUser(UUID id);
+    void deleteUser(UUID userId);
 
-    RefreshTokenResponse refreshUserToken(String username, String refreshToken);
+    RefreshTokenResponse refreshUserToken(UUID userId, String refreshToken);
 
-    void changePassword(String username, String oldPassword, String newPassword);
+    void changePassword(UUID userId, String oldPassword, String newPassword);
 }
