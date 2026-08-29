@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record UserDeletedEvent(
-        UUID id,
+        UUID userId,
         Instant deletedAt
 ) implements Event {
 }

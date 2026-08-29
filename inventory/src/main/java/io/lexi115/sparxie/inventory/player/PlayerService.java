@@ -10,12 +10,21 @@ import java.util.UUID;
 public class PlayerService {
     private final PlayerRepository playerRepository;
 
-    public Player getById(final UUID id) {
-        return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(id));
+    public void createPlayer(final UUID userId) {
+        var player = new Player(userId);
+        playerRepository.save(player);
+    }
+
+    public Player getById(final UUID userId) {
+        return playerRepository.findById(userId)
+                .orElseThrow(() -> new PlayerNotFoundException(userId));
     }
 
     public void savePlayer(final Player player) {
         playerRepository.save(player);
+    }
+
+    public void deleteById(final UUID userId) {
+        playerRepository.deleteById(userId);
     }
 }

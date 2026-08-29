@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record UserCreatedEvent(
-        UUID id,
+        UUID userId,
         String username,
         Instant createdAt
 ) implements Event {

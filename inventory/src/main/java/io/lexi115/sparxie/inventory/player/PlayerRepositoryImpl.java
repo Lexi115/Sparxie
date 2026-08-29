@@ -28,4 +28,9 @@ public class PlayerRepositoryImpl implements PlayerRepository {
     public void save(Player player) {
         map.put(player.getId(), player);
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        map.remove(id);
+    }
 }

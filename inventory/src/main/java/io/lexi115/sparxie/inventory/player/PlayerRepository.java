@@ -7,4 +7,6 @@ public interface PlayerRepository {
     Optional<Player> findById(UUID id);
 
     void save(Player player);
+
+    void deleteById(UUID id);
 }
