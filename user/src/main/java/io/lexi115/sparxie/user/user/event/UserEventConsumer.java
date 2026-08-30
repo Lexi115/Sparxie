@@ -16,13 +16,13 @@ public class UserEventConsumer {
 
     @KafkaHandler
     public void onUserCreated(final UserCreatedEvent event) {
-        System.out.println("player created event");
+        System.out.println("player created event " + event.userId());
         userService.createUser(event.userId(), event.username(), event.createdAt());
     }
 
     @KafkaHandler
     public void onUserDeleted(final UserDeletedEvent event) {
-        System.out.println("player deleted event");
+        System.out.println("player deleted event " + event.userId());
         userService.deleteUser(event.userId());
     }
 }
