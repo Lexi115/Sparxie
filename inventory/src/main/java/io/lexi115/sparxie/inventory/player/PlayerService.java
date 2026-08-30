@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.inventory.player;
 
+import io.lexi115.sparxie.inventory.player.exception.PlayerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

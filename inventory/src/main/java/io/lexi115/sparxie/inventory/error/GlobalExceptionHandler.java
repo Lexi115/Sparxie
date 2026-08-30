@@ -1,10 +1,10 @@
 package io.lexi115.sparxie.inventory.error;
 
-import io.lexi115.sparxie.inventory.character.CharacterNotFoundException;
-import io.lexi115.sparxie.inventory.core.InventoryLockedException;
-import io.lexi115.sparxie.inventory.item.NotEnoughItemsException;
-import io.lexi115.sparxie.inventory.player.PlayerNotFoundException;
-import io.lexi115.sparxie.inventory.weapon.WeaponNotFoundException;
+import io.lexi115.sparxie.inventory.character.exception.CharacterNotFoundException;
+import io.lexi115.sparxie.inventory.inventory.exception.InventoryLockedException;
+import io.lexi115.sparxie.inventory.inventory.exception.NotEnoughItemsException;
+import io.lexi115.sparxie.inventory.player.exception.PlayerNotFoundException;
+import io.lexi115.sparxie.inventory.weapon.exception.WeaponNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

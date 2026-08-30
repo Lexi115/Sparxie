@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.shop.item;
 
+import io.lexi115.sparxie.shop.item.exception.ShopItemNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

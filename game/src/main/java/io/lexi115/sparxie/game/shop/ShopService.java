@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.shop;
 
-import io.lexi115.sparxie.game.core.PurchaseRequest;
+import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
 import io.lexi115.sparxie.game.shop.dto.ShopItemDto;
 import io.lexi115.sparxie.game.shop.transaction.ShopTransaction;
 import io.lexi115.sparxie.game.shop.transaction.ShopTransactionService;

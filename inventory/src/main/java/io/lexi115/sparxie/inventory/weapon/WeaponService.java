@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.inventory.weapon;
 
+import io.lexi115.sparxie.inventory.weapon.exception.WeaponNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

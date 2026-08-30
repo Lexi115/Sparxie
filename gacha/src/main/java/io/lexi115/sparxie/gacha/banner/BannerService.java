@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import io.lexi115.sparxie.gacha.banner.exception.BannerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

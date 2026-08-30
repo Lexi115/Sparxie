@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gacha.player;
 
+import io.lexi115.sparxie.gacha.player.exception.PlayerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

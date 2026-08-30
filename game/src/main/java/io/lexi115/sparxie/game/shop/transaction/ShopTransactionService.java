@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.shop.transaction;
 
-import io.lexi115.sparxie.game.messaging.OutboxEventService;
+import io.lexi115.sparxie.game.event.OutboxEventService;
 import io.lexi115.sparxie.game.shop.event.PurchasePerformedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

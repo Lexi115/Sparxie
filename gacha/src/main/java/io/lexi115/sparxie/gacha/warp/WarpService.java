@@ -6,6 +6,7 @@ import io.lexi115.sparxie.gacha.concurrent.Lock;
 import io.lexi115.sparxie.gacha.player.Player;
 import io.lexi115.sparxie.gacha.player.PlayerService;
 import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
+import io.lexi115.sparxie.gacha.warp.exception.WarpLockedException;
 import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.inventory.character;
 
+import io.lexi115.sparxie.inventory.character.exception.CharacterNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
