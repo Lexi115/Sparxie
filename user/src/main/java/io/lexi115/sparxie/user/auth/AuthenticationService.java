@@ -5,6 +5,7 @@ import io.lexi115.sparxie.user.auth.dto.UserLoginResponse;
 import io.lexi115.sparxie.user.auth.dto.UserRegisterResponse;
 import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
 import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
+import io.lexi115.sparxie.user.event.EventType;
 import io.lexi115.sparxie.user.event.OutboxEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class AuthenticationService {
     public UserRegisterResponse registerUser(final String username, final String password) {
         var response = authenticationClient.registerUser(username, password);
         var event = new UserCreatedEvent(response.userId(), username, Instant.now());
-        outboxEventService.scheduleEvent(event, "user-topic");
+        outboxEventService.scheduleEvent(event, response.userId().toString(), "user-topic", EventType.USER_CREATED);
         return response;
     }
 
@@ -32,7 +33,7 @@ public class AuthenticationService {
     public void deleteUser(final UUID userId) {
         authenticationClient.deleteUser(userId);
         var event = new UserDeletedEvent(userId, Instant.now());
-        outboxEventService.scheduleEvent(event, "user-topic");
+        outboxEventService.scheduleEvent(event, userId.toString(), "user-topic", EventType.USER_DELETED);
     }
 
     public RefreshTokenResponse refreshUserToken(final UUID userId, final String refreshToken) {

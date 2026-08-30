@@ -18,13 +18,15 @@ public class OutboxEventService {
         return outboxEventRepository.findTop100ByOrderByCreatedAtAsc();
     }
 
-    public void scheduleEvent(final Event event, final String topic) {
+    public void scheduleEvent(final Event event, final String key, final String topic, final EventType eventType) {
         try {
             var outboxEvent = new OutboxEvent(
                     UUID.randomUUID(),
+                    key,
                     topic,
                     objectMapper.writeValueAsString(event),
-                    Instant.now()
+                    Instant.now(),
+                    eventType
             );
             outboxEventRepository.save(outboxEvent);
         } catch (Exception e) {

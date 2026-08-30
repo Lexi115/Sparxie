@@ -5,8 +5,10 @@ import java.util.UUID;
 
 public record OutboxEvent(
         UUID id,
+        String key,
         String topic,
         String payload,
-        Instant createdAt
+        Instant createdAt,
+        EventType type
 ) {
 }

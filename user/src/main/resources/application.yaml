@@ -1,6 +1,14 @@
 spring:
   application:
     name: user
+  kafka:
+    properties:
+      spring.json.trusted.packages: "io.lexi115.sparxie.*"
+      spring.json.type.mapping: >
+        USER_CREATED:io.lexi115.sparxie.user.auth.event.UserCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.user.auth.event.UserDeletedEvent
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
 
 app:
   http:
