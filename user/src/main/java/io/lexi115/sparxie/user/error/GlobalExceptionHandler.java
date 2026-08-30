@@ -1,9 +1,9 @@
 package io.lexi115.sparxie.user.error;
 
-import io.lexi115.sparxie.user.auth.AuthenticationException;
-import io.lexi115.sparxie.user.auth.InvalidCredentialsException;
-import io.lexi115.sparxie.user.auth.UsernameAlreadyInUseException;
-import io.lexi115.sparxie.user.core.UserNotFoundException;
+import io.lexi115.sparxie.user.auth.exception.AuthenticationException;
+import io.lexi115.sparxie.user.auth.exception.InvalidCredentialsException;
+import io.lexi115.sparxie.user.auth.exception.UsernameAlreadyInUseException;
+import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

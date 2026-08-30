@@ -27,3 +27,10 @@ spring:
                 - Path=/api/user/**
               filters:
                 - StripPrefix=1
+            # Authentication
+            - id: auth
+              uri: ${AUTH_SERVICE_BASE_URI:http://user:8080}
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=1

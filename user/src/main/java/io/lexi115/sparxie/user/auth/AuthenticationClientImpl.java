@@ -1,9 +1,11 @@
 package io.lexi115.sparxie.user.auth;
 
-import io.lexi115.sparxie.user.auth.dto.LoginResponse;
 import io.lexi115.sparxie.user.auth.dto.RefreshTokenResponse;
-import io.lexi115.sparxie.user.auth.dto.RegisterResponse;
-import io.lexi115.sparxie.user.core.UserNotFoundException;
+import io.lexi115.sparxie.user.auth.dto.UserLoginResponse;
+import io.lexi115.sparxie.user.auth.dto.UserRegisterResponse;
+import io.lexi115.sparxie.user.auth.exception.InvalidCredentialsException;
+import io.lexi115.sparxie.user.auth.exception.UsernameAlreadyInUseException;
+import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,7 @@ public class AuthenticationClientImpl implements AuthenticationClient {
     private final Logger logger = LoggerFactory.getLogger(AuthenticationClientImpl.class);
 
     @Override
-    public RegisterResponse registerUser(String username, String password) {
+    public UserRegisterResponse registerUser(String username, String password) {
         map.forEach((_, user) -> {
             if (user.getUsername().equals(username)) {
                 throw new UsernameAlreadyInUseException(username);
@@ -29,15 +31,15 @@ public class AuthenticationClientImpl implements AuthenticationClient {
         var user = new AuthenticationUser(UUID.randomUUID(), username, Instant.now(), password);
         map.put(user.getId(), user);
         logger.info("[AUTH] Registered user {}", user);
-        return new RegisterResponse(user.getId(), "fake-access-token", "fake-refresh-token");
+        return new UserRegisterResponse(user.getId(), "fake-access-token", "fake-refresh-token");
     }
 
     @Override
-    public LoginResponse loginUser(String username, String password) {
+    public UserLoginResponse authenticateUser(String username, String password) {
         for (var user : map.values()) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 logger.info("[AUTH] Logged user {}", user);
-                return new LoginResponse(user.getId(), "fake-access-token", "fake-refresh-token");
+                return new UserLoginResponse(user.getId(), "fake-access-token", "fake-refresh-token");
             }
         }
         throw new InvalidCredentialsException();
@@ -64,7 +66,7 @@ public class AuthenticationClientImpl implements AuthenticationClient {
     }
 
     @Override
-    public void changePassword(UUID userId, String oldPassword, String newPassword) {
+    public void changeUserPassword(UUID userId, String oldPassword, String newPassword) {
         var user = map.get(userId);
         if (user == null) {
             throw new UserNotFoundException(userId);

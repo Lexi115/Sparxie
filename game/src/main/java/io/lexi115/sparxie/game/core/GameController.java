@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
     private final GameService gameService;
 
-    @PostMapping("/pull")
+    @PostMapping("/warp/pull")
     public WarpResultDto performWarp(@Valid @RequestBody final WarpRequest request) {
         return gameService.performWarp(request);
     }
 
-    @PostMapping("/purchase")
+    @PostMapping("/shop/purchase")
     public void performPurchase(@Valid @RequestBody final PurchaseRequest request) {
         gameService.performPurchase(request);
     }

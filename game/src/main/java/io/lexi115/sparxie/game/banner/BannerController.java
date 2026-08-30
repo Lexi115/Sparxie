@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class BannerController {
     private final BannerService bannerService;
 
-    @GetMapping("/{id}")
-    public BannerDto getById(@PathVariable final String id) {
-        return bannerService.getById(id);
+    @GetMapping("/{bannerId}")
+    public BannerDto getById(@PathVariable final String bannerId) {
+        return bannerService.getById(bannerId);
     }
 
-    @GetMapping("/details/{id}")
-    public BannerDetailsDto getDetailsById(@PathVariable final String id) {
-        return bannerService.getDetailsById(id);
+    @GetMapping("/details/{bannerId}")
+    public BannerDetailsDto getDetailsById(@PathVariable final String bannerId) {
+        return bannerService.getDetailsById(bannerId);
     }
 }
