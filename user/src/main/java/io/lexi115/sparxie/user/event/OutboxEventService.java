@@ -18,7 +18,7 @@ public class OutboxEventService {
         return outboxEventRepository.findTop100ByOrderByCreatedAtAsc();
     }
 
-    public void scheduleEvent(final Event event, final String key, final String topic, final EventType eventType) {
+    public void scheduleEvent(final Event event, final String key, final String topic) {
         try {
             var outboxEvent = new OutboxEvent(
                     UUID.randomUUID(),
@@ -26,7 +26,7 @@ public class OutboxEventService {
                     topic,
                     objectMapper.writeValueAsString(event),
                     Instant.now(),
-                    eventType
+                    event.getEventType()
             );
             outboxEventRepository.save(outboxEvent);
         } catch (Exception e) {

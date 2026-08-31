@@ -12,7 +12,7 @@ import java.util.UUID;
 public class WarpTransactionService {
     private final WarpTransactionRepository warpTransactionRepository;
 
-    public WarpTransaction getById(final UUID id) {
+    public WarpTransaction getTransaction(final UUID id) {
         return warpTransactionRepository.findById(id).orElse(null);
     }
 

@@ -18,13 +18,13 @@ public class BannerController {
 
     @GetMapping("/{bannerId}")
     public BannerDto getById(@PathVariable final String bannerId) {
-        var banner = bannerService.getById(bannerId);
+        var banner = bannerService.getBanner(bannerId);
         return bannerMapper.toDto(banner);
     }
 
     @GetMapping("/details/{bannerId}")
     public BannerDetailsDto getDetailsById(@PathVariable final String bannerId) {
-        var banner = bannerService.getById(bannerId);
+        var banner = bannerService.getBanner(bannerId);
         return bannerMapper.toDetailsDto(banner);
     }
 }

@@ -12,7 +12,7 @@ public class BannerService {
     private final BannerRepository bannerRepository;
 
     @Cacheable("banners")
-    public Banner getById(final String id) {
+    public Banner getBanner(final String id) {
         var editsBanner = bannerRepository.findById(id).orElse(null);
         if (editsBanner == null || editsBanner.getType() == null) {
             throw new BannerNotFoundException(id);

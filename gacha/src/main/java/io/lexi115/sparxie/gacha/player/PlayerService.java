@@ -17,7 +17,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    public Player getById(final UUID userId) {
+    public Player getPlayer(final UUID userId) {
         return playerRepository.findById(userId)
                 .orElseThrow(() -> new PlayerNotFoundException(userId));
     }
@@ -26,7 +26,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    public void deleteById(final UUID userId) {
+    public void deletePlayer(final UUID userId) {
         playerRepository.deleteById(userId);
     }
 }

@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-@KafkaListener(topics = "user-topic", groupId = "user-service-group")
-public class UserEventConsumer {
+@KafkaListener(topics = "${app.kafka.topic.user}", groupId = "${app.kafka.group.user}")
+public class KafkaUserConsumer {
     private final UserService userService;
 
     @KafkaHandler
     public void onUserCreated(final UserCreatedEvent event) {
-        System.out.println("player created event " + event.userId());
+        System.out.println("user created event " + event.userId());
         userService.createUser(event.userId(), event.username(), event.createdAt());
     }
 
     @KafkaHandler
     public void onUserDeleted(final UserDeletedEvent event) {
-        System.out.println("player deleted event " + event.userId());
+        System.out.println("user deleted event " + event.userId());
         userService.deleteUser(event.userId());
     }
 }

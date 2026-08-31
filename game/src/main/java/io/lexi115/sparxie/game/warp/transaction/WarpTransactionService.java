@@ -3,6 +3,7 @@ package io.lexi115.sparxie.game.warp.transaction;
 import io.lexi115.sparxie.game.event.OutboxEventService;
 import io.lexi115.sparxie.game.warp.event.WarpPerformedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,6 +15,9 @@ import java.util.UUID;
 public class WarpTransactionService {
     private final WarpTransactionRepository warpTransactionRepository;
     private final OutboxEventService outboxEventService;
+
+    @Value("${app.kafka.topic.warp}")
+    private String warpTopic;
 
     // @Transactional
     public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
@@ -43,6 +47,6 @@ public class WarpTransactionService {
                 transaction.getCreatedAt(),
                 transaction.getItems()
         );
-        outboxEventService.scheduleEvent(event, "warp-topic");
+        outboxEventService.scheduleEvent(event, transaction.getPlayerId().toString(), warpTopic);
     }
 }

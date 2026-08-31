@@ -6,3 +6,21 @@ spring:
     cache-names: characters, weapons
     caffeine:
       spec: expireAfterWrite=12h,maximumSize=1000
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.type.mapping: >
+        USER_CREATED:io.lexi115.sparxie.inventory.player.event.PlayerCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.inventory.player.event.PlayerDeletedEvent
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
+
+app:
+  kafka:
+    topic:
+      user: user-topic
+    group:
+      inventory: inventory-group

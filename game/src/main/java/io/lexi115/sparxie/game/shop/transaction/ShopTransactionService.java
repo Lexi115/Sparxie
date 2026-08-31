@@ -3,6 +3,7 @@ package io.lexi115.sparxie.game.shop.transaction;
 import io.lexi115.sparxie.game.event.OutboxEventService;
 import io.lexi115.sparxie.game.shop.event.PurchasePerformedEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,6 +14,9 @@ import java.util.UUID;
 public class ShopTransactionService {
     private final ShopTransactionRepository shopTransactionRepository;
     private final OutboxEventService outboxEventService;
+
+    @Value("${app.kafka.topic.shop}")
+    private String shopTopic;
 
     // @Transactional
     public ShopTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
@@ -43,6 +47,6 @@ public class ShopTransactionService {
                 transaction.getPrice(),
                 transaction.getItems()
         );
-        outboxEventService.scheduleEvent(event, "shop-topic");
+        outboxEventService.scheduleEvent(event, transaction.getPlayerId().toString(), shopTopic);
     }
 }

@@ -17,7 +17,7 @@ public class WarpController {
     private final WarpService warpService;
     private final WarpMapper warpMapper;
 
-    @PostMapping("/warp")
+    @PostMapping("/pull")
     public WarpResultDto performWarp(@Valid @RequestBody final WarpRequest request) {
         var warpResult = warpService.performWarp(request);
         return warpMapper.toDto(warpResult);

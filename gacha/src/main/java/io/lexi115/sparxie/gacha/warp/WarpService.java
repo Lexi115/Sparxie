@@ -31,9 +31,9 @@ public class WarpService {
             throw new WarpLockedException("Please wait a bit before making another pull!");
         }
         try {
-            var player = playerService.getById(playerId);
-            var banner = bannerService.getById(request.bannerId());
-            var cachedTransaction = warpTransactionService.getById(transactionId);
+            var player = playerService.getPlayer(playerId);
+            var banner = bannerService.getBanner(request.bannerId());
+            var cachedTransaction = warpTransactionService.getTransaction(transactionId);
             if (cachedTransaction != null) {
                 return cachedTransaction.result();
             }

@@ -25,7 +25,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    public void deleteById(final UUID userId) {
+    public void deletePlayer(final UUID userId) {
         playerRepository.deleteById(userId);
     }
 }

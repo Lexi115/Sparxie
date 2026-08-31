@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.game.shop.event;
 
 import io.lexi115.sparxie.game.event.Event;
+import io.lexi115.sparxie.game.event.EventType;
 import io.lexi115.sparxie.game.shop.ShopCurrency;
 
 import java.math.BigDecimal;
@@ -16,4 +17,8 @@ public record PurchasePerformedEvent(
         BigDecimal price,
         Map<String, Long> items
 ) implements Event {
+    @Override
+    public EventType getEventType() {
+        return EventType.PURCHASE_PERFORMED;
+    }
 }

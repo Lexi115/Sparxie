@@ -1,6 +1,12 @@
 spring:
   application:
     name: game
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
 
 app:
   http:
@@ -8,3 +14,7 @@ app:
     banner-client-uri: ${BANNER_CLIENT_URI:http://gacha:8080/banner}
     inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
     shop-client-uri: ${SHOP_CLIENT_URI:http://shop:8080/shop}
+  kafka:
+    topic:
+      warp: warp-topic
+      shop: shop-topic

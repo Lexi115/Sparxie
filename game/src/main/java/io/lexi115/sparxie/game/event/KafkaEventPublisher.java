@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.user.event;
+package io.lexi115.sparxie.game.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EventPublisherImpl implements EventPublisher {
+public class KafkaEventPublisher implements EventPublisher {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 

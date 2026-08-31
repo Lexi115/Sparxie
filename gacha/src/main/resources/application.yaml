@@ -1,8 +1,23 @@
 spring:
   application:
     name: gacha
-
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.type.mapping: >
+        USER_CREATED:io.lexi115.sparxie.gacha.player.event.PlayerCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.gacha.player.event.PlayerDeletedEvent
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
 app:
   storage:
     root-path: ${APP_STORAGE_ROOT:/var/lib/sparxie/gacha}
     banners-path: ${app.storage.root-path}/banners
+  kafka:
+    topic:
+      user: user-topic
+    group:
+      gacha: gacha-group
