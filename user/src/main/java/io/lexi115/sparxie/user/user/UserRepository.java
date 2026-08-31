@@ -1,12 +1,9 @@
 package io.lexi115.sparxie.user.user;
 
-import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
+
 import java.util.UUID;
 
-public interface UserRepository {
-    Optional<User> findById(UUID id);
-
-    void save(User user);
-
-    void delete(User user);
+public interface UserRepository extends CrudRepository<User, UUID> {
+    boolean existsByUsername(String username);
 }

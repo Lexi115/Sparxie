@@ -1,10 +1,11 @@
 package io.lexi115.sparxie.user.user;
 
+import io.lexi115.sparxie.user.auth.exception.UsernameAlreadyInUseException;
 import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -17,12 +18,20 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    public void createUser(final UUID userId, final String username, final Instant createdAt) {
-        var user = new User(userId, username, createdAt);
+    @Transactional
+    public void create(final UUID userId, final String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new UsernameAlreadyInUseException(username);
+        }
+        var user = User.builder()
+                .id(userId)
+                .username(username)
+                .build();
         userRepository.save(user);
     }
 
-    public void deleteUser(final UUID userId) {
+    @Transactional
+    public void deleteById(final UUID userId) {
         var user = getById(userId);
         userRepository.delete(user);
     }

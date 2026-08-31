@@ -17,12 +17,12 @@ public class KafkaUserConsumer {
     @KafkaHandler
     public void onUserCreated(final UserCreatedEvent event) {
         System.out.println("user created event " + event.userId());
-        userService.createUser(event.userId(), event.username(), event.createdAt());
+        userService.create(event.userId(), event.username());
     }
 
     @KafkaHandler
     public void onUserDeleted(final UserDeletedEvent event) {
         System.out.println("user deleted event " + event.userId());
-        userService.deleteUser(event.userId());
+        userService.deleteById(event.userId());
     }
 }

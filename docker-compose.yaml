@@ -3,10 +3,10 @@ services:
     container_name: gateway
     build:
       context: ./gateway
-    env_file:
-      - ./gateway/.env
     ports:
       - "8080:8080"
+    env_file:
+      - ./gateway/.env
     restart: on-failure
     profiles:
       - game
@@ -17,10 +17,10 @@ services:
     container_name: game
     build:
       context: ./game
-    env_file:
-      - ./game/.env
     ports:
       - "8081:8080"
+    env_file:
+      - ./game/.env
     restart: on-failure
     depends_on:
       - kafka
@@ -32,10 +32,10 @@ services:
     container_name: gacha
     build:
       context: ./gacha
-    env_file:
-      - ./gacha/.env
     ports:
       - "8082:8080"
+    env_file:
+      - ./gacha/.env
     restart: on-failure
     volumes:
       - gacha_data:/var/lib/sparxie/gacha
@@ -50,10 +50,10 @@ services:
     container_name: inventory
     build:
       context: ./inventory
-    env_file:
-      - ./inventory/.env
     ports:
       - "8083:8080"
+    env_file:
+      - ./inventory/.env
     restart: on-failure
     depends_on:
       - redis
@@ -66,10 +66,10 @@ services:
     container_name: shop
     build:
       context: ./shop
-    env_file:
-      - ./shop/.env
     ports:
       - "8084:8080"
+    env_file:
+      - ./shop/.env
     restart: on-failure
     depends_on:
       - redis
@@ -81,16 +81,30 @@ services:
     container_name: user
     build:
       context: ./user
-    env_file:
-      - ./user/.env
     ports:
       - "8085:8080"
+    env_file:
+      - ./user/.env
     restart: on-failure
     depends_on:
       - kafka
+      - postgres
     profiles:
       - user
       - all
+
+  postgres:
+    image: postgres:18.6
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   kafka:
     image: apache/kafka:4.3.1
@@ -112,6 +126,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
+    restart: always
     profiles:
       - user
       - game
@@ -122,6 +137,7 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    restart: always
     volumes:
       - redis_data:/data
     profiles:
@@ -136,3 +152,4 @@ volumes:
       o: bind
       device: "${GACHA_DATA_PATH}"
   redis_data:
+  postgres_data:
