@@ -15,7 +15,7 @@ public class OutboxEventWorker {
         var events = outboxEventService.getSomeOutboxEvents();
         for (OutboxEvent event : events) {
             try {
-                eventPublisher.publishEvent(event.topic(), event.key(), event.payload(), event.type());
+                eventPublisher.publishEvent(event.getTopic(), event.getKey(), event.getPayload(), event.getEventType());
                 outboxEventService.deleteOutboxEvent(event);
             } catch (Exception e) {
                 break; // message broker is down

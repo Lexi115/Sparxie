@@ -1,11 +1,8 @@
 package io.lexi115.sparxie.user.event;
 
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
-public interface OutboxEventRepository {
-    List<OutboxEvent> findTop100ByOrderByCreatedAtAsc();
+import java.util.UUID;
 
-    void save(OutboxEvent event);
-
-    void delete(OutboxEvent event);
+public interface OutboxEventRepository extends CrudRepository<OutboxEvent, UUID> {
 }

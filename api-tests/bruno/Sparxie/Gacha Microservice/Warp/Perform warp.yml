@@ -1,0 +1,34 @@
+info:
+  name: Perform warp
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{gachaBaseUri}}/warp/pull"
+  body:
+    type: json
+    data: |-
+      {
+        "transactionId": "{{$randomUUID}}",
+        "playerId": "{{playerId}}",
+        "bannerId": "{{bannerId}}",
+        "amount": {{pullAmount}}
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: playerId
+      value: 2a699ae9-2733-466a-9e15-228965b3779a
+    - name: bannerId
+      value: banner_standard_event
+    - name: pullAmount
+      value: "10"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

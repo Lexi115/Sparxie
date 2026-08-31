@@ -1,0 +1,30 @@
+info:
+  name: Refresh user token
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{gatewayBaseUri}}/api/auth/refresh"
+  body:
+    type: json
+    data: |-
+      {
+        "userId": "{{userId}}",
+        "refreshToken": "{{refreshToken}}"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: userId
+      value: eef5892c-50ef-4464-bd36-21f046870fd4
+    - name: refreshToken
+      value: boia
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

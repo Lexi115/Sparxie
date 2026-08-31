@@ -1,0 +1,34 @@
+info:
+  name: Perform warp
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{gatewayBaseUri}}/api/game/warp/pull"
+  body:
+    type: json
+    data: |-
+      {
+        "transactionId": "{{$randomUUID}}",
+        "playerId": "{{playerId}}",
+        "bannerId": "{{bannerId}}",
+        "amount": {{pullAmount}}
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: playerId
+      value: afc5d5b9-a477-4cdb-b089-68dc63b87c42
+    - name: bannerId
+      value: banner_standard_event
+    - name: pullAmount
+      value: "10"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

@@ -1,0 +1,7 @@
+info:
+  name: Game Orchestrator Microservice
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit

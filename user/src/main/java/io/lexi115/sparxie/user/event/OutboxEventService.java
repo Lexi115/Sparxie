@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,19 +14,18 @@ public class OutboxEventService {
     private final ObjectMapper objectMapper;
 
     public List<OutboxEvent> getSomeOutboxEvents() {
-        return outboxEventRepository.findTop100ByOrderByCreatedAtAsc();
+        return (List<OutboxEvent>) outboxEventRepository.findAll();
     }
 
     public void scheduleEvent(final Event event, final String key, final String topic) {
         try {
-            var outboxEvent = new OutboxEvent(
-                    UUID.randomUUID(),
-                    key,
-                    topic,
-                    objectMapper.writeValueAsString(event),
-                    Instant.now(),
-                    event.getEventType()
-            );
+            var outboxEvent = OutboxEvent.builder()
+                    .id(UUID.randomUUID())
+                    .key(key)
+                    .topic(topic)
+                    .payload(objectMapper.writeValueAsString(event))
+                    .eventType(event.getEventType())
+                    .build();
             outboxEventRepository.save(outboxEvent);
         } catch (Exception e) {
             throw new RuntimeException("Failed to serialize Outbox Event", e);

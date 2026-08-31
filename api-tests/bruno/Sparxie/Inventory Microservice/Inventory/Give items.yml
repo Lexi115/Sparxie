@@ -1,0 +1,35 @@
+info:
+  name: Give items
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{inventoryBaseUri}}/inventory/give"
+  body:
+    type: json
+    data: |-
+      {
+        "transactionId": "{{$randomUUID}}",
+        "playerId": "{{playerId}}",
+        "items": {
+          "{{itemId}}": {{itemAmount}}
+        }
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: playerId
+      value: afc5d5b9-a477-4cdb-b089-68dc63b87c42
+    - name: itemId
+      value: standard_ticket
+    - name: itemAmount
+      value: "160"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
