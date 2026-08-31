@@ -5,7 +5,7 @@ import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "gacha", contextId = "warpClient", url = "${app.http.warp-client-uri}")
+@FeignClient(name = "gacha", contextId = "warpClient", url = "${app.http.client-uri.warp}")
 public interface WarpClient {
     @PostMapping("/pull")
     WarpResultDto pull(WarpRequest request);

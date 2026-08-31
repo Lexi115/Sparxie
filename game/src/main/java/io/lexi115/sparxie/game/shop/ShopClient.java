@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "shop", contextId = "shopClient", url = "${app.http.shop-client-uri}")
+@FeignClient(value = "shop", contextId = "shopClient", url = "${app.http.client-uri.shop}")
 public interface ShopClient {
     @GetMapping("/items/{id}")
     ShopItemDto getItemById(@PathVariable String id);

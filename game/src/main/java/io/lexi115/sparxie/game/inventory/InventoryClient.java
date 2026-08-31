@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "inventory", contextId = "inventoryClient", url = "${app.http.inventory-client-uri}")
+@FeignClient(name = "inventory", contextId = "inventoryClient", url = "${app.http.client-uri.inventory}")
 public interface InventoryClient {
     @PostMapping("/give")
     void giveItems(@Valid @RequestBody MultipleItemsRequest request);

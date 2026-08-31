@@ -1,7 +1,8 @@
 spring:
   application:
     name: shop
-
-app:
-  http:
-    inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
+  data:
+    redis:
+      database: ${REDIS_DATABASE:2}
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}

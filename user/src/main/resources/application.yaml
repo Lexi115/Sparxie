@@ -18,7 +18,8 @@ spring:
 
 app:
   http:
-    zitadel-client-uri: ${ZITADEL_CLIENT_URI:http://zitadel:8080}
+    client-uri:
+      zitadel: ${ZITADEL_CLIENT_URI:http://zitadel:8080}
   kafka:
     topic:
       user: user-topic

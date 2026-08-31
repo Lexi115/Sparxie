@@ -1,6 +1,11 @@
 spring:
   application:
     name: gacha
+  cache:
+    type: caffeine
+    cache-names: banners, banner_templates
+    caffeine:
+      spec: expireAfterWrite=12h,maximumSize=1000
   kafka:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -12,6 +17,12 @@ spring:
         USER_DELETED:io.lexi115.sparxie.gacha.player.event.PlayerDeletedEvent
     bootstrap-servers:
       - ${KAFKA_SERVER:kafka:9092}
+  data:
+    redis:
+      database: ${REDIS_DATABASE:0}
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+
 app:
   storage:
     root-path: ${APP_STORAGE_ROOT:/var/lib/sparxie/gacha}

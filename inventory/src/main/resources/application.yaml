@@ -17,6 +17,12 @@ spring:
         USER_DELETED:io.lexi115.sparxie.inventory.player.event.PlayerDeletedEvent
     bootstrap-servers:
       - ${KAFKA_SERVER:kafka:9092}
+  data:
+    redis:
+      database: ${REDIS_DATABASE:1}
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+
 
 app:
   kafka:
