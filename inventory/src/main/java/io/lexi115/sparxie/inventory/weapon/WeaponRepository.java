@@ -1,9 +1,6 @@
 package io.lexi115.sparxie.inventory.weapon;
 
-import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 
-public interface WeaponRepository {
-    Optional<Weapon> findById(String id);
-
-    boolean existsById(String id);
+public interface WeaponRepository extends CrudRepository<Weapon, String> {
 }

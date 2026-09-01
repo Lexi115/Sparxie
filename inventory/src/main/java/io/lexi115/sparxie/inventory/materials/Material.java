@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.inventory.character;
+package io.lexi115.sparxie.inventory.materials;
 
 import io.lexi115.sparxie.inventory.inventory.StarRarity;
 import jakarta.persistence.Id;
@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "characters")
+@Document(collection = "materials")
 @Getter
 @Setter
 @NoArgsConstructor
-public final class Character {
+public final class Material {
     @Id
     private String id;
 

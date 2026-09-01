@@ -1,0 +1,102 @@
+[
+  {
+    "id": "lc_meshing_cogs",
+    "name": "Meshing Cogs",
+    "rarity": "THREE"
+  },
+  {
+    "id": "lc_multiplication",
+    "name": "Multiplication",
+    "rarity": "THREE"
+  },
+  {
+    "id": "lc_collapsing_sky",
+    "name": "Collapsing Sky",
+    "rarity": "THREE"
+  },
+  {
+    "id": "lc_chorus",
+    "name": "Chorus",
+    "rarity": "THREE"
+  },
+  {
+    "id": "lc_planetary_rendezvous",
+    "name": "Planetary Rendezvous",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_under_the_blue_sky",
+    "name": "Under the Blue Sky",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_geniuses_repose",
+    "name": "Geniuses Repose",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_dance_dance_dance",
+    "name": "Dance Dance Dance",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_day_one_of_my_new_life",
+    "name": "Day One of My New Life",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_make_the_world_clamor",
+    "name": "Make the World Clamor",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_default_4_star",
+    "name": "Default 4 Star",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "lc_earthly_escapade",
+    "name": "Earthly Escapade",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_night_on_the_milky_way",
+    "name": "Night on the Milky Way",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_in_the_name_of_the_world",
+    "name": "In the Name of the World",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_but_the_battle_isnt_over",
+    "name": "But the Battle Isn't Over",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_moment_of_victory",
+    "name": "Moment of Victory",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_something_irreplaceable",
+    "name": "Something Irreplaceable",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_sleep_like_the_dead",
+    "name": "Sleep Like the Dead",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_time_waits_for_no_one",
+    "name": "Time Waits for No One",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "lc_default_5_star",
+    "name": "Default 5 Star",
+    "rarity": "FIVE"
+  }
+]

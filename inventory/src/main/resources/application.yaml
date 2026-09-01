@@ -9,7 +9,7 @@ spring:
     enabled: true
   cache:
     type: caffeine
-    cache-names: characters, weapons
+    cache-names: characters, weapons, materials
     caffeine:
       spec: expireAfterWrite=12h,maximumSize=1000
   kafka:
@@ -30,10 +30,12 @@ spring:
       port: ${REDIS_PORT:6379}
   mongodb:
     uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
+    representation:
+      uuid: standard
 
 app:
   flamingock:
-    target-system: "user_db"
+    database: ${MONGO_DATABASE}
   kafka:
     topic:
       user: user-topic

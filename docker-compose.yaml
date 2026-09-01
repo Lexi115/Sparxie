@@ -130,7 +130,6 @@ services:
     restart: always
     volumes:
       - mongo_data:/data/db
-      - mongo_config:/data/configdb
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
@@ -199,4 +198,3 @@ volumes:
   redis_data:
   postgres_data:
   mongo_data:
-  mongo_config:

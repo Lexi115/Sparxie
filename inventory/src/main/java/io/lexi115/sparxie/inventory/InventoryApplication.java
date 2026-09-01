@@ -8,7 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @EnableFlamingock(
         stages = {
-                @Stage(location = "io.lexi115.sparxie.inventory.db.migrations")
+                @Stage(location = "io.lexi115.sparxie.inventory.db.flamingock.migrations")
         }
 )
 @SpringBootApplication

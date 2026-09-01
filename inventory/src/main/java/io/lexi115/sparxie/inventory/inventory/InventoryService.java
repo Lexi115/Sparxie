@@ -4,6 +4,7 @@ import io.lexi115.sparxie.inventory.character.CharacterService;
 import io.lexi115.sparxie.inventory.concurrent.Lock;
 import io.lexi115.sparxie.inventory.inventory.exception.InventoryLockedException;
 import io.lexi115.sparxie.inventory.inventory.transaction.InventoryTransactionService;
+import io.lexi115.sparxie.inventory.materials.MaterialService;
 import io.lexi115.sparxie.inventory.player.Player;
 import io.lexi115.sparxie.inventory.player.PlayerService;
 import io.lexi115.sparxie.inventory.util.UuidHelper;
@@ -23,6 +24,7 @@ public class InventoryService {
     private final PlayerService playerService;
     private final CharacterService characterService;
     private final WeaponService weaponService;
+    private final MaterialService materialService;
     private final InventoryTransactionService inventoryTransactionService;
     private final Lock playerLock;
     private final UuidHelper uuidHelper;
@@ -77,10 +79,9 @@ public class InventoryService {
             case "lc" -> ItemType.WEAPON;
             default -> ItemType.MATERIAL;
         };
-        //todo rimetti quando ci saranno tutti ID validi salvati
-//        if (!itemExists(realItemId, itemType)) {
-//            throw new IllegalArgumentException("Invalid ID");
-//        }
+        if (!itemExists(realItemId, itemType)) {
+            throw new IllegalArgumentException("Invalid ID: " + itemId);
+        }
         action.accept(realItemId, itemType);
     }
 
@@ -88,7 +89,7 @@ public class InventoryService {
         return switch (itemType) {
             case CHARACTER -> characterService.existsById(itemId);
             case WEAPON -> weaponService.existsById(itemId);
-            case MATERIAL -> true;
+            case MATERIAL -> materialService.existsById(itemId);
         };
     }
 

@@ -6,6 +6,7 @@ import io.lexi115.sparxie.game.banner.exception.BannerNotFoundException;
 import io.lexi115.sparxie.game.character.exception.CharacterNotFoundException;
 import io.lexi115.sparxie.game.inventory.exception.InventoryLockedException;
 import io.lexi115.sparxie.game.inventory.exception.NotEnoughItemsException;
+import io.lexi115.sparxie.game.material.exception.MaterialNotFoundException;
 import io.lexi115.sparxie.game.player.exception.PlayerNotFoundException;
 import io.lexi115.sparxie.game.shop.exception.ShopLockedException;
 import io.lexi115.sparxie.game.shop.item.ShopItemNotFoundException;
@@ -39,11 +40,13 @@ public class FeignErrorDecoder implements ErrorDecoder {
                     case ERR_BANNER_NOT_FOUND -> new BannerNotFoundException(problem.getDetail());
                     case ERR_CHARACTER_NOT_FOUND -> new CharacterNotFoundException(problem.getDetail());
                     case ERR_WEAPON_NOT_FOUND -> new WeaponNotFoundException(problem.getDetail());
+                    case ERR_MATERIAL_NOT_FOUND -> new MaterialNotFoundException(problem.getDetail());
                     case ERR_SHOP_ITEM_NOT_FOUND -> new ShopItemNotFoundException(problem.getDetail());
 
                     case ERR_NOT_ENOUGH_ITEMS -> parseNotEnoughItemsException(problem);
 
-                    case ERR_VALIDATION_FAILED -> new IllegalArgumentException(problem.getDetail());
+                    case ERR_VALIDATION_FAILED,
+                         ERR_ILLEGAL_ARGUMENT -> new IllegalArgumentException(problem.getDetail());
                 };
             }
         } catch (Exception _) {

@@ -21,9 +21,9 @@ http:
 runtime:
   variables:
     - name: playerId
-      value: afc5d5b9-a477-4cdb-b089-68dc63b87c42
+      value: a1ef00f5-c29b-4edc-ab2d-6266b94ace3e
     - name: itemId
-      value: standard_ticket
+      value: oneiric_shard
     - name: itemAmount
       value: "160"
 
