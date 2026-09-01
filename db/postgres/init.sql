@@ -1,2 +1,8 @@
 CREATE
 DATABASE user_db;
+CREATE
+DATABASE game_db;
+CREATE
+DATABASE inventory_db;
+CREATE
+DATABASE gacha_db;

@@ -10,6 +10,7 @@ import io.lexi115.sparxie.inventory.util.UuidHelper;
 import io.lexi115.sparxie.inventory.weapon.WeaponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class InventoryService {
     private final Lock playerLock;
     private final UuidHelper uuidHelper;
 
+    @Transactional
     public void giveItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
         var actionUuid = uuidHelper.generateNameUuid(transactionId + "_give");
         executeTransaction(actionUuid, playerId, player ->
@@ -34,6 +36,7 @@ public class InventoryService {
                 ));
     }
 
+    @Transactional
     public void consumeItems(final UUID transactionId, final UUID playerId, final Map<String, Long> items) {
         var actionUuid = uuidHelper.generateNameUuid(transactionId + "_consume");
         executeTransaction(actionUuid, playerId, player ->
@@ -42,7 +45,7 @@ public class InventoryService {
                 ));
     }
 
-    // @Transactional
+    @Transactional
     public void executeTransaction(final UUID transactionId, final UUID playerId, final Consumer<Player> action) {
         System.out.println("INVENTORY TRANSACTION ID: " + transactionId);
         var lockName = "inventory_lock_" + playerId;
@@ -50,21 +53,21 @@ public class InventoryService {
             throw new InventoryLockedException("Please wait a bit before using the inventory again!");
         }
         try {
-            var transaction = inventoryTransactionService.getOrCreateTransaction(transactionId, playerId);
-            if (transaction.isCompleted()) {
+            var player = playerService.getById(playerId);
+            var oldTransaction = inventoryTransactionService.getById(transactionId);
+            if (oldTransaction != null) {
                 return;
             }
-            var player = playerService.getById(playerId);
             action.accept(player);
-            playerService.savePlayer(player);
+            playerService.save(player);
             printPlayerInventory(player); // TODO debug
-            inventoryTransactionService.commitTransaction(transaction);
+            inventoryTransactionService.create(transactionId, playerId);
         } finally {
             playerLock.release(lockName);
         }
     }
 
-    private void withValidItem(final String itemId, final Long amount, BiConsumer<String, ItemType> action) {
+    private void withValidItem(final String itemId, final Long amount, final BiConsumer<String, ItemType> action) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount cannot be 0 or less");
         }

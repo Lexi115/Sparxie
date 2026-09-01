@@ -1,6 +1,12 @@
 spring:
   application:
     name: inventory
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  liquibase:
+    enabled: true
   cache:
     type: caffeine
     cache-names: characters, weapons
@@ -22,9 +28,12 @@ spring:
       database: ${REDIS_DATABASE:1}
       host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
-
+  mongodb:
+    uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
 
 app:
+  flamingock:
+    target-system: "user_db"
   kafka:
     topic:
       user: user-topic

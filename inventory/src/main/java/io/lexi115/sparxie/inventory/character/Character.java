@@ -1,7 +1,18 @@
 package io.lexi115.sparxie.inventory.character;
 
-public record Character(
-        String id,
-        String name
-) {
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "characters")
+@Getter
+@Setter
+@NoArgsConstructor
+public final class Character {
+    @Id
+    private String id;
+    
+    private String name;
 }

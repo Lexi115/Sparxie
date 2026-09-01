@@ -1,12 +1,8 @@
 package io.lexi115.sparxie.inventory.player;
 
-import java.util.Optional;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import java.util.UUID;
 
-public interface PlayerRepository {
-    Optional<Player> findById(UUID id);
-
-    void save(Player player);
-
-    void deleteById(UUID id);
+public interface PlayerRepository extends MongoRepository<Player, UUID> {
 }

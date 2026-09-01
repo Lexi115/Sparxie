@@ -17,7 +17,20 @@
 
     <properties>
         <java.version>25</java.version>
+        <flamingock.version>1.4.4</flamingock.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.flamingock</groupId>
+                <artifactId>flamingock-bom</artifactId>
+                <version>${flamingock.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -29,6 +42,15 @@
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.flamingock</groupId>
+            <artifactId>flamingock-community</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.flamingock</groupId>
+            <artifactId>flamingock-springboot-integration</artifactId>
+            <version>${flamingock.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -75,6 +97,23 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>4.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-liquibase</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,6 +137,11 @@
                                 <path>
                                     <groupId>org.projectlombok</groupId>
                                     <artifactId>lombok</artifactId>
+                                </path>
+                                <path>
+                                    <groupId>io.flamingock</groupId>
+                                    <artifactId>flamingock-processor</artifactId>
+                                    <version>${flamingock.version}</version>
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
