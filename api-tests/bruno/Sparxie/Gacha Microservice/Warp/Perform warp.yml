@@ -20,7 +20,7 @@ http:
 runtime:
   variables:
     - name: playerId
-      value: 2a699ae9-2733-466a-9e15-228965b3779a
+      value: f4317bef-93a7-4c62-9784-61c64ae95906
     - name: bannerId
       value: banner_standard_event
     - name: pullAmount

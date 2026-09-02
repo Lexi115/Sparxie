@@ -33,13 +33,12 @@ public class WarpService {
         try {
             var player = playerService.getPlayer(playerId);
             var banner = bannerService.getBanner(request.bannerId());
-            var cachedTransaction = warpTransactionService.getTransaction(transactionId);
+            var cachedTransaction = warpTransactionService.getById(transactionId);
             if (cachedTransaction != null) {
-                return cachedTransaction.result();
+                return cachedTransaction.getResult();
             }
             var result = pullItems(banner, player, request.amount());
-            var transaction = warpTransactionService.createTransaction(transactionId, playerId, result);
-            warpTransactionService.saveTransaction(transaction);
+            warpTransactionService.create(transactionId, playerId, result);
             playerService.savePlayer(player);
             return result;
         } finally {

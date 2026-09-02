@@ -60,7 +60,7 @@ public class PlayerPity {
     }
 
     public void updatePity(final BannerType bannerType, final WarpResultItem warpResultItem) {
-        var pulledRarity = warpResultItem.item().rarity();
+        var pulledRarity = warpResultItem.rarity();
         var resultOutcome = warpResultItem.outcome();
         incrementPity(bannerType, StarRarity.FOUR);
         incrementPity(bannerType, StarRarity.FIVE);

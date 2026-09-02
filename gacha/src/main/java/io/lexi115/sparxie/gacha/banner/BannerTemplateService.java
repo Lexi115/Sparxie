@@ -12,7 +12,7 @@ public class BannerTemplateService {
 
     @Cacheable("banner_templates")
     public Banner getById(final String id) {
-        return bannerRepository.findDefaultById(id)
+        return bannerRepository.findTemplateById(id)
                 .orElseThrow(() -> new BannerNotFoundException(id));
     }
 }

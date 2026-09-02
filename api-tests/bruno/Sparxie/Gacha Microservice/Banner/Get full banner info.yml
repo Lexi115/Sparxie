@@ -11,10 +11,11 @@ http:
 runtime:
   variables:
     - name: bannerId
-      value: banner_standard_event
+      value: banner_weapon_event_sparkle_01
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

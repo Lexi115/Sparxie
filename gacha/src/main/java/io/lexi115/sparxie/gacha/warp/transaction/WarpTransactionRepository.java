@@ -1,10 +1,8 @@
 package io.lexi115.sparxie.gacha.warp.transaction;
 
-import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
+
 import java.util.UUID;
 
-public interface WarpTransactionRepository {
-    Optional<WarpTransaction> findById(UUID id);
-
-    void save(WarpTransaction transaction);
+public interface WarpTransactionRepository extends CrudRepository<WarpTransaction, UUID> {
 }

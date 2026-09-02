@@ -43,8 +43,6 @@ services:
     env_file:
       - ./gacha/.env
     restart: on-failure
-    volumes:
-      - gacha_data:/var/lib/sparxie/gacha
     depends_on:
       - redis
       - kafka
@@ -135,6 +133,7 @@ services:
     restart: always
     volumes:
       - mongo_data:/data/db
+      - mongo_config:/data/configdb
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
@@ -171,6 +170,10 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
     restart: always
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+      - kafka_config:/mnt/shared/config
+      - kafka_secrets:/etc/kafka/secrets
     profiles:
       - inventory
       - gacha
@@ -194,12 +197,10 @@ services:
       - all
 
 volumes:
-  gacha_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: "${GACHA_DATA_PATH}"
+  kafka_data:
+  kafka_config:
+  kafka_secrets:
   redis_data:
   postgres_data:
   mongo_data:
+  mongo_config:
