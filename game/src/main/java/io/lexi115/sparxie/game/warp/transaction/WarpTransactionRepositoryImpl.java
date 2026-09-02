@@ -18,7 +18,8 @@ public class WarpTransactionRepositoryImpl implements WarpTransactionRepository 
     }
 
     @Override
-    public void save(final WarpTransaction transaction) {
+    public WarpTransaction save(final WarpTransaction transaction) {
         map.put(transaction.getTransactionId(), transaction);
+        return transaction;
     }
 }

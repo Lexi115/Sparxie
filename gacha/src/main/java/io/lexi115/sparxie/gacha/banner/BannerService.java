@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BannerService {
-
     private final BannerRepository bannerRepository;
     private final BannerTemplateService bannerTemplateService;
 

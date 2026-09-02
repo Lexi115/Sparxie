@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.game.shop;
 
-import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
 import io.lexi115.sparxie.game.shop.dto.ShopItemDto;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,5 +16,5 @@ public interface ShopClient {
     ShopItemDto getItemById(@PathVariable String id);
 
     @PostMapping("/items/purchase")
-    void purchaseItem(@Valid @RequestBody PurchaseRequest request);
+    PurchaseResponse purchaseItem(@Valid @RequestBody PurchaseRequest request);
 }

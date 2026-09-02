@@ -15,8 +15,8 @@ public class WarpService {
     private final WarpClient warpClient;
     private final WarpTransactionService warpTransactionService;
 
-    public WarpResultDto pull(final WarpRequest request) {
-        return warpClient.pull(request);
+    public WarpResultDto performWarp(final WarpRequest request) {
+        return warpClient.performWarp(request);
     }
 
     public WarpTransaction startTransaction(final UUID transactionId, final UUID playerId) {

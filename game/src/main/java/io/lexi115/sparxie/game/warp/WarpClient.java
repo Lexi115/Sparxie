@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "gacha", contextId = "warpClient", url = "${app.http.client-uri.warp}")
 public interface WarpClient {
     @PostMapping("/pull")
-    WarpResultDto pull(WarpRequest request);
+    WarpResultDto performWarp(WarpRequest request);
 }

@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.game.game;
 
-import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
 import io.lexi115.sparxie.game.warp.dto.WarpRequest;
 import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class GameController {
     }
 
     @PostMapping("/shop/purchase")
-    public void performPurchase(@Valid @RequestBody final PurchaseRequest request) {
-        gameService.performPurchase(request);
+    public PurchaseResponse performPurchase(@Valid @RequestBody final PurchaseRequest request) {
+        return gameService.performPurchase(request);
     }
 }

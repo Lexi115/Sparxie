@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.gacha.banner;
 
-import io.lexi115.sparxie.gacha.player.PlayerPity;
+import io.lexi115.sparxie.gacha.player.pity.Pity;
 import io.lexi115.sparxie.gacha.warp.WarpOutcome;
 import io.lexi115.sparxie.gacha.warp.WarpResultItem;
 import lombok.Getter;
@@ -75,9 +75,9 @@ public class Banner {
         }
     }
 
-    public WarpResultItem pullItem(final PlayerPity playerPity) {
-        var fourStarPity = playerPity.getPity(type, StarRarity.FOUR);
-        var fiveStarPity = playerPity.getPity(type, StarRarity.FIVE);
+    public WarpResultItem pullItem(final Pity pity) {
+        var fourStarPity = pity.getValue(type, StarRarity.FOUR);
+        var fiveStarPity = pity.getValue(type, StarRarity.FIVE);
         var fourStarRate = getRarityRates(StarRarity.FOUR, fourStarPity);
         var fiveStarRate = getRarityRates(StarRarity.FIVE, fiveStarPity);
         var randomizer = ThreadLocalRandom.current();
@@ -86,7 +86,7 @@ public class Banner {
         var starRarity = (roll < fiveStarRate) ? StarRarity.FIVE
                 : (roll < fourStarRate + fiveStarRate) ? StarRarity.FOUR
                 : StarRarity.THREE;
-        var outcome = decideOutcome(starRarity, playerPity.isGuaranteed(type, starRarity));
+        var outcome = decideOutcome(starRarity, pity.isGuaranteed(type, starRarity));
         var itemId = chooseItem(starRarity, outcome);
         return new WarpResultItem(itemId, starRarity, outcome);
     }

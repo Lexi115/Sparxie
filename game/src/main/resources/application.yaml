@@ -1,6 +1,12 @@
 spring:
   application:
     name: game
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  liquibase:
+    enabled: true
   kafka:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer

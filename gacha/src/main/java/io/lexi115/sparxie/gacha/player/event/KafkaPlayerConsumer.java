@@ -15,12 +15,12 @@ public class KafkaPlayerConsumer {
     @KafkaHandler
     public void onPlayerCreated(final PlayerCreatedEvent event) {
         System.out.println("player created event " + event.userId());
-        playerService.createPlayer(event.userId());
+        playerService.create(event.userId());
     }
 
     @KafkaHandler
     public void onPlayerDeleted(final PlayerDeletedEvent event) {
         System.out.println("player deleted event " + event.userId());
-        playerService.deletePlayer(event.userId());
+        playerService.deleteById(event.userId());
     }
 }

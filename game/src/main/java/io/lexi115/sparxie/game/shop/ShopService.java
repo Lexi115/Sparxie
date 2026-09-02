@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.game.shop;
 
-import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
 import io.lexi115.sparxie.game.shop.dto.ShopItemDto;
 import io.lexi115.sparxie.game.shop.transaction.ShopTransaction;
 import io.lexi115.sparxie.game.shop.transaction.ShopTransactionService;
@@ -20,15 +21,15 @@ public class ShopService {
     }
 
     public ShopTransaction startTransaction(final UUID transactionId, final UUID playerId) {
-        return shopTransactionService.getOrCreateTransaction(transactionId, playerId);
+        return shopTransactionService.getOrCreate(transactionId, playerId);
     }
 
     public void commitTransaction(final ShopTransaction transaction) {
-        shopTransactionService.commitTransaction(transaction);
+        shopTransactionService.commit(transaction);
     }
 
-    public void purchaseItem(final UUID transactionId, final UUID playerId, final String itemId, final Long amount) {
+    public PurchaseResponse purchaseItem(final UUID transactionId, final UUID playerId, final String itemId, final Long amount) {
         var request = new PurchaseRequest(transactionId, playerId, itemId, amount);
-        shopClient.purchaseItem(request);
+        return shopClient.purchaseItem(request);
     }
 }

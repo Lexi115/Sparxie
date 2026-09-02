@@ -1,17 +1,29 @@
 package io.lexi115.sparxie.gacha.player;
 
+import io.lexi115.sparxie.gacha.player.pity.Pity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Document(collection = "players")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Player {
+    @Id
     private UUID id;
-    private PlayerPity pity = new PlayerPity();
+
+    private Pity pity;
+
+    public Player(final UUID id) {
+        this.id = id;
+        this.pity = new Pity();
+    }
 }
+

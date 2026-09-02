@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.game.dto;
+package io.lexi115.sparxie.game.shop.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

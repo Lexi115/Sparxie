@@ -6,7 +6,6 @@ import io.lexi115.sparxie.game.shop.ShopCurrency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
 
 public record PurchasePerformedEvent(
@@ -15,7 +14,8 @@ public record PurchasePerformedEvent(
         Instant createdAt,
         ShopCurrency currency,
         BigDecimal price,
-        Map<String, Long> items
+        String itemId,
+        Long amount
 ) implements Event {
     @Override
     public EventType getEventType() {

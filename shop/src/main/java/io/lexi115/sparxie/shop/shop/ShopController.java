@@ -2,6 +2,7 @@ package io.lexi115.sparxie.shop.shop;
 
 import io.lexi115.sparxie.shop.item.dto.ShopItemDto;
 import io.lexi115.sparxie.shop.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.shop.shop.dto.PurchaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ShopController {
     }
 
     @PostMapping("/items/purchase")
-    public void purchaseItem(@Valid @RequestBody final PurchaseRequest request) {
-        shopService.purchaseItem(request.transactionId(), request.playerId(), request.itemId(), request.amount());
+    public PurchaseResponse purchaseItem(@Valid @RequestBody final PurchaseRequest request) {
+        return shopService.purchaseItem(request.transactionId(), request.playerId(), request.itemId(), request.amount());
     }
 }

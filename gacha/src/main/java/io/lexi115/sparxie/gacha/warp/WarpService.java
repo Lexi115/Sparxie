@@ -10,19 +10,19 @@ import io.lexi115.sparxie.gacha.warp.exception.WarpLockedException;
 import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
 public class WarpService {
-
     private final BannerService bannerService;
     private final PlayerService playerService;
     private final WarpTransactionService warpTransactionService;
     private final Lock playerLock;
 
-    // @Transactional
+    @Transactional
     public WarpResult performWarp(final WarpRequest request) {
         var transactionId = request.transactionId();
         var playerId = request.playerId();
@@ -31,7 +31,7 @@ public class WarpService {
             throw new WarpLockedException("Please wait a bit before making another pull!");
         }
         try {
-            var player = playerService.getPlayer(playerId);
+            var player = playerService.getById(playerId);
             var banner = bannerService.getBanner(request.bannerId());
             var cachedTransaction = warpTransactionService.getById(transactionId);
             if (cachedTransaction != null) {
@@ -39,7 +39,7 @@ public class WarpService {
             }
             var result = pullItems(banner, player, request.amount());
             warpTransactionService.create(transactionId, playerId, result);
-            playerService.savePlayer(player);
+            playerService.save(player);
             return result;
         } finally {
             playerLock.release(lockName);
@@ -56,7 +56,7 @@ public class WarpService {
         for (int i = 0; i < amount; i++) {
             var item = banner.pullItem(playerPity);
             pulledItems.add(item);
-            playerPity.updatePity(bannerType, item);
+            playerPity.update(bannerType, item);
         }
         return new WarpResult(bannerType, pulledItems);
     }

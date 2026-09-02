@@ -40,7 +40,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- PostgreSQL -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
