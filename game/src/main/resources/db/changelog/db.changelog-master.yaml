@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changes/01-create-warp-transactions-table.yaml
+  - include:
+      file: db/changelog/changes/02-create-shop-transactions-table.yaml
+  - include:
+      file: db/changelog/changes/03-create-outbox-events-table.yaml

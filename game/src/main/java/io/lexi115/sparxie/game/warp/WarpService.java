@@ -20,10 +20,10 @@ public class WarpService {
     }
 
     public WarpTransaction startTransaction(final UUID transactionId, final UUID playerId) {
-        return warpTransactionService.getOrCreateTransaction(transactionId, playerId);
+        return warpTransactionService.getOrCreateById(transactionId, playerId);
     }
 
     public void commitTransaction(final WarpTransaction transaction) {
-        warpTransactionService.commitTransaction(transaction);
+        warpTransactionService.commit(transaction);
     }
 }

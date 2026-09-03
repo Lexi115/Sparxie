@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.shop.error;
 
-import io.lexi115.sparxie.shop.item.exception.ShopItemNotFoundException;
 import io.lexi115.sparxie.shop.shop.exception.ShopLockedException;
+import io.lexi115.sparxie.shop.shop.item.exception.ShopItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

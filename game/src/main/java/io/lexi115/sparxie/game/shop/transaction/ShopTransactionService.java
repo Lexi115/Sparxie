@@ -44,7 +44,7 @@ public class ShopTransactionService {
     public void commit(final ShopTransaction transaction) {
         transaction.setStatus(ShopTransactionStatus.COMPLETED);
         shopTransactionRepository.save(transaction);
-        var purchaseResponse = transaction.getResponse();
+        var purchaseResponse = transaction.getResult();
         var event = new PurchasePerformedEvent(
                 transaction.getTransactionId(),
                 transaction.getPlayerId(),

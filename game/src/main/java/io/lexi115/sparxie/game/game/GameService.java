@@ -66,8 +66,8 @@ public class GameService {
         var itemId = request.itemId();
         var itemAmount = request.amount();
         var transaction = shopService.startTransaction(transactionId, playerId);
-        if (!transaction.isCompleted()) {
-            return transaction.getResponse();
+        if (transaction.isCompleted()) {
+            return transaction.getResult();
         }
 
         var shopItem = shopService.getItemById(itemId);
@@ -79,7 +79,7 @@ public class GameService {
                     shopItemCurrency.name(), shopItemCost)
             );
         }
-        transaction.setResponse(purchaseResponse);
+        transaction.setResult(purchaseResponse);
         inventoryService.giveItems(transactionId, playerId, Map.of(itemId, itemAmount));
         shopService.commitTransaction(transaction);
         return purchaseResponse;

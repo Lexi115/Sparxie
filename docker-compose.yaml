@@ -44,6 +44,7 @@ services:
       - ./gacha/.env
     restart: on-failure
     depends_on:
+      - mongo
       - redis
       - kafka
       - postgres
@@ -62,6 +63,7 @@ services:
       - ./inventory/.env
     restart: on-failure
     depends_on:
+      - mongo
       - redis
       - kafka
       - postgres
@@ -81,6 +83,7 @@ services:
     restart: on-failure
     depends_on:
       - redis
+      - mongo
     profiles:
       - shop
       - game

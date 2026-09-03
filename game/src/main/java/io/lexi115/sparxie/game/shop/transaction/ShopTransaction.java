@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shop_transaction")
+@Table(name = "shop_transactions")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -35,7 +35,7 @@ public class ShopTransaction {
     @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private PurchaseResponse response;
+    private PurchaseResponse result;
 
     public boolean isCompleted() {
         return this.status == ShopTransactionStatus.COMPLETED;

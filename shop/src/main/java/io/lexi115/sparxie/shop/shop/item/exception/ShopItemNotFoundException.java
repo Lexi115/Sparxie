@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.shop.item.exception;
+package io.lexi115.sparxie.shop.shop.item.exception;
 
 public class ShopItemNotFoundException extends RuntimeException {
     public ShopItemNotFoundException(final String itemId) {

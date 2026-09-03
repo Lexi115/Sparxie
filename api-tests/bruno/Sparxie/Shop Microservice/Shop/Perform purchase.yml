@@ -20,13 +20,13 @@ http:
 runtime:
   variables:
     - name: playerId
-      value: 1bbad0cc-4a14-4c5e-8254-f851ffa30907
+      value: 015cea78-a7b7-41d1-b182-9dcdb8bbaad2
     - name: bannerId
       value: banner_standard_event
     - name: pullAmount
       value: "10"
     - name: itemId
-      value: oneiric_shard
+      value: stellar_jade
     - name: itemAmount
       value: "1600"
 

@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.shop.item.dto;
+package io.lexi115.sparxie.shop.shop.item.dto;
 
 public record ShopItemDto(
         String id,

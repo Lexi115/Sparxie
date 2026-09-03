@@ -21,7 +21,7 @@ public class WarpTransactionService {
     private String warpTopic;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
+    public WarpTransaction getOrCreateById(final UUID transactionId, final UUID playerId) {
         var oldTransaction = warpTransactionRepository.findById(transactionId).orElse(null);
         if (oldTransaction != null) {
             return oldTransaction;
@@ -38,7 +38,7 @@ public class WarpTransactionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void commitTransaction(final WarpTransaction transaction) {
+    public void commit(final WarpTransaction transaction) {
         transaction.setStatus(WarpTransactionStatus.COMPLETED);
         warpTransactionRepository.save(transaction);
         var event = new WarpPerformedEvent(

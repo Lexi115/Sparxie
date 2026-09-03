@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.game.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
@@ -15,7 +16,7 @@ public class OutboxEventService {
     private final ObjectMapper objectMapper;
 
     public List<OutboxEvent> getSomeOutboxEvents() {
-        return outboxEventRepository.findTop100ByOrderByCreatedAtAsc();
+        return outboxEventRepository.findAllBy(Limit.of(10));
     }
 
     public void scheduleEvent(final Event event, final String key, final String topic) {

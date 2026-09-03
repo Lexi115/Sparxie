@@ -1,34 +1,37 @@
 databaseChangeLog:
   - changeSet:
-      id: 02-create-shop-transactions-table
+      id: 03-create-outbox-events-table
       author: Lexi115
       changes:
         - createTable:
-            tableName: shop_transactions
+            tableName: outbox_events
             columns:
               - column:
-                  name: transaction_id
+                  name: id
                   type: uuid
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: player_id
-                  type: uuid
+                  name: key
+                  type: varchar(100)
                   constraints:
                     nullable: false
+              - column:
+                  name: topic
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: text
               - column:
                   name: created_at
                   type: timestamptz
                   constraints:
                     nullable: false
               - column:
-                  name: status
-                  type: varchar(100)
+                  name: event_type
+                  type: varchar(30)
                   constraints:
                     nullable: false
-              - column:
-                  name: result
-                  type: jsonb
-                  constraints:
-                    nullable: true
