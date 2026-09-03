@@ -1,8 +1,6 @@
 package io.lexi115.sparxie.user.auth;
 
-import io.lexi115.sparxie.user.auth.dto.RefreshTokenResponse;
-import io.lexi115.sparxie.user.auth.dto.UserLoginResponse;
-import io.lexi115.sparxie.user.auth.dto.UserRegisterResponse;
+import io.lexi115.sparxie.user.auth.dto.*;
 import io.lexi115.sparxie.user.auth.exception.InvalidCredentialsException;
 import io.lexi115.sparxie.user.auth.exception.UsernameAlreadyInUseException;
 import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class AuthenticationClientImpl implements AuthenticationClient {
         var user = new AuthenticationUser(UUID.randomUUID(), username, Instant.now(), password);
         map.put(user.getId(), user);
         logger.info("[AUTH] Registered user {}", user);
-        return new UserRegisterResponse(user.getId(), "fake-access-token", "fake-refresh-token");
+        return new UserRegisterResponse(user.getId());
     }
 
     @Override
@@ -76,5 +75,18 @@ public class AuthenticationClientImpl implements AuthenticationClient {
         }
         user.setPassword(newPassword);
         logger.info("[AUTH] Password changed for user {}", user);
+    }
+
+    @Override
+    public JwkResponse getPublicJwk() {
+        var jwk = new Jwk(
+                "RSA",
+                "sig",
+                "RS256",
+                "2026-key-1",
+                "u1SU1LfVLPHCozMxH2Mo4lgOEePzNm0tRgeLezV6ffAt0gunVTLw7onLRnrq0_IzW7yWR7QkrmBL7jTKEn5u-qKhbwKfBstIs-bMY2Zkp18gnTxKLxoS2tFczGkPLPgizskuemMghRniWaoLcyehkd3qqGElvW_VDL5AaWTg0nLVkjRo9z-40RQzuVaE8AkAFmxZzow3x-VJYKdjykkJ0iT9wCS0DRTXu269V264Vf_3jvredZiKRkgwlL9xNAwxXFg0x_XFw005UWVRIkdgcKWTjpBP2dPwVZ4WWC-9aGVd-Gyn1o0CLelf4rEjGoXbAAEgAqeGUxrcIlbjXfbcmw",
+                "AQAB"
+        );
+        return new JwkResponse(List.of(jwk));
     }
 }

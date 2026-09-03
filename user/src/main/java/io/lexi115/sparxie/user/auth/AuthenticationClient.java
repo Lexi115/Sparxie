@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.user.auth;
 
+import io.lexi115.sparxie.user.auth.dto.JwkResponse;
 import io.lexi115.sparxie.user.auth.dto.RefreshTokenResponse;
 import io.lexi115.sparxie.user.auth.dto.UserLoginResponse;
 import io.lexi115.sparxie.user.auth.dto.UserRegisterResponse;
@@ -16,4 +17,6 @@ public interface AuthenticationClient {
     RefreshTokenResponse refreshUserToken(UUID userId, String refreshToken);
 
     void changeUserPassword(UUID userId, String oldPassword, String newPassword);
+
+    JwkResponse getPublicJwk();
 }

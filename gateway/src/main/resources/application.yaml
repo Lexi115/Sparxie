@@ -34,3 +34,8 @@ spring:
                 - Path=/api/auth/**
               filters:
                 - StripPrefix=1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_ISSUER_URI:http://user:8080/auth/jwk}

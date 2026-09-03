@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.UUID;
 
 public record UserRegisterResponse(
-        @JsonIgnore UUID userId,
-        String accessToken,
-        @JsonIgnore String refreshToken
+        @JsonIgnore UUID userId
 ) {
 }

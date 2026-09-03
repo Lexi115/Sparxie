@@ -40,4 +40,9 @@ public class AuthenticationController {
         authenticationService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/jwk")
+    public JwkResponse getPublicJwk() {
+        return authenticationService.getPublicJwk();
+    }
 }
