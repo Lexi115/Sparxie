@@ -2,8 +2,8 @@ package io.lexi115.sparxie.game.warp.dto;
 
 import java.util.List;
 
-public record WarpResultDto(
+public record GachaWarpResponse(
         String bannerType,
-        List<WarpResultItemDto> items
+        List<GachaWarpItem> items
 ) {
 }

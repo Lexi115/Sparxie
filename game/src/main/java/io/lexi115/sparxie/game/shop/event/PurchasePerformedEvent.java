@@ -2,7 +2,6 @@ package io.lexi115.sparxie.game.shop.event;
 
 import io.lexi115.sparxie.game.event.Event;
 import io.lexi115.sparxie.game.event.EventType;
-import io.lexi115.sparxie.game.shop.ShopCurrency;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,7 +11,7 @@ public record PurchasePerformedEvent(
         UUID transactionId,
         UUID playerId,
         Instant createdAt,
-        ShopCurrency currency,
+        String currency,
         BigDecimal price,
         String itemId,
         Long amount

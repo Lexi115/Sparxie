@@ -6,13 +6,13 @@ import org.hibernate.validator.constraints.Range;
 
 import java.util.UUID;
 
-public record WarpRequest(
+public record GachaWarpRequest(
         @NotNull UUID transactionId,
         @NotBlank String bannerId,
         @NotNull UUID playerId,
         @Range(min = 1, max = 10) Integer amount
 ) {
-    public WarpRequest {
+    public GachaWarpRequest {
         if (amount == null) {
             amount = 1;
         }

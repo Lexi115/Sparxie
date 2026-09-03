@@ -1,13 +1,11 @@
 package io.lexi115.sparxie.game.shop.dto;
 
-import io.lexi115.sparxie.game.shop.ShopCurrency;
-
 import java.math.BigDecimal;
 
-public record PurchaseResponse(
+public record ShopPurchaseResponse(
         String itemId,
         Long amount,
-        ShopCurrency currency,
+        String currency,
         BigDecimal price
 ) {
 }

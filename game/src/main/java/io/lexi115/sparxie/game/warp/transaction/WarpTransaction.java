@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.warp.transaction;
 
-import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
+import io.lexi115.sparxie.game.game.dto.WarpResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class WarpTransaction {
     @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private WarpResultDto result;
+    private WarpResponse result;
 
     public boolean isCompleted() {
         return this.status == WarpTransactionStatus.COMPLETED;

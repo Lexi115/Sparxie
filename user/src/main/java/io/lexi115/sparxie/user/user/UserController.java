@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.user.user;
 
 import io.lexi115.sparxie.user.user.dto.UserDto;
+import io.lexi115.sparxie.user.user.dto.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +15,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping("/{userId}")
     public UserDto getById(@PathVariable final UUID userId) {
         var user = userService.getById(userId);
-        return new UserDto(user.getId(), user.getUsername(), user.getCreatedAt());
+        return userMapper.toDto(user);
     }
 }

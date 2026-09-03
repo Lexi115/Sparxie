@@ -2,7 +2,7 @@ package io.lexi115.sparxie.game.banner.dto;
 
 import java.util.Map;
 
-public record BannerDetailsDto(
+public record BannerDetails(
         String id,
         String name,
         String type,

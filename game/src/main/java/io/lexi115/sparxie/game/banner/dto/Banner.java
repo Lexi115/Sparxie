@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 @Builder
-public record BannerDto(
+public record Banner(
         String id,
         String name,
         String type,

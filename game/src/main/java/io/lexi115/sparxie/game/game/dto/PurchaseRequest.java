@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.shop.dto;
+package io.lexi115.sparxie.game.game.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public record PurchaseRequest(
         @NotNull UUID transactionId,
-        @NotNull UUID playerId,
         @NotBlank String itemId,
         @NotNull @Min(1) Long amount
 ) {

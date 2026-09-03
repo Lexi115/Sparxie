@@ -1,15 +1,14 @@
 package io.lexi115.sparxie.game.game;
 
-import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
-import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
-import io.lexi115.sparxie.game.warp.dto.WarpRequest;
-import io.lexi115.sparxie.game.warp.dto.WarpResultDto;
+import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.game.dto.PurchaseResponse;
+import io.lexi115.sparxie.game.game.dto.WarpRequest;
+import io.lexi115.sparxie.game.game.dto.WarpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/game")
@@ -18,12 +17,18 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping("/warp/pull")
-    public WarpResultDto performWarp(@Valid @RequestBody final WarpRequest request) {
-        return gameService.performWarp(request);
+    public WarpResponse performWarp(
+            @RequestHeader("X-User-Id") UUID playerId,
+            @Valid @RequestBody final WarpRequest request
+    ) {
+        return gameService.performWarp(playerId, request);
     }
 
     @PostMapping("/shop/purchase")
-    public PurchaseResponse performPurchase(@Valid @RequestBody final PurchaseRequest request) {
-        return gameService.performPurchase(request);
+    public PurchaseResponse performPurchase(
+            @RequestHeader("X-User-Id") UUID playerId,
+            @Valid @RequestBody final PurchaseRequest request
+    ) {
+        return gameService.performPurchase(playerId, request);
     }
 }
