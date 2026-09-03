@@ -21,7 +21,7 @@ http:
 runtime:
   variables:
     - name: playerId
-      value: eb0fdb32-9aa0-44b8-985c-fc63d339898d
+      value: 00000000-0000-0000-0000-000000000000
     - name: itemId
       value: limited_ticket
     - name: itemAmount

@@ -11,7 +11,7 @@ http:
 runtime:
   variables:
     - name: userId
-      value: 809b3f0b-aba6-473d-b40a-62da439f1780
+      value: 00000000-0000-0000-0000-000000000000
 
 settings:
   encodeUrl: true

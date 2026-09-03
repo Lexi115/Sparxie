@@ -11,11 +11,12 @@ http:
     data: |-
       {
         "transactionId": "{{$randomUUID}}",
-        "playerId": "{{playerId}}",
         "itemId": "{{itemId}}",
         "amount": {{itemAmount}}
       }
-  auth: inherit
+  auth:
+    type: bearer
+    token: "{{authToken}}"
 
 runtime:
   variables:

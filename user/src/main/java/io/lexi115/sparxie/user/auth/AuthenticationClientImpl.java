@@ -27,7 +27,11 @@ public class AuthenticationClientImpl implements AuthenticationClient {
                 throw new UsernameAlreadyInUseException(username);
             }
         });
-        var user = new AuthenticationUser(UUID.randomUUID(), username, Instant.now(), password);
+
+        // todo remove forced uuid
+        var uuid = username.equals("sparkle") ? UUID.fromString("00000000-0000-0000-0000-000000000000") : UUID.randomUUID();
+
+        var user = new AuthenticationUser(uuid, username, Instant.now(), password);
         map.put(user.getId(), user);
         logger.info("[AUTH] Registered user {}", user);
         return new UserRegisterResponse(user.getId());
