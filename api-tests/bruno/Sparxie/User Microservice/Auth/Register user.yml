@@ -18,7 +18,7 @@ http:
 runtime:
   variables:
     - name: username
-      value: sparklep
+      value: sparkle
     - name: password
       value: feet
 

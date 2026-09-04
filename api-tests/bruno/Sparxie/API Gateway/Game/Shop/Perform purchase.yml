@@ -27,9 +27,9 @@ runtime:
     - name: pullAmount
       value: "10"
     - name: itemId
-      value: oneiric_shard
+      value: limited_ticket
     - name: itemAmount
-      value: "1600"
+      value: "1000"
 
 settings:
   encodeUrl: true
