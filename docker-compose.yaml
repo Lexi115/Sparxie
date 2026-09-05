@@ -104,6 +104,7 @@ services:
     depends_on:
       - kafka
       - postgres
+      - supabase
     profiles:
       - user
       - all
@@ -114,9 +115,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_PASSWORD: postgres
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -200,6 +205,31 @@ services:
       - gacha
       - shop
       - game
+      - all
+
+  supabase:
+    image: supabase/gotrue:v2.158.1
+    container_name: supabase
+    ports:
+      - "9999:9999"
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/supabase_db?options=-c%20search_path%3Dauth
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_SITE_URL: http://localhost:8080
+      GOTRUE_URI_ALLOW_LIST: "*"
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - user
       - all
 
 volumes:

@@ -1,9 +1,6 @@
 package io.lexi115.sparxie.user.auth;
 
-import io.lexi115.sparxie.user.auth.dto.JwkResponse;
-import io.lexi115.sparxie.user.auth.dto.RefreshTokenResponse;
-import io.lexi115.sparxie.user.auth.dto.UserLoginResponse;
-import io.lexi115.sparxie.user.auth.dto.UserRegisterResponse;
+import io.lexi115.sparxie.user.auth.dto.*;
 import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
 import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
 import io.lexi115.sparxie.user.event.OutboxEventService;
@@ -17,38 +14,35 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final AuthenticationClient authenticationClient;
+    private final AuthenticationAdapter authenticationAdapter;
     private final OutboxEventService outboxEventService;
 
     @Value("${app.kafka.topic.user}")
     private String userTopicName;
 
-    public UserRegisterResponse registerUser(final String username, final String password) {
-        var response = authenticationClient.registerUser(username, password);
-        var event = new UserCreatedEvent(response.userId(), username, Instant.now());
-        outboxEventService.scheduleEvent(event, response.userId().toString(), userTopicName);
+    public RegisterResponse register(final RegisterRequest request) {
+        var response = authenticationAdapter.register(request);
+        var userId = response.userId();
+        var event = new UserCreatedEvent(userId, request.username(), Instant.now());
+        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
         return response;
     }
 
-    public UserLoginResponse authenticateUser(final String username, final String password) {
-        return authenticationClient.authenticateUser(username, password);
+    public LoginResponse login(final LoginRequest request) {
+        return authenticationAdapter.login(request);
     }
 
-    public void deleteUser(final UUID userId) {
-        authenticationClient.deleteUser(userId);
+    public RefreshTokenResponse refreshToken(final RefreshTokenRequest request) {
+        return authenticationAdapter.refreshToken(request);
+    }
+
+    public void updatePassword(final UUID userId, final UpdatePasswordRequest request) {
+        authenticationAdapter.updatePassword(userId, request);
+    }
+
+    public void delete(final UUID userId) {
+        authenticationAdapter.delete(userId);
         var event = new UserDeletedEvent(userId, Instant.now());
         outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
-    }
-
-    public RefreshTokenResponse refreshUserToken(final UUID userId, final String refreshToken) {
-        return authenticationClient.refreshUserToken(userId, refreshToken);
-    }
-
-    public void changeUserPassword(final UUID userId, final String oldPassword, final String newPassword) {
-        authenticationClient.changeUserPassword(userId, oldPassword, newPassword);
-    }
-
-    public JwkResponse getPublicJwk() {
-        return authenticationClient.getPublicJwk();
     }
 }

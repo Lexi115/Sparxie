@@ -25,9 +25,12 @@ spring:
 app:
   http:
     client-uri:
-      zitadel: ${ZITADEL_CLIENT_URI:http://zitadel:8080}
+      supabase: ${SUPABASE_CLIENT_URI:http://supabase:9999}
   kafka:
     topic:
       user: user-topic
     group:
       user: user-group
+  supabase:
+    jwt:
+      service: ${JWT_SERVICE}

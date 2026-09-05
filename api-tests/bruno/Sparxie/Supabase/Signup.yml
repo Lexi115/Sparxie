@@ -1,26 +1,19 @@
 info:
-  name: Register user
+  name: Signup
   type: http
   seq: 1
 
 http:
   method: POST
-  url: "{{userBaseUri}}/auth/register"
+  url: "{{supabaseUri}}/signup"
   body:
     type: json
     data: |-
       {
-        "username": "{{username}}",
-        "password": "{{password}}"
+        "email": "a@a.it",
+        "password": "sparkle"
       }
   auth: inherit
-
-runtime:
-  variables:
-    - name: username
-      value: sparkle
-    - name: password
-      value: feet
 
 settings:
   encodeUrl: true

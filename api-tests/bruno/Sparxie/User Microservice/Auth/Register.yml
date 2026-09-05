@@ -1,26 +1,27 @@
 info:
-  name: Refresh user token
+  name: Register
   type: http
   seq: 3
 
 http:
   method: POST
-  url: "{{gatewayBaseUri}}/api/auth/refresh"
+  url: "{{userBaseUri}}/auth/register"
   body:
     type: json
     data: |-
       {
-        "userId": "{{userId}}",
-        "refreshToken": "{{refreshToken}}"
+        "username": "{{username}}",
+        "email": "{{email}}",
+        "password": "{{password}}"
       }
   auth: inherit
 
 runtime:
   variables:
-    - name: userId
-      value: eef5892c-50ef-4464-bd36-21f046870fd4
-    - name: refreshToken
-      value: boia
+    - name: username
+      value: sparkle
+    - name: password
+      value: feet
 
 settings:
   encodeUrl: true

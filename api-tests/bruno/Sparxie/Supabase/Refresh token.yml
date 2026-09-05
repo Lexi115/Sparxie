@@ -1,0 +1,26 @@
+info:
+  name: Refresh token
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{supabaseUri}}/token?grant_type=refresh_token"
+  params:
+    - name: grant_type
+      value: refresh_token
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+        "refresh_token": "TPr4RhkduAr7y2rqLK3qSg"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

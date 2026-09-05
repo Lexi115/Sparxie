@@ -1,6 +1,5 @@
 package io.lexi115.sparxie.user.user;
 
-import io.lexi115.sparxie.user.auth.exception.UsernameAlreadyInUseException;
 import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +19,6 @@ public class UserService {
 
     @Transactional
     public void create(final UUID userId, final String username) {
-        if (userRepository.existsByUsername(username)) {
-            throw new UsernameAlreadyInUseException(username);
-        }
         var user = User.builder()
                 .id(userId)
                 .username(username)

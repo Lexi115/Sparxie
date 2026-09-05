@@ -1,26 +1,26 @@
 info:
-  name: Refresh user token
+  name: Login
   type: http
   seq: 1
 
 http:
   method: POST
-  url: "{{userBaseUri}}/auth/refresh"
+  url: "{{userBaseUri}}/auth/login"
   body:
     type: json
     data: |-
       {
-        "userId": "{{userId}}",
-        "refreshToken": "{{refreshToken}}"
+        "email": "{{email}}",
+        "password": "{{password}}"
       }
   auth: inherit
 
 runtime:
   variables:
-    - name: userId
-      value: e2217fe7-2978-4595-a489-0490e6b72c62
-    - name: refreshToken
-      value: boia
+    - name: username
+      value: sparkle
+    - name: password
+      value: feet
 
 settings:
   encodeUrl: true

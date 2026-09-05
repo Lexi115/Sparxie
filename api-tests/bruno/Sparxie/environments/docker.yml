@@ -12,6 +12,8 @@ variables:
     value: http://localhost:8084
   - name: userBaseUri
     value: http://localhost:8085
+  - name: supabaseUri
+    value: http://localhost:9999
   - secret: true
     name: authToken
     description: ""

@@ -1,16 +1,17 @@
 info:
-  name: Login user
+  name: Register
   type: http
   seq: 1
 
 http:
   method: POST
-  url: "{{userBaseUri}}/auth/login"
+  url: "{{gatewayBaseUri}}/api/auth/register"
   body:
     type: json
     data: |-
       {
         "username": "{{username}}",
+        "email": "{{email}}",
         "password": "{{password}}"
       }
   auth: inherit
@@ -20,7 +21,9 @@ runtime:
     - name: username
       value: sparkle
     - name: password
-      value: feet
+      value: feetus
+    - name: email
+      value: a@a.it
 
 settings:
   encodeUrl: true

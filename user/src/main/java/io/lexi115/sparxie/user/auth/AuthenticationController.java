@@ -15,34 +15,32 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public UserRegisterResponse registerUser(@Valid @RequestBody final UserRegisterRequest request) {
-        return authenticationService.registerUser(request.username(), request.password());
+    public RegisterResponse register(@Valid @RequestBody final RegisterRequest request) {
+        return authenticationService.register(request);
     }
 
     @PostMapping("/login")
-    public UserLoginResponse authenticateUser(@Valid @RequestBody final UserLoginRequest request) {
-        return authenticationService.authenticateUser(request.username(), request.password());
+    public LoginResponse login(@Valid @RequestBody final LoginRequest request) {
+        return authenticationService.login(request);
     }
 
     @PostMapping("/refresh")
-    public RefreshTokenResponse refreshUserToken(@Valid @RequestBody final RefreshTokenRequest request) {
-        return authenticationService.refreshUserToken(request.userId(), request.refreshToken());
+    public RefreshTokenResponse refreshToken(@Valid @RequestBody final RefreshTokenRequest request) {
+        return authenticationService.refreshToken(request);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<Void> changeUserPassword(@Valid @RequestBody final ChangePasswordRequest request) {
-        authenticationService.changeUserPassword(request.userId(), request.oldPassword(), request.newPassword());
+    public ResponseEntity<Void> changePassword(
+            @RequestHeader("X-User-Id") final UUID userId,
+            @Valid @RequestBody final UpdatePasswordRequest request
+    ) {
+        authenticationService.updatePassword(userId, request);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable final UUID userId) {
-        authenticationService.deleteUser(userId);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> delete(@RequestHeader("X-User-Id") final UUID userId) {
+        authenticationService.delete(userId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/jwk")
-    public JwkResponse getPublicJwk() {
-        return authenticationService.getPublicJwk();
     }
 }

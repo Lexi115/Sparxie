@@ -1,26 +1,23 @@
 info:
-  name: Login user
+  name: Login
   type: http
   seq: 2
 
 http:
   method: POST
-  url: "{{gatewayBaseUri}}/api/auth/login"
+  url: "{{supabaseUri}}/token?grant_type=password"
+  params:
+    - name: grant_type
+      value: password
+      type: query
   body:
     type: json
     data: |-
       {
-        "username": "{{username}}",
-        "password": "{{password}}"
+        "email": "a@a.it",
+        "password": "sparxie"
       }
   auth: inherit
-
-runtime:
-  variables:
-    - name: username
-      value: sparkle
-    - name: password
-      value: feet
 
 settings:
   encodeUrl: true
