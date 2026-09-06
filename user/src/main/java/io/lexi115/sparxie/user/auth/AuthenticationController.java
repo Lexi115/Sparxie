@@ -29,18 +29,27 @@ public class AuthenticationController {
         return authenticationService.refreshToken(request);
     }
 
-    @PostMapping("/change-password")
-    public ResponseEntity<Void> changePassword(
-            @RequestHeader("X-User-Id") final UUID userId,
-            @Valid @RequestBody final UpdatePasswordRequest request
+    @PostMapping("/update-password")
+    public ResponseEntity<Void> updatePassword(
+            @Valid @RequestBody final UpdatePasswordRequest request,
+            @RequestHeader("Authorization") final String bearerToken
     ) {
-        authenticationService.updatePassword(userId, request);
+        authenticationService.updatePassword(request, bearerToken);
         return ResponseEntity.noContent().build();
     }
 
+//    @PostMapping("/admin/change-password")
+//    public ResponseEntity<Void> adminUpdatePassword(
+//            @Valid @RequestBody final UpdatePasswordRequest request,
+//            @RequestHeader("X-User-Id") final UUID userId
+//    ) {
+//        authenticationService.adminUpdatePassword(request, userId);
+//        return ResponseEntity.noContent().build();
+//    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestHeader("X-User-Id") final UUID userId) {
-        authenticationService.delete(userId);
+        authenticationService.adminDelete(userId);
         return ResponseEntity.noContent().build();
     }
 }

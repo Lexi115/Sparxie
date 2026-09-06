@@ -23,7 +23,13 @@ runtime:
     - name: password
       value: feetus
     - name: email
-      value: a@a.it
+      value: c@a.it
+  scripts:
+    - type: after-response
+      code: |-
+        var data = res.getBody();
+        bru.setEnvVar("accessToken", data.accessToken);
+        bru.setEnvVar("refreshToken", data.refreshToken);
 
 settings:
   encodeUrl: true

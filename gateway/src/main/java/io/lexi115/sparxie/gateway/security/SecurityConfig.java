@@ -1,5 +1,7 @@
 package io.lexi115.sparxie.gateway.security;
 
+import io.lexi115.sparxie.gateway.security.filters.JwtAuthorizationFilter;
+import io.lexi115.sparxie.gateway.security.filters.SecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfig {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final List<SecurityFilter> securityFilters;
 
     @Value("${app.security.jwt.secret}")
     private String jwtSecret;
@@ -30,12 +34,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/change-password").authenticated()
-                        .requestMatchers("/api/auth/delete").authenticated()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    securityFilters.forEach(securityFilter -> securityFilter.filter(auth));
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterAfter(jwtAuthorizationFilter, BearerTokenAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2
                         -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())));

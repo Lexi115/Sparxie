@@ -16,7 +16,7 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
         this.customHeaders = new HashMap<>();
     }
 
-    public void addHeader(String name, String value) {
+    public void setHeader(String name, String value) {
         this.customHeaders.put(name, value);
     }
 

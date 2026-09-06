@@ -20,7 +20,9 @@ runtime:
     - name: username
       value: sparkle
     - name: password
-      value: feet
+      value: feetus
+    - name: email
+      value: a@a.it
 
 settings:
   encodeUrl: true

@@ -15,9 +15,12 @@ http:
   auth: inherit
 
 runtime:
-  variables:
-    - name: refreshToken
-      value: EwJk69Ph4MzuvQopGIy9YA
+  scripts:
+    - type: after-response
+      code: |-
+        var data = res.getBody();
+        bru.setEnvVar("accessToken", data.accessToken);
+        bru.setEnvVar("refreshToken", data.refreshToken);
 
 settings:
   encodeUrl: true

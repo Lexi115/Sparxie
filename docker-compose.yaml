@@ -8,14 +8,12 @@ services:
     env_file:
       - ./gateway/.env
     restart: on-failure
-    depends_on:
-      - user
-      - game
     profiles:
       - inventory
       - gacha
       - shop
       - game
+      - user
       - all
 
   game:

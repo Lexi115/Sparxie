@@ -16,8 +16,8 @@ public class SupabaseAdapter implements AuthenticationAdapter {
     private final SupabaseClient supabaseClient;
     private final SupabaseMapper supabaseMapper;
 
-    @Value("${app.supabase.jwt.service}")
-    private String jwtServiceKey;
+    @Value("Bearer ${app.supabase.jwt.service}")
+    private String serviceBearerToken;
 
     @Override
     public RegisterResponse register(final RegisterRequest request) {
@@ -41,13 +41,19 @@ public class SupabaseAdapter implements AuthenticationAdapter {
     }
 
     @Override
-    public void updatePassword(final UUID userId, final UpdatePasswordRequest request) {
+    public void updatePassword(UpdatePasswordRequest request, String bearerToken) {
         var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        supabaseClient.updatePassword(userId, supabaseRequest, "Bearer " + jwtServiceKey);
+        supabaseClient.updatePassword(supabaseRequest, bearerToken);
     }
 
     @Override
-    public void delete(final UUID userId) {
-        supabaseClient.delete(userId, "Bearer " + jwtServiceKey);
+    public void adminUpdatePassword(final UpdatePasswordRequest request, final UUID userId) {
+        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
+        supabaseClient.adminUpdatePassword(supabaseRequest, userId, serviceBearerToken);
+    }
+
+    @Override
+    public void adminDelete(final UUID userId) {
+        supabaseClient.delete(userId, serviceBearerToken);
     }
 }

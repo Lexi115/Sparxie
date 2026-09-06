@@ -25,8 +25,10 @@ DATABASE gacha_db OWNER gacha_user;
 -- Supabase database
 CREATE
 DATABASE supabase_db;
+
 \c
-supabase_db;
+supabase_db
+
 CREATE SCHEMA auth;
 CREATE TYPE auth.factor_type AS ENUM ('totp', 'webauthn');
 CREATE TYPE auth.factor_status AS ENUM ('unverified', 'verified');

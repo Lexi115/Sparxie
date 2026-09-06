@@ -11,7 +11,9 @@ public interface AuthenticationAdapter {
 
     RefreshTokenResponse refreshToken(RefreshTokenRequest request);
 
-    void updatePassword(UUID userId, UpdatePasswordRequest request);
+    void updatePassword(UpdatePasswordRequest request, String bearerToken);
 
-    void delete(UUID userId);
+    void adminUpdatePassword(UpdatePasswordRequest request, UUID userId);
+
+    void adminDelete(UUID userId);
 }

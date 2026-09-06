@@ -6,6 +6,9 @@ info:
 http:
   method: DELETE
   url: "{{userBaseUri}}/auth/delete"
+  headers:
+    - name: X-User-Id
+      value: e458b206-011c-4070-b718-e285fc26c883
   auth: inherit
 
 runtime:

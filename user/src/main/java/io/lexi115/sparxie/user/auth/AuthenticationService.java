@@ -36,12 +36,16 @@ public class AuthenticationService {
         return authenticationAdapter.refreshToken(request);
     }
 
-    public void updatePassword(final UUID userId, final UpdatePasswordRequest request) {
-        authenticationAdapter.updatePassword(userId, request);
+    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
+        authenticationAdapter.updatePassword(request, bearerToken);
     }
 
-    public void delete(final UUID userId) {
-        authenticationAdapter.delete(userId);
+    public void adminUpdatePassword(final UpdatePasswordRequest request, final UUID userId) {
+        authenticationAdapter.adminUpdatePassword(request, userId);
+    }
+
+    public void adminDelete(final UUID userId) {
+        authenticationAdapter.adminDelete(userId);
         var event = new UserDeletedEvent(userId, Instant.now());
         outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
     }

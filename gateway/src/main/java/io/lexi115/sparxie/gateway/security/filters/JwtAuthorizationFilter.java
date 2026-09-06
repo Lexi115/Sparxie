@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gateway.security;
+package io.lexi115.sparxie.gateway.security.filters;
 
 import io.lexi115.sparxie.gateway.http.CustomHttpServletRequestWrapper;
 import jakarta.servlet.FilterChain;
@@ -33,7 +33,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         var customRequest = new CustomHttpServletRequestWrapper(request);
         var userId = principal.getSubject();
-        customRequest.addHeader("X-User-Id", userId);
+        customRequest.setHeader("X-User-Id", userId);
         filterChain.doFilter(customRequest, response);
     }
 }
