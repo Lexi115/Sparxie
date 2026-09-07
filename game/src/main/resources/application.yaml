@@ -20,6 +20,8 @@ app:
       warp: ${WARP_CLIENT_URI:http://gacha:8080/warp}
       banner: ${BANNER_CLIENT_URI:http://gacha:8080/banner}
       inventory: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
+      character: ${CHARACTER_CLIENT_URI:http://inventory:8080/character}
+      weapon: ${WEAPON_CLIENT_URI:http://inventory:8080/weapon}
       shop: ${SHOP_CLIENT_URI:http://shop:8080/shop}
   kafka:
     topic:

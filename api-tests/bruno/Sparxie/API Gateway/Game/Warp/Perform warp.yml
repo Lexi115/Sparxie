@@ -16,7 +16,7 @@ http:
       }
   auth:
     type: bearer
-    token: "{{authToken}}"
+    token: "{{accessToken}}"
 
 runtime:
   variables:

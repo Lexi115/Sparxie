@@ -16,7 +16,7 @@ http:
       }
   auth:
     type: bearer
-    token: "{{authToken}}"
+    token: "{{accessToken}}"
 
 runtime:
   variables:
@@ -29,7 +29,7 @@ runtime:
     - name: itemId
       value: limited_ticket
     - name: itemAmount
-      value: "1000"
+      value: "100"
 
 settings:
   encodeUrl: true
