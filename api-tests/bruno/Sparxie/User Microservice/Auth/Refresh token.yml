@@ -14,13 +14,6 @@ http:
       }
   auth: inherit
 
-runtime:
-  variables:
-    - name: userId
-      value: e2217fe7-2978-4595-a489-0490e6b72c62
-    - name: refreshToken
-      value: 3eslRZGZ2Bu_AbmRbC0AdA
-
 settings:
   encodeUrl: true
   timeout: 0

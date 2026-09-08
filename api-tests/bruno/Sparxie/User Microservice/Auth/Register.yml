@@ -16,15 +16,6 @@ http:
       }
   auth: inherit
 
-runtime:
-  variables:
-    - name: username
-      value: sparkle
-    - name: password
-      value: feetus
-    - name: email
-      value: a@a.it
-
 settings:
   encodeUrl: true
   timeout: 0

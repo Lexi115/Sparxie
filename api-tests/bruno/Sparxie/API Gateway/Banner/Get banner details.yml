@@ -6,9 +6,6 @@ info:
 http:
   method: GET
   url: "{{gatewayBaseUri}}/api/banner/details/{{bannerId}}"
-  headers:
-    - name: Authorization
-      value: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZmQ1YmQxZC0zODU3LTQ3ZWEtYjcwZC01ODcyZDJiZmNiNzYiLCJuYW1lIjoic3BhcmtsZSIsImlhdCI6MTUxNjIzOTAyMn0.gGNDhycjS6kS33mTU95pRoQ3_6G3fWi6_Fyl5mJh2jaMNuoaBQALM1vHmnot5688IocIXlmj6GGNBfpXZzaJ8KtA6xLyzN-tfC-bAPBltJRIUkmCF0965nR9RKcs_mJWv4r03qeAgE-JPSBd_YXbqJ9yeuzo8SrmE_6xslj0A2Yl2HmZ3OBaLpcKS51TtSUYEw14K4nrIuLb4hXDBHkNINl6R6BAQnafiZLA-MYDpK3qbyuyhDSYfaVL948ldesHjXRfSuITpjSOP_wzwqdsVC3B_SkhZJeAZwnQwOxe_YFMqM0KTjiW9tgfiKbMYsYt2QCMAvwJo74-raCxUHBVXz
   auth: inherit
 
 runtime:

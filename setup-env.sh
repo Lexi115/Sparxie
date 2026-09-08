@@ -19,6 +19,7 @@ USER_SERVICE_BASE_URI=http://user:8080
 
 # Root-level
 cat <<EOF > ./.env
+COMPOSE_PROFILES=*
 JWT_SECRET=${JWT_SECRET}
 EOF
 
@@ -117,6 +118,7 @@ header = {"alg": "HS256", "typ": "JWT"}
 payload = {"role": "service_role", "iss": "supabase", "exp": int(time.time()) + 31536000}
 signing_input = f"{b64(header)}.{b64(payload)}"
 sig = hmac.new(secret.encode(), signing_input.encode(), hashlib.sha256).digest()
-print(f"{signing_input}.{base64.urlsafe_b64encode(sig).rstrip(b\"=\").decode()}")
+signature = base64.urlsafe_b64encode(sig).rstrip(b"=").decode()
+print(signing_input + "." + signature)
 ')
 EOF
