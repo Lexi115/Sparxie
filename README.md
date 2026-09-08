@@ -43,7 +43,7 @@ This section will guide you through the installation process.
 > [!WARNING]
 > `setup-env.sh` requires **Python 3.x** to be installed in order to work!
 
-2. Run `docker compose up` to start all services.
+2. Run `docker compose up -d` to start all services.
 3. Make HTTP calls to the available endpoints.
 
 > [!TIP]
