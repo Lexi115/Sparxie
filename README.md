@@ -39,12 +39,12 @@ This section will guide you through the installation process.
 ### Guide
 
 1. Manually set the environment variables inside `.env` files or run the `setup-env.sh` script to do the job for you.
-   > [!WARNING]
-   > `setup-env.sh` requires **Python 3.x** to be installed in order to work!
+> [!WARNING]
+> `setup-env.sh` requires **Python 3.x** to be installed in order to work!
 2. Run `docker compose --profile "*" up` to start all services.
 3. Make HTTP calls to the available endpoints.
-   > [!TIP]
-   > If you have an HTTP client like **Bruno** (or Postman), you can import the whole request collection at
+> [!TIP]
+> If you have an HTTP client like **Bruno** (or Postman), you can import the whole request collection at
    `api-tests/bruno/Sparxie` and try them out easily.
 4. Run `docker compose --profile "*" down` to stop all services.
 
