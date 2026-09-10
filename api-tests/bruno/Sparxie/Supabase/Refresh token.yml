@@ -1,7 +1,7 @@
 info:
   name: Refresh token
   type: http
-  seq: 5
+  seq: 4
 
 http:
   method: POST
@@ -14,9 +14,20 @@ http:
     type: json
     data: |-
       {
-        "refresh_token": "TPr4RhkduAr7y2rqLK3qSg"
+        "refresh_token": "{{supabaseRefreshToken}}"
       }
   auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status != 200) {
+          return;
+        }
+        var resData = res.getBody();
+        bru.setEnvVar("supabaseAccessToken", resData.access_token);
+        bru.setEnvVar("supabaseRefreshToken", resData.refresh_token);
 
 settings:
   encodeUrl: true

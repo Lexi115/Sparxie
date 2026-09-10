@@ -6,12 +6,14 @@ info:
 http:
   method: POST
   url: "{{gameBaseUri}}/game/shop/purchase"
+  headers:
+    - name: X-User-Id
+      value: "{{userId}}"
   body:
     type: json
     data: |-
       {
         "transactionId": "{{$randomUUID}}",
-        "playerId": "{{playerId}}",
         "itemId": "{{itemId}}",
         "amount": {{itemAmount}}
       }
@@ -19,8 +21,6 @@ http:
 
 runtime:
   variables:
-    - name: playerId
-      value: eb0fdb32-9aa0-44b8-985c-fc63d339898d
     - name: bannerId
       value: banner_standard_event
     - name: pullAmount

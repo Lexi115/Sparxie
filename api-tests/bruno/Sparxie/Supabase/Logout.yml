@@ -1,14 +1,14 @@
 info:
   name: Logout
   type: http
-  seq: 4
+  seq: 3
 
 http:
   method: POST
   url: "{{supabaseUri}}/logout"
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMmQ0NTE0NS1lNzY4LTQ0MDctODM2Ny00MzIwY2YwYWI4NjciLCJhdWQiOiIiLCJleHAiOjE3ODg1NDI5NjMsImlhdCI6MTc4ODUzOTM2MywiZW1haWwiOiJhQGEuaXQiLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoiYUBhLml0IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImYyZDQ1MTQ1LWU3NjgtNDQwNy04MzY3LTQzMjBjZjBhYjg2NyJ9LCJyb2xlIjoiIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3ODg1MzkzNjN9XSwic2Vzc2lvbl9pZCI6IjhiN2I4NGZhLTEyMzUtNDUyYi1iZDM2LWQ2ODM4NTU3NWM5MiIsImlzX2Fub255bW91cyI6ZmFsc2V9.EZ7vx-qRI4ybQ2QGq8swMHltGyE1m3UUkS7vJngCkvQ
+    token: "{{supabaseAccessToken}}"
 
 settings:
   encodeUrl: true

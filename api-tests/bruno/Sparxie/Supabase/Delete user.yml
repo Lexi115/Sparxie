@@ -1,14 +1,14 @@
 info:
   name: Delete user
   type: http
-  seq: 6
+  seq: 5
 
 http:
   method: DELETE
-  url: "{{supabaseUri}}/admin/users/f2d45145-e768-4407-8367-4320cf0ab867"
+  url: "{{supabaseUri}}/admin/users/{{supabaseUserId}}"
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJleHAiOjIxMDM5MDA3NjV9.UE4YVpZ5fZHiAIcmtbq6W0SXZ6uJM4usrVnXJns0pEw
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJleHAiOjE4MjA0MjQyOTl9.T-tpSmfx2zvRez-pUaarQPpOyqGvahRtt6Oiy4QNDBk
 
 settings:
   encodeUrl: true

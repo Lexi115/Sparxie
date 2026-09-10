@@ -18,6 +18,9 @@ runtime:
   scripts:
     - type: after-response
       code: |-
+        if (res.status != 200) {
+          return;
+        }
         var data = res.getBody();
         bru.setEnvVar("accessToken", data.accessToken);
         bru.setEnvVar("refreshToken", data.refreshToken);

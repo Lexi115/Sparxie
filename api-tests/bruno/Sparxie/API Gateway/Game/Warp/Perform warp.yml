@@ -20,8 +20,6 @@ http:
 
 runtime:
   variables:
-    - name: playerId
-      value: a1ef00f5-c29b-4edc-ab2d-6266b94ace3e
     - name: bannerId
       value: banner_character_event_sparkle_01
     - name: pullAmount

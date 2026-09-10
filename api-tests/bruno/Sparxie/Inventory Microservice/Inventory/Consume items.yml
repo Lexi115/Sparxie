@@ -21,7 +21,7 @@ http:
 runtime:
   variables:
     - name: playerId
-      value: 00000000-0000-0000-0000-000000000000
+      value: "{{userId}}"
     - name: itemId
       value: oneiric_shard
     - name: itemAmount

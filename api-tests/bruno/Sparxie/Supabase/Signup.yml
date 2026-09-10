@@ -10,10 +10,26 @@ http:
     type: json
     data: |-
       {
-        "email": "ba.it",
-        "password": "sparkle"
+        "email": "{{$randomEmail}}",
+        "password": "{{$randomPassword}}"
       }
   auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status != 200) {
+          return;
+        }
+        var reqData = req.getBody();
+        bru.setEnvVar("supabaseEmail", reqData.email);
+        bru.setEnvVar("supabasePassword", reqData.password);
+
+        var resData = res.getBody();
+        bru.setEnvVar("supabaseAccessToken", resData.access_token);
+        bru.setEnvVar("supabaseRefreshToken", resData.refresh_token);
+        bru.setEnvVar("supabaseUserId", resData.user.id);
 
 settings:
   encodeUrl: true

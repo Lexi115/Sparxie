@@ -16,19 +16,20 @@ http:
   auth: inherit
 
 runtime:
-  variables:
-    - name: username
-      value: sparkle
-    - name: password
-      value: feetus
-    - name: email
-      value: c@a.it
   scripts:
     - type: after-response
       code: |-
-        var data = res.getBody();
-        bru.setEnvVar("accessToken", data.accessToken);
-        bru.setEnvVar("refreshToken", data.refreshToken);
+        if (res.status != 200) {
+          return;
+        }
+        var reqData = req.getBody();
+        bru.setEnvVar("email", reqData.email);
+        bru.setEnvVar("password", reqData.password);
+
+        var resData = res.getBody();
+        bru.setEnvVar("accessToken", resData.accessToken);
+        bru.setEnvVar("refreshToken", resData.refreshToken);
+        bru.setEnvVar("userId", resData.userId);
 
 settings:
   encodeUrl: true

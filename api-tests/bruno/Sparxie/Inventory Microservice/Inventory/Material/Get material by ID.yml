@@ -10,10 +10,6 @@ http:
 
 runtime:
   variables:
-    - name: characterId
-      value: char_sparkle
-    - name: weaponId
-      value: lc_earthly_escapades
     - name: materialId
       value: stellar_jade
 

@@ -11,11 +11,6 @@ http:
       value: "{{userId}}"
   auth: inherit
 
-runtime:
-  variables:
-    - name: userId
-      value: d57b87a7-26f9-4b6f-bce3-e211ad594747
-
 settings:
   encodeUrl: true
   timeout: 0
