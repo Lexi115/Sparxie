@@ -5,8 +5,13 @@ info:
 
 http:
   method: GET
-  url: "{{gatewayBaseUri}}/api/auth/authorize/google"
+  url: "{{gatewayBaseUri}}/api/auth/authorize/{{provider}}"
   auth: inherit
+
+runtime:
+  variables:
+    - name: provider
+      value: github
 
 settings:
   encodeUrl: true

@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{userBaseUri}}/auth/authorize/google"
+  url: "{{userBaseUri}}/auth/authorize/{{provider}}"
   auth: inherit
 
 settings:
