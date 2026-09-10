@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     env_file:
       - ./gateway/.env
-    restart: on-failure
+    restart: always
     profiles:
       - inventory
       - gacha
@@ -24,7 +24,7 @@ services:
       - "8081:8080"
     env_file:
       - ./game/.env
-    restart: on-failure
+    restart: always
     depends_on:
       - kafka
       - postgres
@@ -43,7 +43,7 @@ services:
       - "8082:8080"
     env_file:
       - ./gacha/.env
-    restart: on-failure
+    restart: always
     depends_on:
       - mongo
       - redis
@@ -62,7 +62,7 @@ services:
       - "8083:8080"
     env_file:
       - ./inventory/.env
-    restart: on-failure
+    restart: always
     depends_on:
       - mongo
       - redis
@@ -81,7 +81,7 @@ services:
       - "8084:8080"
     env_file:
       - ./shop/.env
-    restart: on-failure
+    restart: always
     depends_on:
       - redis
       - mongo
@@ -98,7 +98,7 @@ services:
       - "8085:8080"
     env_file:
       - ./user/.env
-    restart: on-failure
+    restart: always
     depends_on:
       - kafka
       - postgres
