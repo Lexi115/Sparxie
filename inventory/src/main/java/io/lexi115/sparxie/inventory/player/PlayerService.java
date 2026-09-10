@@ -1,6 +1,5 @@
 package io.lexi115.sparxie.inventory.player;
 
-import io.lexi115.sparxie.inventory.player.exception.PlayerAlreadyExistsException;
 import io.lexi115.sparxie.inventory.player.exception.PlayerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,11 +17,12 @@ public class PlayerService {
                 .orElseThrow(() -> new PlayerNotFoundException(playerId));
     }
 
+    public boolean existsById(final UUID playerId) {
+        return playerRepository.existsById(playerId);
+    }
+
     @Transactional
     public void create(final UUID playerId) {
-        if (playerRepository.existsById(playerId)) {
-            throw new PlayerAlreadyExistsException("ID '" + playerId + "' already in use.");
-        }
         var player = new Player(playerId);
         playerRepository.save(player);
     }

@@ -1,15 +1,11 @@
 info:
-  name: Login with Google
+  name: Authorize (OAuth2)
   type: http
   seq: 6
 
 http:
   method: GET
-  url: "{{supabaseUri}}/authorize?provider=google"
-  params:
-    - name: provider
-      value: google
-      type: query
+  url: "{{userBaseUri}}/auth/authorize/google"
   auth: inherit
 
 settings:

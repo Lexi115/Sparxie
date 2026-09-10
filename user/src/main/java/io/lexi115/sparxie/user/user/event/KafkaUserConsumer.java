@@ -17,7 +17,10 @@ public class KafkaUserConsumer {
     @KafkaHandler
     public void onUserCreated(final UserCreatedEvent event) {
         System.out.println("user created event " + event.userId());
-        userService.create(event.userId(), event.username());
+        var userId = event.userId();
+        if (!userService.existsById(userId)) {
+            userService.create(userId, event.username());
+        }
     }
 
     @KafkaHandler

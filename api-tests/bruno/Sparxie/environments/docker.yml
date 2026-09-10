@@ -14,3 +14,13 @@ variables:
     value: http://localhost:8085
   - name: supabaseUri
     value: http://localhost:9999
+  - name: email
+    value: Dewayne23@gmail.com
+  - name: password
+    value: 0YMQhUrxp23B9T9
+  - name: accessToken
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZDBhZWJkZi00YWEzLTQxMTgtOTYzZS03YTM0Mzk3YTZiNmIiLCJhdWQiOiIiLCJleHAiOjE3ODkwNDUwMTAsImlhdCI6MTc4OTA0MTQxMCwiZW1haWwiOiJkZXdheW5lMjNAZ21haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbCI6ImRld2F5bmUyM0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiMWQwYWViZGYtNGFhMy00MTE4LTk2M2UtN2EzNDM5N2E2YjZiIn0sInJvbGUiOiIiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc4OTA0MTQxMH1dLCJzZXNzaW9uX2lkIjoiMWUwN2YzNDQtMGIyYy00ODQyLTk2MTItMzVmOTQ3MGJjMTlmIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.0jlmYLzUFjSas-K--iJCuXKiD6RYr0F29Bv25aGWsgs
+  - name: refreshToken
+    value: BgXecbLzraizHP5Da29baw
+  - name: userId
+    value: 1d0aebdf-4aa3-4118-963e-7a34397a6b6b

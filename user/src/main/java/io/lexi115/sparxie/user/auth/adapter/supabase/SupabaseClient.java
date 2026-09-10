@@ -4,9 +4,11 @@ import io.lexi115.sparxie.user.auth.adapter.supabase.dto.*;
 import io.lexi115.sparxie.user.auth.adapter.supabase.error.SupabaseErrorDecoder;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -40,5 +42,8 @@ public interface SupabaseClient {
     );
 
     @DeleteMapping("/admin/users/{userId}")
-    void delete(@PathVariable UUID userId, @RequestHeader("Authorization") String bearerToken);
+    void adminDelete(@PathVariable UUID userId, @RequestHeader("Authorization") String bearerToken);
+
+    @GetMapping("/callback")
+    feign.Response callback(@SpringQueryMap Map<String, String> params);
 }

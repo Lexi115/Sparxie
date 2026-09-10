@@ -17,6 +17,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
+    public boolean existsById(final UUID userId) {
+        return userRepository.existsById(userId);
+    }
+
     @Transactional
     public void create(final UUID userId, final String username) {
         var user = User.builder()

@@ -1,12 +1,19 @@
 package io.lexi115.sparxie.user.auth.adapter.supabase;
 
 import io.lexi115.sparxie.user.auth.AuthenticationAdapter;
+import io.lexi115.sparxie.user.auth.IdentityProvider;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseMapper;
+import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseUserMetadata;
 import io.lexi115.sparxie.user.auth.dto.*;
+import io.lexi115.sparxie.user.util.CookieHelper;
+import io.lexi115.sparxie.user.util.JwtHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -15,6 +22,11 @@ public class SupabaseAdapter implements AuthenticationAdapter {
 
     private final SupabaseClient supabaseClient;
     private final SupabaseMapper supabaseMapper;
+    private final CookieHelper cookieHelper;
+    private final JwtHelper jwtHelper;
+
+    @Value("${app.http.client-uri.supabase-external}")
+    private String supabaseExternalClientUri;
 
     @Value("Bearer ${app.supabase.jwt.service}")
     private String serviceBearerToken;
@@ -41,19 +53,45 @@ public class SupabaseAdapter implements AuthenticationAdapter {
     }
 
     @Override
-    public void updatePassword(UpdatePasswordRequest request, String bearerToken) {
+    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
         var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
         supabaseClient.updatePassword(supabaseRequest, bearerToken);
     }
 
     @Override
-    public void adminUpdatePassword(final UpdatePasswordRequest request, final UUID userId) {
-        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        supabaseClient.adminUpdatePassword(supabaseRequest, userId, serviceBearerToken);
+    public void delete(final UUID userId) {
+        supabaseClient.adminDelete(userId, serviceBearerToken);
     }
 
     @Override
-    public void adminDelete(final UUID userId) {
-        supabaseClient.delete(userId, serviceBearerToken);
+    public URI getAuthorizeUri(final IdentityProvider provider) {
+        return URI.create(supabaseExternalClientUri + "/authorize?provider=" + provider.name().toLowerCase());
+    }
+
+    @Override
+    public CallbackResponse callback(final Map<String, String> params) {
+        try (var feignResponse = supabaseClient.callback(params)) {
+            var headers = feignResponse.headers();
+
+            var locations = headers.getOrDefault("Location", headers.get("location"));
+            var location = locations != null ? URI.create(locations.iterator().next()) : null;
+
+            var cookies = headers.getOrDefault("Set-Cookie", headers.get("set-cookie"));
+            var accessToken = cookieHelper.extractCookie(cookies, "sb-access-token");
+            var refreshToken = cookieHelper.extractCookie(cookies, "sb-refresh-token");
+
+            var userId = jwtHelper.extractClaim(accessToken, "sub", UUID.class);
+            var userMetadata = jwtHelper.extractNestedClaim(accessToken, "user_metadata", SupabaseUserMetadata.class);
+
+            return CallbackResponse.builder()
+                    .location(location)
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .userId(userId)
+                    .username(userMetadata.username())
+                    .email(userMetadata.email())
+                    .createdAt(Instant.now())
+                    .build();
+        }
     }
 }

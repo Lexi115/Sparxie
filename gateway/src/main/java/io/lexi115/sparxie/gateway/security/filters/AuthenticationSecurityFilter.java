@@ -14,6 +14,7 @@ public class AuthenticationSecurityFilter implements SecurityFilter {
         registry
                 .requestMatchers(HttpMethod.POST, prefix + "/change-password").authenticated()
                 .requestMatchers(HttpMethod.DELETE, prefix + "/delete").authenticated()
+                .requestMatchers(HttpMethod.GET, prefix + "/callback").permitAll()
                 .requestMatchers(prefix + "/**").permitAll();
     }
 }

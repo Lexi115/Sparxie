@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -23,7 +25,7 @@ public class AuthenticationService {
     public RegisterResponse register(final RegisterRequest request) {
         var response = authenticationAdapter.register(request);
         var userId = response.userId();
-        var event = new UserCreatedEvent(userId, request.username(), Instant.now());
+        var event = new UserCreatedEvent(userId, request.username(), response.createdAt());
         outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
         return response;
     }
@@ -40,13 +42,21 @@ public class AuthenticationService {
         authenticationAdapter.updatePassword(request, bearerToken);
     }
 
-    public void adminUpdatePassword(final UpdatePasswordRequest request, final UUID userId) {
-        authenticationAdapter.adminUpdatePassword(request, userId);
-    }
-
-    public void adminDelete(final UUID userId) {
-        authenticationAdapter.adminDelete(userId);
+    public void delete(final UUID userId) {
+        authenticationAdapter.delete(userId);
         var event = new UserDeletedEvent(userId, Instant.now());
         outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+    }
+
+    public URI getAuthorizeUri(final IdentityProvider provider) {
+        return authenticationAdapter.getAuthorizeUri(provider);
+    }
+
+    public CallbackResponse callback(final Map<String, String> params) {
+        var response = authenticationAdapter.callback(params);
+        var userId = response.userId();
+        var event = new UserCreatedEvent(userId, response.username(), response.createdAt());
+        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        return response;
     }
 }

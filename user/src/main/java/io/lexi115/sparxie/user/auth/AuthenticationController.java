@@ -3,9 +3,11 @@ package io.lexi115.sparxie.user.auth;
 import io.lexi115.sparxie.user.auth.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -38,18 +40,25 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("/admin/change-password")
-//    public ResponseEntity<Void> adminUpdatePassword(
-//            @Valid @RequestBody final UpdatePasswordRequest request,
-//            @RequestHeader("X-User-Id") final UUID userId
-//    ) {
-//        authenticationService.adminUpdatePassword(request, userId);
-//        return ResponseEntity.noContent().build();
-//    }
-
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestHeader("X-User-Id") final UUID userId) {
-        authenticationService.adminDelete(userId);
+        authenticationService.delete(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/authorize/{provider}")
+    public ResponseEntity<Void> authorize(@PathVariable final IdentityProvider provider) {
+        var redirectUri = authenticationService.getAuthorizeUri(provider);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(redirectUri)
+                .build();
+    }
+
+    @GetMapping("/callback")
+    public ResponseEntity<CallbackResponse> callback(@RequestParam Map<String, String> params) {
+        var response = authenticationService.callback(params);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(response.location())
+                .body(response);
     }
 }

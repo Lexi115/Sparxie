@@ -21,11 +21,18 @@ spring:
         USER_DELETED:io.lexi115.sparxie.user.auth.event.UserDeletedEvent
     bootstrap-servers:
       - ${KAFKA_SERVER:kafka:9092}
+  cloud:
+    openfeign:
+      client:
+        config:
+          supabaseClient:
+            follow-redirects: false
 
 app:
   http:
     client-uri:
       supabase: ${SUPABASE_CLIENT_URI:http://supabase:9999}
+      supabase-external: ${SUPABASE_EXTERNAL_CLIENT_URI:http://localhost:9999}
   kafka:
     topic:
       user: user-topic
