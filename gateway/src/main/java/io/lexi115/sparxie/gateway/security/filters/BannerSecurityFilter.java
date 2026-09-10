@@ -1,0 +1,18 @@
+package io.lexi115.sparxie.gateway.security.filters;
+
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BannerSecurityFilter implements SecurityFilter {
+
+    @Override
+    public void filter(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
+        var prefix = "/api/banner";
+        registry
+                .requestMatchers(HttpMethod.GET, prefix + "/{bannerId}").permitAll()
+                .requestMatchers(HttpMethod.GET, prefix + "/details/{bannerId}").permitAll();
+    }
+}

@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-warp-transactions-table
+      author: Lexi115
+      changes:
+        - createTable:
+            tableName: warp_transactions
+            columns:
+              - column:
+                  name: transaction_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: player_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: result
+                  type: jsonb
+                  constraints:
+                    nullable: false

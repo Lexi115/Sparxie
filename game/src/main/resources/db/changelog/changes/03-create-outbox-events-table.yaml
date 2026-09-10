@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-create-outbox-events-table
+      author: Lexi115
+      changes:
+        - createTable:
+            tableName: outbox_events
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: key
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: topic
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_type
+                  type: varchar(30)
+                  constraints:
+                    nullable: false

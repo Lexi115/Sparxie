@@ -1,0 +1,40 @@
+info:
+  name: Register
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{gatewayBaseUri}}/api/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{$randomUserName}}",
+        "email": "{{$randomEmail}}",
+        "password": "{{$randomPassword}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status != 200) {
+          return;
+        }
+        var reqData = req.getBody();
+        bru.setEnvVar("email", reqData.email);
+        bru.setEnvVar("password", reqData.password);
+
+        var resData = res.getBody();
+        bru.setEnvVar("accessToken", resData.accessToken);
+        bru.setEnvVar("refreshToken", resData.refreshToken);
+        bru.setEnvVar("userId", resData.userId);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

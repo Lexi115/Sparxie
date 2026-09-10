@@ -15,6 +15,7 @@
         <module>game</module>
         <module>inventory</module>
         <module>shop</module>
+        <module>user</module>
         <module>gateway</module>
     </modules>
 

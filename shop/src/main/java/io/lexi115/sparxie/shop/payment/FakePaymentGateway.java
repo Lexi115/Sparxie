@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.shop.payment;
 
+import io.lexi115.sparxie.shop.payment.transaction.PaymentTransaction;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

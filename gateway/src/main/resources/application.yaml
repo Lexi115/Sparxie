@@ -20,3 +20,36 @@ spring:
                 - Path=/api/banner/**
               filters:
                 - StripPrefix=1
+            # User
+            - id: user
+              uri: ${USER_SERVICE_BASE_URI:http://user:8080}
+              predicates:
+                - Path=/api/user/**
+              filters:
+                - StripPrefix=1
+            # Authentication
+            - id: auth
+              uri: ${AUTH_SERVICE_BASE_URI:http://user:8080}
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=1
+            # Character
+            - id: character
+              uri: ${CHARACTER_SERVICE_BASE_URI:http://inventory:8080}
+              predicates:
+                - Path=/api/character/**
+              filters:
+                - StripPrefix=1
+            # Weapon
+            - id: weapon
+              uri: ${WEAPON_SERVICE_BASE_URI:http://inventory:8080}
+              predicates:
+                - Path=/api/weapon/**
+              filters:
+                - StripPrefix=1
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}

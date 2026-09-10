@@ -1,14 +1,15 @@
 package io.lexi115.sparxie.game.error;
 
-import io.lexi115.sparxie.game.banner.BannerNotFoundException;
-import io.lexi115.sparxie.game.character.CharacterNotFoundException;
-import io.lexi115.sparxie.game.inventory.InventoryLockedException;
-import io.lexi115.sparxie.game.item.NotEnoughItemsException;
-import io.lexi115.sparxie.game.player.PlayerNotFoundException;
-import io.lexi115.sparxie.game.shop.ShopLockedException;
+import io.lexi115.sparxie.game.banner.exception.BannerNotFoundException;
+import io.lexi115.sparxie.game.character.exception.CharacterNotFoundException;
+import io.lexi115.sparxie.game.inventory.exception.InventoryLockedException;
+import io.lexi115.sparxie.game.inventory.exception.NotEnoughItemsException;
+import io.lexi115.sparxie.game.material.exception.MaterialNotFoundException;
+import io.lexi115.sparxie.game.player.exception.PlayerNotFoundException;
+import io.lexi115.sparxie.game.shop.exception.ShopLockedException;
 import io.lexi115.sparxie.game.shop.item.ShopItemNotFoundException;
-import io.lexi115.sparxie.game.warp.WarpLockedException;
-import io.lexi115.sparxie.game.weapon.WeaponNotFoundException;
+import io.lexi115.sparxie.game.warp.exception.WarpLockedException;
+import io.lexi115.sparxie.game.weapon.exception.WeaponNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -45,6 +46,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND, ErrorCode.ERR_WEAPON_NOT_FOUND);
     }
 
+    @ExceptionHandler(MaterialNotFoundException.class)
+    public ProblemDetail materialNotFound(final MaterialNotFoundException e) {
+        return createErrorResponse("Material Not Found", e.getMessage(),
+                HttpStatus.NOT_FOUND, ErrorCode.ERR_WEAPON_NOT_FOUND);
+    }
+
     @ExceptionHandler(ShopItemNotFoundException.class)
     public ProblemDetail shopItemNotFound(final ShopItemNotFoundException e) {
         return createErrorResponse("Shop Item Not Found", e.getMessage(),
@@ -67,6 +74,12 @@ public class GlobalExceptionHandler {
     public ProblemDetail shopLocked(final ShopLockedException e) {
         return createErrorResponse("Shop Locked", e.getMessage(),
                 HttpStatus.CONFLICT, ErrorCode.ERR_SHOP_LOCKED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail illegalArgument(final IllegalArgumentException e) {
+        return createErrorResponse("Illegal Argument", e.getMessage(),
+                HttpStatus.BAD_REQUEST, ErrorCode.ERR_ILLEGAL_ARGUMENT);
     }
 
     @ExceptionHandler(NotEnoughItemsException.class)

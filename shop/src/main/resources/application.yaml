@@ -1,7 +1,16 @@
 spring:
   application:
     name: shop
+  data:
+    redis:
+      database: ${REDIS_DATABASE:2}
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+  mongodb:
+    uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
+    representation:
+      uuid: standard
 
 app:
-  http:
-    inventory-client-uri: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
+  flamingock:
+    database: ${MONGO_DATABASE}

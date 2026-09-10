@@ -6,22 +6,23 @@ import io.lexi115.sparxie.gacha.concurrent.Lock;
 import io.lexi115.sparxie.gacha.player.Player;
 import io.lexi115.sparxie.gacha.player.PlayerService;
 import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
+import io.lexi115.sparxie.gacha.warp.exception.WarpLockedException;
 import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
 public class WarpService {
-
     private final BannerService bannerService;
     private final PlayerService playerService;
     private final WarpTransactionService warpTransactionService;
     private final Lock playerLock;
 
-    // @Transactional
+    @Transactional
     public WarpResult performWarp(final WarpRequest request) {
         var transactionId = request.transactionId();
         var playerId = request.playerId();
@@ -31,15 +32,14 @@ public class WarpService {
         }
         try {
             var player = playerService.getById(playerId);
-            var banner = bannerService.getById(request.bannerId());
+            var banner = bannerService.getBanner(request.bannerId());
             var cachedTransaction = warpTransactionService.getById(transactionId);
             if (cachedTransaction != null) {
-                return cachedTransaction.result();
+                return cachedTransaction.getResult();
             }
             var result = pullItems(banner, player, request.amount());
-            var transaction = warpTransactionService.createTransaction(transactionId, playerId, result);
-            warpTransactionService.saveTransaction(transaction);
-            playerService.savePlayer(player);
+            warpTransactionService.create(transactionId, playerId, result);
+            playerService.save(player);
             return result;
         } finally {
             playerLock.release(lockName);
@@ -56,7 +56,7 @@ public class WarpService {
         for (int i = 0; i < amount; i++) {
             var item = banner.pullItem(playerPity);
             pulledItems.add(item);
-            playerPity.updatePity(bannerType, item);
+            playerPity.update(bannerType, item);
         }
         return new WarpResult(bannerType, pulledItems);
     }

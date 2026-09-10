@@ -1,0 +1,87 @@
+[
+  {
+    "id": "char_sampo",
+    "name": "Sampo",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_qingque",
+    "name": "Qingque",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_hanya",
+    "name": "Hanya",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_march_7th",
+    "name": "March 7th",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_dan_heng",
+    "name": "Dan Heng",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_asta",
+    "name": "Asta",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_herta",
+    "name": "Herta",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_default_4_star",
+    "name": "Default 4 Star",
+    "rarity": "FOUR"
+  },
+  {
+    "id": "char_sparkle",
+    "name": "Sparkle",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_himeko",
+    "name": "Himeko",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_welt",
+    "name": "Welt",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_bronya",
+    "name": "Bronya",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_gepard",
+    "name": "Gepard",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_clara",
+    "name": "Clara",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_yanqing",
+    "name": "Yanqing",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_bailu",
+    "name": "Bailu",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "char_default_5_star",
+    "name": "Default 5 Star",
+    "rarity": "FIVE"
+  }
+]

@@ -1,10 +1,11 @@
 package io.lexi115.sparxie.inventory.error;
 
-import io.lexi115.sparxie.inventory.character.CharacterNotFoundException;
-import io.lexi115.sparxie.inventory.core.InventoryLockedException;
-import io.lexi115.sparxie.inventory.item.NotEnoughItemsException;
-import io.lexi115.sparxie.inventory.player.PlayerNotFoundException;
-import io.lexi115.sparxie.inventory.weapon.WeaponNotFoundException;
+import io.lexi115.sparxie.inventory.character.exception.CharacterNotFoundException;
+import io.lexi115.sparxie.inventory.inventory.exception.InventoryLockedException;
+import io.lexi115.sparxie.inventory.inventory.exception.NotEnoughItemsException;
+import io.lexi115.sparxie.inventory.materials.exception.MaterialNotFoundException;
+import io.lexi115.sparxie.inventory.player.exception.PlayerNotFoundException;
+import io.lexi115.sparxie.inventory.weapon.exception.WeaponNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -37,10 +38,22 @@ public class GlobalExceptionHandler {
                 "Weapon Not Found", e.getMessage(), HttpStatus.NOT_FOUND, ErrorCode.ERR_WEAPON_NOT_FOUND);
     }
 
+    @ExceptionHandler(MaterialNotFoundException.class)
+    public ProblemDetail materialNotFound(final MaterialNotFoundException e) {
+        return createErrorResponse(
+                "Material Not Found", e.getMessage(), HttpStatus.NOT_FOUND, ErrorCode.ERR_MATERIAL_NOT_FOUND);
+    }
+
     @ExceptionHandler(InventoryLockedException.class)
     public ProblemDetail inventoryLocked(final InventoryLockedException e) {
         return createErrorResponse(
                 "Inventory Locked", e.getMessage(), HttpStatus.CONFLICT, ErrorCode.ERR_INVENTORY_LOCKED);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail illegalArgument(final IllegalArgumentException e) {
+        return createErrorResponse(
+                "Illegal argument", e.getMessage(), HttpStatus.BAD_REQUEST, ErrorCode.ERR_ILLEGAL_ARGUMENT);
     }
 
     @ExceptionHandler(NotEnoughItemsException.class)

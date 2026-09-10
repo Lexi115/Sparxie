@@ -2,15 +2,16 @@ package io.lexi115.sparxie.game.error;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import io.lexi115.sparxie.game.banner.BannerNotFoundException;
-import io.lexi115.sparxie.game.character.CharacterNotFoundException;
-import io.lexi115.sparxie.game.inventory.InventoryLockedException;
-import io.lexi115.sparxie.game.item.NotEnoughItemsException;
-import io.lexi115.sparxie.game.player.PlayerNotFoundException;
-import io.lexi115.sparxie.game.shop.ShopLockedException;
+import io.lexi115.sparxie.game.banner.exception.BannerNotFoundException;
+import io.lexi115.sparxie.game.character.exception.CharacterNotFoundException;
+import io.lexi115.sparxie.game.inventory.exception.InventoryLockedException;
+import io.lexi115.sparxie.game.inventory.exception.NotEnoughItemsException;
+import io.lexi115.sparxie.game.material.exception.MaterialNotFoundException;
+import io.lexi115.sparxie.game.player.exception.PlayerNotFoundException;
+import io.lexi115.sparxie.game.shop.exception.ShopLockedException;
 import io.lexi115.sparxie.game.shop.item.ShopItemNotFoundException;
-import io.lexi115.sparxie.game.warp.WarpLockedException;
-import io.lexi115.sparxie.game.weapon.WeaponNotFoundException;
+import io.lexi115.sparxie.game.warp.exception.WarpLockedException;
+import io.lexi115.sparxie.game.weapon.exception.WeaponNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Component;
@@ -39,14 +40,15 @@ public class FeignErrorDecoder implements ErrorDecoder {
                     case ERR_BANNER_NOT_FOUND -> new BannerNotFoundException(problem.getDetail());
                     case ERR_CHARACTER_NOT_FOUND -> new CharacterNotFoundException(problem.getDetail());
                     case ERR_WEAPON_NOT_FOUND -> new WeaponNotFoundException(problem.getDetail());
+                    case ERR_MATERIAL_NOT_FOUND -> new MaterialNotFoundException(problem.getDetail());
                     case ERR_SHOP_ITEM_NOT_FOUND -> new ShopItemNotFoundException(problem.getDetail());
 
                     case ERR_NOT_ENOUGH_ITEMS -> parseNotEnoughItemsException(problem);
 
-                    case ERR_VALIDATION_FAILED -> new IllegalArgumentException(problem.getDetail());
+                    case ERR_VALIDATION_FAILED,
+                         ERR_ILLEGAL_ARGUMENT -> new IllegalArgumentException(problem.getDetail());
                 };
             }
-
         } catch (Exception _) {
         }
 

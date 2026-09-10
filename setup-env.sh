@@ -1,0 +1,124 @@
+# Variables
+JWT_SECRET=$(openssl rand -base64 48 | tr -d '\n\r')
+export JWT_SECRET="${JWT_SECRET}"
+
+KAFKA_SERVER=kafka:9092
+REDIS_HOST=redis
+REDIS_PORT=6379
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+MONGO_HOST=mongo
+MONGO_PORT=27017
+SUPABASE_CLIENT_URI=http://supabase:9999
+
+GACHA_SERVICE_BASE_URI=http://gacha:8080
+GAME_SERVICE_BASE_URI=http://game:8080
+INVENTORY_SERVICE_BASE_URI=http://inventory:8080
+SHOP_SERVICE_BASE_URI=http://shop:8080
+USER_SERVICE_BASE_URI=http://user:8080
+
+# Root-level
+cat <<EOF > ./.env
+COMPOSE_PROFILES=*
+JWT_SECRET=${JWT_SECRET}
+EOF
+
+# Gacha service
+cat <<EOF > ./gacha/.env
+KAFKA_SERVER=${KAFKA_SERVER}
+
+REDIS_HOST=${REDIS_HOST}
+REDIS_PORT=${REDIS_PORT}
+
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
+POSTGRES_USER=gacha_user
+POSTGRES_PASSWORD=gacha_user
+POSTGRES_DATABASE=gacha_db
+
+MONGO_HOST=${MONGO_HOST}
+MONGO_PORT=${MONGO_PORT}
+MONGO_DATABASE=gacha_db
+EOF
+
+# Game service
+cat <<EOF > ./game/.env
+WARP_CLIENT_URI=${GACHA_SERVICE_BASE_URI}/warp
+BANNER_CLIENT_URI=${GACHA_SERVICE_BASE_URI}/banner
+INVENTORY_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}/inventory
+CHARACTER_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}/character
+WEAPON_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}/weapon
+SHOP_CLIENT_URI=${SHOP_SERVICE_BASE_URI}/shop
+
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
+POSTGRES_USER=game_user
+POSTGRES_PASSWORD=game_user
+POSTGRES_DATABASE=game_db
+EOF
+
+# Gateway service
+cat <<EOF > ./gateway/.env
+GAME_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
+BANNER_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
+CHARACTER_SERVICE_BASE_URI=${INVENTORY_SERVICE_BASE_URI}
+WEAPON_SERVICE_BASE_URI=${INVENTORY_SERVICE_BASE_URI}
+USER_SERVICE_BASE_URI=${USER_SERVICE_BASE_URI}
+AUTH_SERVICE_BASE_URI=${USER_SERVICE_BASE_URI}
+
+JWT_SECRET=${JWT_SECRET}
+EOF
+
+# Inventory service
+cat <<EOF > ./inventory/.env
+KAFKA_SERVER=${KAFKA_SERVER}
+
+REDIS_HOST=${REDIS_HOST}
+REDIS_PORT=${REDIS_PORT}
+REDIS_DATABASE=0
+
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
+POSTGRES_USER=inventory_user
+POSTGRES_PASSWORD=inventory_user
+POSTGRES_DATABASE=inventory_db
+
+MONGO_HOST=${MONGO_HOST}
+MONGO_PORT=${MONGO_PORT}
+MONGO_DATABASE=inventory_db
+EOF
+
+# Shop service
+cat <<EOF > ./shop/.env
+REDIS_HOST=${REDIS_HOST}
+REDIS_PORT=${REDIS_PORT}
+
+MONGO_HOST=${MONGO_HOST}
+MONGO_PORT=${MONGO_PORT}
+MONGO_DATABASE=shop_db
+EOF
+
+# User service
+cat <<EOF > ./user/.env
+SUPABASE_CLIENT_URI=${SUPABASE_CLIENT_URI}
+
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
+POSTGRES_USER=user_user
+POSTGRES_PASSWORD=user_user
+POSTGRES_DATABASE=user_db
+
+KAFKA_SERVER=${KAFKA_SERVER}
+
+JWT_SERVICE=$(python3 -c '
+import json, base64, hmac, hashlib, time, os
+b64 = lambda d: base64.urlsafe_b64encode(json.dumps(d, separators=(",", ":")).encode()).rstrip(b"=").decode()
+secret = os.environ.get("JWT_SECRET")
+header = {"alg": "HS256", "typ": "JWT"}
+payload = {"role": "service_role", "iss": "supabase", "exp": int(time.time()) + 31536000}
+signing_input = f"{b64(header)}.{b64(payload)}"
+sig = hmac.new(secret.encode(), signing_input.encode(), hashlib.sha256).digest()
+signature = base64.urlsafe_b64encode(sig).rstrip(b"=").decode()
+print(signing_input + "." + signature)
+')
+EOF

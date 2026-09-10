@@ -1,0 +1,22 @@
+[
+  {
+    "itemId": "oneiric_shard",
+    "currency": "MONEY",
+    "cost": 1
+  },
+  {
+    "itemId": "stellar_jade",
+    "currency": "ONEIRIC_SHARD",
+    "cost": 1
+  },
+  {
+    "itemId": "standard_ticket",
+    "currency": "STELLAR_JADE",
+    "cost": 160
+  },
+  {
+    "itemId": "limited_ticket",
+    "currency": "STELLAR_JADE",
+    "cost": 160
+  }
+]

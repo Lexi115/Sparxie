@@ -16,11 +16,8 @@ public class WarpTransactionService {
         return warpTransactionRepository.findById(id).orElse(null);
     }
 
-    public WarpTransaction createTransaction(final UUID transactionId, final UUID playerId, final WarpResult warpResult) {
-        return new WarpTransaction(transactionId, playerId, Instant.now(), warpResult);
-    }
-
-    public void saveTransaction(final WarpTransaction transaction) {
+    public void create(final UUID transactionId, final UUID playerId, final WarpResult warpResult) {
+        var transaction = new WarpTransaction(transactionId, playerId, Instant.now(), warpResult);
         warpTransactionRepository.save(transaction);
     }
 }

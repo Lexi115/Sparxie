@@ -1,11 +1,16 @@
 package io.lexi115.sparxie.shop;
 
+import io.flamingock.api.annotations.EnableFlamingock;
+import io.flamingock.api.annotations.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFlamingock(
+        stages = {
+                @Stage(location = "io.lexi115.sparxie.shop.db.flamingock.migrations")
+        }
+)
 @SpringBootApplication
-@EnableFeignClients
 public class ShopApplication {
 
     public static void main(String[] args) {

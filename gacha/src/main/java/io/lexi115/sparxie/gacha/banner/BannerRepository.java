@@ -1,9 +1,11 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
 import java.util.Optional;
 
-public interface BannerRepository {
-    Optional<Banner> findById(String id);
-
-    Optional<Banner> findDefaultById(String id);
+public interface BannerRepository extends CrudRepository<Banner, String> {
+    @Query("{ '_id':  ?0, 'template':  true }")
+    Optional<Banner> findTemplateById(String id);
 }

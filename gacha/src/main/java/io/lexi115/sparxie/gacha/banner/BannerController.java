@@ -16,15 +16,15 @@ public class BannerController {
     private final BannerService bannerService;
     private final BannerMapper bannerMapper;
 
-    @GetMapping("/{id}")
-    public BannerDto getById(@PathVariable final String id) {
-        var banner = bannerService.getById(id);
+    @GetMapping("/{bannerId}")
+    public BannerDto getById(@PathVariable final String bannerId) {
+        var banner = bannerService.getBanner(bannerId);
         return bannerMapper.toDto(banner);
     }
 
-    @GetMapping("/details/{id}")
-    public BannerDetailsDto getDetailsById(@PathVariable final String id) {
-        var banner = bannerService.getById(id);
+    @GetMapping("/details/{bannerId}")
+    public BannerDetailsDto getDetailsById(@PathVariable final String bannerId) {
+        var banner = bannerService.getBanner(bannerId);
         return bannerMapper.toDetailsDto(banner);
     }
 }

@@ -1,0 +1,38 @@
+info:
+  name: Perform purchase
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{shopBaseUri}}/shop/items/purchase"
+  body:
+    type: json
+    data: |-
+      {
+        "transactionId": "{{$randomUUID}}",
+        "playerId": "{{playerId}}",
+        "itemId": "{{itemId}}",
+        "amount": {{itemAmount}}
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: playerId
+      value: "{{userId}}"
+    - name: bannerId
+      value: banner_standard_event
+    - name: pullAmount
+      value: "10"
+    - name: itemId
+      value: stellar_jade
+    - name: itemAmount
+      value: "1600"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

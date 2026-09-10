@@ -1,0 +1,43 @@
+info:
+  name: Login
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{supabaseUri}}/token?grant_type=password"
+  params:
+    - name: grant_type
+      value: password
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{supabaseEmail}}",
+        "password": "{{supabasePassword}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status != 200) {
+          return;
+        }
+        var reqData = req.getBody();
+        bru.setEnvVar("supabaseEmail", reqData.email);
+        bru.setEnvVar("supabasePassword", reqData.password);
+
+        var resData = res.getBody();
+        bru.setEnvVar("supabaseAccessToken", resData.access_token);
+        bru.setEnvVar("supabaseRefreshToken", resData.refresh_token);
+        bru.setEnvVar("supabaseUserId", resData.user.id);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

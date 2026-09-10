@@ -1,0 +1,39 @@
+info:
+  name: Login
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{gatewayBaseUri}}/api/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{email}}",
+        "password": "{{password}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status != 200) {
+          return;
+        }
+        var reqData = req.getBody();
+        bru.setEnvVar("email", reqData.email);
+        bru.setEnvVar("password", reqData.password);
+
+        var resData = res.getBody();
+        bru.setEnvVar("accessToken", resData.accessToken);
+        bru.setEnvVar("refreshToken", resData.refreshToken);
+        bru.setEnvVar("userId", resData.userId);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

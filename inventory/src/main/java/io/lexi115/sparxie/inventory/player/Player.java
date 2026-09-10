@@ -1,21 +1,45 @@
 package io.lexi115.sparxie.inventory.player;
 
-import io.lexi115.sparxie.inventory.item.ItemType;
-import io.lexi115.sparxie.inventory.item.NotEnoughItemsException;
+import io.lexi115.sparxie.inventory.inventory.ItemType;
+import io.lexi115.sparxie.inventory.inventory.exception.NotEnoughItemsException;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@Document(collection = "players")
 @Getter
+@Setter
+@NoArgsConstructor
 public class Player {
-    private final UUID id;
-    private final Map<String, Long> characters = new HashMap<>();
-    private final Map<String, Long> weapons = new HashMap<>();
-    private final Map<String, Long> materials = new HashMap<>();
+    @Id
+    private UUID id;
+
+    @CreatedDate
+    @Field("created_at")
+    private Instant createdAt;
+
+    @NotNull
+    private Map<String, Long> characters = new HashMap<>();
+
+    @NotNull
+    private Map<String, Long> weapons = new HashMap<>();
+
+    @NotNull
+    private Map<String, Long> materials = new HashMap<>();
+
+    public Player(final UUID id) {
+        this.id = id;
+    }
 
     public void giveItem(final String itemId, final ItemType itemType, final Long amount) {
         if (amount <= 0) {

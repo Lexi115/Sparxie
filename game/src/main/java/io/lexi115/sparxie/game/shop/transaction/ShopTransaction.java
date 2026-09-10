@@ -1,45 +1,41 @@
 package io.lexi115.sparxie.game.shop.transaction;
 
-import io.lexi115.sparxie.game.shop.ShopCurrency;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.lexi115.sparxie.game.game.dto.PurchaseResponse;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
 
+@Entity
+@Table(name = "shop_transactions")
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ShopTransaction {
+    @Id
+    @Column(nullable = false, updatable = false)
     private UUID transactionId;
+
+    @Column(nullable = false, updatable = false)
     private UUID playerId;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     @Setter
-    private ShopCurrency currency;
-
-    @Setter
-    private BigDecimal price = BigDecimal.ZERO;
-
-    @Setter
-    private Map<String, Long> items;
-
-    @Setter
+    @Enumerated(EnumType.STRING)
     private ShopTransactionStatus status;
 
-    public ShopTransaction(
-            final UUID transactionId,
-            final UUID playerId,
-            final Instant createdAt,
-            final ShopTransactionStatus status
-    ) {
-        this.transactionId = transactionId;
-        this.playerId = playerId;
-        this.createdAt = createdAt;
-        this.status = status;
-    }
+    @Setter
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private PurchaseResponse result;
 
     public boolean isCompleted() {
         return this.status == ShopTransactionStatus.COMPLETED;

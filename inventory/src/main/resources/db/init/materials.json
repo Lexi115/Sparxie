@@ -1,0 +1,22 @@
+[
+  {
+    "id": "oneiric_shard",
+    "name": "Oneiric Shard",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "stellar_jade",
+    "name": "Stellar Jade",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "standard_ticket",
+    "name": "Standard Ticket",
+    "rarity": "FIVE"
+  },
+  {
+    "id": "limited_ticket",
+    "name": "Limited Ticket",
+    "rarity": "FIVE"
+  }
+]

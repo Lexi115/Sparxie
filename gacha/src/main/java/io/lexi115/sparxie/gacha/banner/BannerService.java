@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gacha.banner;
 
+import io.lexi115.sparxie.gacha.banner.exception.BannerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -7,18 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BannerService {
-    private final BannerTemplateService bannerTemplateService;
     private final BannerRepository bannerRepository;
+    private final BannerTemplateService bannerTemplateService;
 
     @Cacheable("banners")
-    public Banner getById(final String id) {
-        var editsBanner = bannerRepository.findById(id).orElse(null);
-        if (editsBanner == null || editsBanner.getType() == null) {
+    public Banner getBanner(final String id) {
+        var banner = bannerRepository.findById(id)
+                .orElseThrow(() -> new BannerNotFoundException(id));
+        if (banner.isTemplate() || banner.getType() == null) {
             throw new BannerNotFoundException(id);
         }
-        // Load default banner for specific type.
-        var defaultBannerId = "default_" + editsBanner.getType().name().toLowerCase();
+        var defaultBannerId = "default_" + banner.getType().name().toLowerCase();
         var defaultBanner = bannerTemplateService.getById(defaultBannerId);
-        return defaultBanner.mergeWith(editsBanner);
+        return defaultBanner.mergeWith(banner);
     }
 }

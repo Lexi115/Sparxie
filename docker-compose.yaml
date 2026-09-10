@@ -3,63 +3,238 @@ services:
     container_name: gateway
     build:
       context: ./gateway
-    env_file:
-      - ./gateway/.env
     ports:
       - "8080:8080"
+    env_file:
+      - ./gateway/.env
     restart: on-failure
-    depends_on:
+    profiles:
+      - inventory
+      - gacha
+      - shop
       - game
+      - user
+      - all
 
   game:
     container_name: game
     build:
       context: ./game
-    env_file:
-      - ./game/.env
     ports:
       - "8081:8080"
+    env_file:
+      - ./game/.env
     restart: on-failure
     depends_on:
-      - gacha
+      - kafka
+      - postgres
+    profiles:
       - inventory
+      - gacha
+      - shop
+      - game
+      - all
 
   gacha:
     container_name: gacha
     build:
       context: ./gacha
-    env_file:
-      - ./gacha/.env
     ports:
       - "8082:8080"
+    env_file:
+      - ./gacha/.env
     restart: on-failure
-    volumes:
-      - gacha_data:/var/lib/sparxie/gacha
+    depends_on:
+      - mongo
+      - redis
+      - kafka
+      - postgres
+    profiles:
+      - gacha
+      - game
+      - all
 
   inventory:
     container_name: inventory
     build:
       context: ./inventory
-    env_file:
-      - ./inventory/.env
     ports:
       - "8083:8080"
+    env_file:
+      - ./inventory/.env
     restart: on-failure
+    depends_on:
+      - mongo
+      - redis
+      - kafka
+      - postgres
+    profiles:
+      - inventory
+      - game
+      - all
 
   shop:
     container_name: shop
     build:
       context: ./shop
-    env_file:
-      - ./shop/.env
     ports:
       - "8084:8080"
+    env_file:
+      - ./shop/.env
     restart: on-failure
+    depends_on:
+      - redis
+      - mongo
+    profiles:
+      - shop
+      - game
+      - all
+
+  user:
+    container_name: user
+    build:
+      context: ./user
+    ports:
+      - "8085:8080"
+    env_file:
+      - ./user/.env
+    restart: on-failure
+    depends_on:
+      - kafka
+      - postgres
+      - supabase
+    profiles:
+      - user
+      - all
+
+  postgres:
+    image: postgres:18.6
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    profiles:
+      - inventory
+      - gacha
+      - game
+      - user
+      - all
+
+  mongo:
+    image: mongo:8.3-noble
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - GLIBC_TUNABLES=glibc.pthread.rseq=1
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--quiet" ]
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      start_interval: 2s
+      retries: 10
+    profiles:
+      - inventory
+      - gacha
+      - shop
+      - game
+      - all
+
+  kafka:
+    image: apache/kafka:4.3.1
+    container_name: kafka
+    ports:
+      - "9092:9092" # Internal (Docker)
+      - "9094:9094" # External (Host)
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9094,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+    restart: always
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+      - kafka_config:/mnt/shared/config
+      - kafka_secrets:/etc/kafka/secrets
+    profiles:
+      - inventory
+      - gacha
+      - game
+      - user
+      - all
+
+  redis:
+    image: redis:8.10-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis_data:/data
+    profiles:
+      - inventory
+      - gacha
+      - shop
+      - game
+      - all
+
+  supabase:
+    image: supabase/gotrue:v2.158.1
+    container_name: supabase
+    ports:
+      - "9999:9999"
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/supabase_db?options=-c%20search_path%3Dauth
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_SITE_URL: http://localhost:8080
+      GOTRUE_URI_ALLOW_LIST: "*"
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - user
+      - all
 
 volumes:
-  gacha_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: "${GACHA_DATA_PATH}"
+  kafka_data:
+  kafka_config:
+  kafka_secrets:
+  redis_data:
+  postgres_data:
+  mongo_data:
+  mongo_config:

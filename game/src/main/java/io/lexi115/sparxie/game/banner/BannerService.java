@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.game.banner;
 
-import io.lexi115.sparxie.game.banner.dto.BannerDetailsDto;
-import io.lexi115.sparxie.game.banner.dto.BannerDto;
+import io.lexi115.sparxie.game.banner.dto.Banner;
+import io.lexi115.sparxie.game.banner.dto.BannerDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 public class BannerService {
     private final BannerClient bannerClient;
 
-    public BannerDto getById(final String id) {
+    public Banner getById(final String id) {
         return bannerClient.getById(id);
     }
 
-    public BannerDetailsDto getDetailsById(final String id) {
+    public BannerDetails getDetailsById(final String id) {
         return bannerClient.getDetailsById(id);
     }
 }

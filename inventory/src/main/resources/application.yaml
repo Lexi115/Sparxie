@@ -1,8 +1,43 @@
 spring:
   application:
     name: inventory
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  liquibase:
+    enabled: true
   cache:
     type: caffeine
-    cache-names: characters, weapons
+    cache-names: characters, weapons, materials
     caffeine:
       spec: expireAfterWrite=12h,maximumSize=1000
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.type.mapping: >
+        USER_CREATED:io.lexi115.sparxie.inventory.player.event.PlayerCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.inventory.player.event.PlayerDeletedEvent
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
+  data:
+    redis:
+      database: ${REDIS_DATABASE:1}
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+  mongodb:
+    uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
+    representation:
+      uuid: standard
+
+app:
+  flamingock:
+    database: ${MONGO_DATABASE}
+  kafka:
+    topic:
+      user: user-topic
+    group:
+      inventory: inventory-group

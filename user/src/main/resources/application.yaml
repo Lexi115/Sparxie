@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: user
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  liquibase:
+    enabled: true
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.type.mapping: >
+        USER_CREATED:io.lexi115.sparxie.user.auth.event.UserCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.user.auth.event.UserDeletedEvent
+    bootstrap-servers:
+      - ${KAFKA_SERVER:kafka:9092}
+
+app:
+  http:
+    client-uri:
+      supabase: ${SUPABASE_CLIENT_URI:http://supabase:9999}
+  kafka:
+    topic:
+      user: user-topic
+    group:
+      user: user-group
+  supabase:
+    jwt:
+      service: ${JWT_SERVICE}

@@ -1,0 +1,16 @@
+name: docker
+variables:
+  - name: gatewayBaseUri
+    value: http://localhost:8080
+  - name: gameBaseUri
+    value: http://localhost:8081
+  - name: gachaBaseUri
+    value: http://localhost:8082
+  - name: inventoryBaseUri
+    value: http://localhost:8083
+  - name: shopBaseUri
+    value: http://localhost:8084
+  - name: userBaseUri
+    value: http://localhost:8085
+  - name: supabaseUri
+    value: http://localhost:9999

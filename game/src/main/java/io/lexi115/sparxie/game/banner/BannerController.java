@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.game.banner;
 
-import io.lexi115.sparxie.game.banner.dto.BannerDetailsDto;
-import io.lexi115.sparxie.game.banner.dto.BannerDto;
+import io.lexi115.sparxie.game.banner.dto.Banner;
+import io.lexi115.sparxie.game.banner.dto.BannerDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class BannerController {
     private final BannerService bannerService;
 
-    @GetMapping("/{id}")
-    public BannerDto getById(@PathVariable final String id) {
-        return bannerService.getById(id);
+    @GetMapping("/{bannerId}")
+    public Banner getById(@PathVariable final String bannerId) {
+        return bannerService.getById(bannerId);
     }
 
-    @GetMapping("/details/{id}")
-    public BannerDetailsDto getDetailsById(@PathVariable final String id) {
-        return bannerService.getDetailsById(id);
+    @GetMapping("/details/{bannerId}")
+    public BannerDetails getDetailsById(@PathVariable final String bannerId) {
+        return bannerService.getDetailsById(bannerId);
     }
 }
