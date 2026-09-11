@@ -13,7 +13,7 @@ public interface AuthenticationAdapter {
 
     RefreshTokenResponse refreshToken(RefreshTokenRequest request);
 
-    void updatePassword(UpdatePasswordRequest request, String bearerToken);
+    void updatePassword(UpdatePasswordRequest request, String authToken);
 
     void delete(UUID userId);
 

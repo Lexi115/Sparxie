@@ -4,11 +4,13 @@ import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
+import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
 import io.lexi115.sparxie.user.event.OutboxEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -30,5 +32,11 @@ public class AdminAuthenticationService {
 
     public void updatePassword(final AdminUpdatePasswordRequest request, final UUID userId) {
         adminAuthenticationAdapter.updatePassword(request, userId);
+    }
+
+    public void deleteUser(final UUID userId) {
+        adminAuthenticationAdapter.deleteUser(userId);
+        var event = new UserDeletedEvent(userId, Instant.now());
+        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
     }
 }

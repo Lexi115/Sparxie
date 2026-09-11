@@ -10,4 +10,6 @@ public interface AdminAuthenticationAdapter {
     AdminCreateUserResponse createUser(AdminCreateUserRequest request);
 
     void updatePassword(AdminUpdatePasswordRequest request, UUID userId);
+
+    void deleteUser(UUID userId);
 }

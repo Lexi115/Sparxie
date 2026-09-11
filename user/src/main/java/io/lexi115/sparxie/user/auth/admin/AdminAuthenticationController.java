@@ -29,4 +29,10 @@ public class AdminAuthenticationController {
         adminAuthenticationService.updatePassword(request, userId);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable final UUID userId) {
+        adminAuthenticationService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -34,9 +34,9 @@ public class AuthenticationController {
     @PostMapping("/password")
     public ResponseEntity<Void> updatePassword(
             @Valid @RequestBody final UpdatePasswordRequest request,
-            @RequestHeader("Authorization") final String bearerToken
+            @RequestHeader("Authorization") final String authToken
     ) {
-        authenticationService.updatePassword(request, bearerToken);
+        authenticationService.updatePassword(request, authToken);
         return ResponseEntity.noContent().build();
     }
 

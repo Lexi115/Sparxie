@@ -4,15 +4,11 @@ import io.lexi115.sparxie.user.auth.AuthenticationAdapter;
 import io.lexi115.sparxie.user.auth.IdentityProvider;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseMapper;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseUserMetadata;
-import io.lexi115.sparxie.user.auth.admin.AdminAuthenticationAdapter;
-import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
-import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
-import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.SupabaseAdminClient;
 import io.lexi115.sparxie.user.auth.dto.*;
 import io.lexi115.sparxie.user.util.CookieHelper;
 import io.lexi115.sparxie.user.util.JwtHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -22,18 +18,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SupabaseAdapter implements AuthenticationAdapter, AdminAuthenticationAdapter {
+public class SupabaseAdapter implements AuthenticationAdapter {
 
     private final SupabaseClient supabaseClient;
+    private final SupabaseAdminClient supabaseAdminClient;
+    private final SupabaseAdapterConfig supabaseAdapterConfig;
     private final SupabaseMapper supabaseMapper;
     private final CookieHelper cookieHelper;
     private final JwtHelper jwtHelper;
-
-    @Value("${app.http.client-uri.supabase-external}")
-    private String supabaseExternalClientUri;
-
-    @Value("Bearer ${app.supabase.jwt.service}")
-    private String serviceBearerToken;
 
     @Override
     public RegisterResponse register(final RegisterRequest request) {
@@ -57,19 +49,20 @@ public class SupabaseAdapter implements AuthenticationAdapter, AdminAuthenticati
     }
 
     @Override
-    public void updatePassword(AdminUpdatePasswordRequest request, UUID userId) {
+    public void updatePassword(final UpdatePasswordRequest request, final String authToken) {
         var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        supabaseClient.adminUpdatePassword(supabaseRequest, userId, serviceBearerToken);
+        supabaseClient.updatePassword(supabaseRequest, authToken);
     }
 
     @Override
     public void delete(final UUID userId) {
-        supabaseClient.adminDelete(userId, serviceBearerToken);
+        supabaseAdminClient.deleteUser(userId);
     }
 
     @Override
     public URI getAuthorizeUri(final IdentityProvider provider) {
-        return URI.create(supabaseExternalClientUri + "/authorize?provider=" + provider.name().toLowerCase());
+        var baseUri = supabaseAdapterConfig.getSupabaseExternalClientUri();
+        return URI.create(baseUri + "/authorize?provider=" + provider.name().toLowerCase());
     }
 
     @Override
@@ -85,7 +78,8 @@ public class SupabaseAdapter implements AuthenticationAdapter, AdminAuthenticati
             var refreshToken = cookieHelper.extractCookie(cookies, "sb-refresh-token");
 
             var userId = jwtHelper.extractClaim(accessToken, "sub", UUID.class);
-            var userMetadata = jwtHelper.extractNestedClaim(accessToken, "user_metadata", SupabaseUserMetadata.class);
+            var userMetadata = jwtHelper.extractNestedClaim(
+                    accessToken, "user_metadata", SupabaseUserMetadata.class);
 
             return CallbackResponse.builder()
                     .location(location)
@@ -97,20 +91,5 @@ public class SupabaseAdapter implements AuthenticationAdapter, AdminAuthenticati
                     .createdAt(Instant.now())
                     .build();
         }
-    }
-
-    // --- ADMIN ---
-
-    @Override
-    public AdminCreateUserResponse createUser(final AdminCreateUserRequest request) {
-        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        var supabaseResponse = supabaseClient.adminCreateUser(supabaseRequest, serviceBearerToken);
-        return supabaseMapper.toClientResponse(supabaseResponse);
-    }
-
-    @Override
-    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
-        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        supabaseClient.updatePassword(supabaseRequest, bearerToken);
     }
 }

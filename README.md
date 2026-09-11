@@ -34,15 +34,10 @@ This section will guide you through the installation process.
 - Docker
 - A UNIX shell (like Git Bash)
 - Apache Maven
-- Python 3.x (for automatic environment setup)
 
 ### Guide
 
 1. Manually set the environment variables inside `.env` files or run the `setup-env.sh` script to do the job for you.
-
-> [!WARNING]
-> `setup-env.sh` requires **Python 3.x** to be installed in order to work!
-
 2. Run `docker compose up -d` to start all services.
 3. Make HTTP calls to the available endpoints.
 

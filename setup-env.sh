@@ -129,15 +129,5 @@ POSTGRES_DATABASE=user_db
 
 KAFKA_SERVER=${KAFKA_SERVER}
 
-JWT_SERVICE=$(python3 -c '
-import json, base64, hmac, hashlib, time, os
-b64 = lambda d: base64.urlsafe_b64encode(json.dumps(d, separators=(",", ":")).encode()).rstrip(b"=").decode()
-secret = os.environ.get("JWT_SECRET")
-header = {"alg": "HS256", "typ": "JWT"}
-payload = {"role": "service_role", "iss": "supabase", "exp": int(time.time()) + 31536000}
-signing_input = f"{b64(header)}.{b64(payload)}"
-sig = hmac.new(secret.encode(), signing_input.encode(), hashlib.sha256).digest()
-signature = base64.urlsafe_b64encode(sig).rstrip(b"=").decode()
-print(signing_input + "." + signature)
-')
+JWT_SECRET=${JWT_SECRET}
 EOF

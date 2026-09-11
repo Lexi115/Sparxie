@@ -1,8 +1,8 @@
 package io.lexi115.sparxie.user.auth.adapter.supabase.dto;
 
-import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserRequest;
-import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserResponse;
-import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminUpdatePasswordRequest;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserRequest;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserResponse;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;

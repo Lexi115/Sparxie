@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto;
+package io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseAppMetadata;

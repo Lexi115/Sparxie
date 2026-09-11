@@ -39,5 +39,4 @@ app:
     group:
       user: user-group
   supabase:
-    jwt:
-      service: ${JWT_SERVICE}
+    jwt-secret: ${JWT_SECRET}

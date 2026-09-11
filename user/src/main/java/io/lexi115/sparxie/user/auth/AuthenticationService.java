@@ -38,8 +38,8 @@ public class AuthenticationService {
         return authenticationAdapter.refreshToken(request);
     }
 
-    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
-        authenticationAdapter.updatePassword(request, bearerToken);
+    public void updatePassword(final UpdatePasswordRequest request, final String authToken) {
+        authenticationAdapter.updatePassword(request, authToken);
     }
 
     public void delete(final UUID userId) {
