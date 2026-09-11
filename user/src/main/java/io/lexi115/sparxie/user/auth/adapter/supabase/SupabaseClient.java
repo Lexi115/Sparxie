@@ -1,5 +1,8 @@
 package io.lexi115.sparxie.user.auth.adapter.supabase;
 
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserRequest;
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserResponse;
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.*;
 import io.lexi115.sparxie.user.auth.adapter.supabase.error.SupabaseErrorDecoder;
 import jakarta.validation.Valid;
@@ -34,9 +37,15 @@ public interface SupabaseClient {
             @RequestHeader("Authorization") String bearerToken
     );
 
+    @PostMapping("/admin/users")
+    SupabaseAdminCreateUserResponse adminCreateUser(
+            @Valid @RequestBody SupabaseAdminCreateUserRequest request,
+            @RequestHeader("Authorization") String bearerToken
+    );
+
     @PutMapping("/admin/users/{userId}")
     void adminUpdatePassword(
-            @Valid @RequestBody SupabaseUpdatePasswordRequest request,
+            @Valid @RequestBody SupabaseAdminUpdatePasswordRequest request,
             @PathVariable UUID userId,
             @RequestHeader("Authorization") String bearerToken
     );

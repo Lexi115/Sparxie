@@ -1,5 +1,11 @@
 package io.lexi115.sparxie.user.auth.adapter.supabase.dto;
 
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserRequest;
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminCreateUserResponse;
+import io.lexi115.sparxie.user.auth.adapter.supabase.admin.dto.SupabaseAdminUpdatePasswordRequest;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,4 +31,15 @@ public interface SupabaseMapper {
     RefreshTokenResponse toClientResponse(SupabaseRefreshTokenResponse response);
 
     SupabaseUpdatePasswordRequest toSupabaseRequest(UpdatePasswordRequest request);
+
+    @Mapping(target = "userMetadata.username", source = "username")
+    @Mapping(target = "userMetadata.email", source = "email")
+    @Mapping(target = "appMetadata.roles", source = "roles")
+    SupabaseAdminCreateUserRequest toSupabaseRequest(AdminCreateUserRequest request);
+
+    @Mapping(target = "username", source = "userMetadata.username")
+    @Mapping(target = "roles", source = "appMetadata.roles")
+    AdminCreateUserResponse toClientResponse(SupabaseAdminCreateUserResponse response);
+
+    SupabaseAdminUpdatePasswordRequest toSupabaseRequest(AdminUpdatePasswordRequest request);
 }

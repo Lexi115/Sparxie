@@ -4,6 +4,10 @@ import io.lexi115.sparxie.user.auth.AuthenticationAdapter;
 import io.lexi115.sparxie.user.auth.IdentityProvider;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseMapper;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseUserMetadata;
+import io.lexi115.sparxie.user.auth.admin.AdminAuthenticationAdapter;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.dto.*;
 import io.lexi115.sparxie.user.util.CookieHelper;
 import io.lexi115.sparxie.user.util.JwtHelper;
@@ -18,7 +22,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SupabaseAdapter implements AuthenticationAdapter {
+public class SupabaseAdapter implements AuthenticationAdapter, AdminAuthenticationAdapter {
 
     private final SupabaseClient supabaseClient;
     private final SupabaseMapper supabaseMapper;
@@ -53,9 +57,9 @@ public class SupabaseAdapter implements AuthenticationAdapter {
     }
 
     @Override
-    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
+    public void updatePassword(AdminUpdatePasswordRequest request, UUID userId) {
         var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
-        supabaseClient.updatePassword(supabaseRequest, bearerToken);
+        supabaseClient.adminUpdatePassword(supabaseRequest, userId, serviceBearerToken);
     }
 
     @Override
@@ -88,10 +92,25 @@ public class SupabaseAdapter implements AuthenticationAdapter {
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .userId(userId)
-                    .username(userMetadata.username())
+                    .username(userMetadata.name())
                     .email(userMetadata.email())
                     .createdAt(Instant.now())
                     .build();
         }
+    }
+
+    // --- ADMIN ---
+
+    @Override
+    public AdminCreateUserResponse createUser(final AdminCreateUserRequest request) {
+        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
+        var supabaseResponse = supabaseClient.adminCreateUser(supabaseRequest, serviceBearerToken);
+        return supabaseMapper.toClientResponse(supabaseResponse);
+    }
+
+    @Override
+    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
+        var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
+        supabaseClient.updatePassword(supabaseRequest, bearerToken);
     }
 }

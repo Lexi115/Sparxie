@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.user.error;
+package io.lexi115.sparxie.user.exception;
 
 public enum ErrorCode {
     ERR_USER_NOT_FOUND,

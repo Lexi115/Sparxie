@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record SupabaseUserMetadata(
         String email,
-        @JsonProperty("full_name") String username
+        @JsonProperty("name") String name,
+        @JsonProperty("full_name") String fullName,
+        @JsonProperty("username") String username
 ) {
 }

@@ -1,5 +1,6 @@
 package io.lexi115.sparxie.gateway.security.filters;
 
+import io.lexi115.sparxie.gateway.auth.UserRole;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
@@ -12,9 +13,9 @@ public class AuthenticationSecurityFilter implements SecurityFilter {
     public void filter(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
         var prefix = "/api/auth";
         registry
-                .requestMatchers(HttpMethod.POST, prefix + "/change-password").authenticated()
+                .requestMatchers(prefix + "/admin/**").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, prefix + "/password").authenticated()
                 .requestMatchers(HttpMethod.DELETE, prefix + "/delete").authenticated()
-                .requestMatchers(HttpMethod.GET, prefix + "/callback").permitAll()
                 .requestMatchers(prefix + "/**").permitAll();
     }
 }

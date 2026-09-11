@@ -26,8 +26,10 @@ services:
       - ./game/.env
     restart: always
     depends_on:
-      - kafka
-      - postgres
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
       - inventory
       - gacha
@@ -45,10 +47,14 @@ services:
       - ./gacha/.env
     restart: always
     depends_on:
-      - mongo
-      - redis
-      - kafka
-      - postgres
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
       - gacha
       - game
@@ -64,10 +70,14 @@ services:
       - ./inventory/.env
     restart: always
     depends_on:
-      - mongo
-      - redis
-      - kafka
-      - postgres
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
       - inventory
       - game
@@ -83,8 +93,10 @@ services:
       - ./shop/.env
     restart: always
     depends_on:
-      - redis
-      - mongo
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
     profiles:
       - shop
       - game
@@ -100,9 +112,12 @@ services:
       - ./user/.env
     restart: always
     depends_on:
-      - kafka
-      - postgres
-      - supabase
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      supabase:
+        condition: service_healthy
     profiles:
       - user
       - all
@@ -145,11 +160,9 @@ services:
       - mongo_config:/data/configdb
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--quiet" ]
     healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
-      interval: 30s
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 10s
       timeout: 10s
-      start_period: 5s
-      start_interval: 2s
       retries: 10
     profiles:
       - inventory
@@ -179,6 +192,11 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z localhost 9092 || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     volumes:
       - kafka_data:/var/lib/kafka/data
       - kafka_config:/mnt/shared/config
@@ -196,6 +214,11 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     volumes:
       - redis_data:/data
     profiles:
@@ -213,7 +236,7 @@ services:
     environment:
       GOTRUE_API_HOST: 0.0.0.0
       GOTRUE_API_PORT: 9999
-      API_EXTERNAL_URL: http://localhost:9999
+      API_EXTERNAL_URL: http://localhost:8080/api/auth
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/supabase_db?options=-c%20search_path%3Dauth
       GOTRUE_JWT_SECRET: ${JWT_SECRET}
@@ -243,8 +266,27 @@ services:
       GOTRUE_EXTERNAL_TWITCH_SECRET: ${TWITCH_CLIENT_SECRET}
       GOTRUE_EXTERNAL_TWITCH_REDIRECT_URI: ${TWITCH_CLIENT_REDIRECT_URI}
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9999/health || exit 1" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     depends_on:
       postgres:
+        condition: service_healthy
+    profiles:
+      - user
+      - all
+
+  supabase-setup:
+    image: postgres:18.6
+    container_name: supabase-setup
+    volumes:
+      - ./db/postgres/supabase-init.sql:/supabase-init.sql
+    command: >
+      bash -c "PGPASSWORD=postgres psql -h postgres -U postgres -d supabase_db -f /supabase-init.sql"
+    depends_on:
+      supabase:
         condition: service_healthy
     profiles:
       - user

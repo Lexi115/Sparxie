@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.user.error;
+package io.lexi115.sparxie.user.exception;
 
 import io.lexi115.sparxie.user.auth.exception.*;
 import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
@@ -67,6 +67,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public ProblemDetail genericError(final Throwable e) {
+        e.printStackTrace();
         logger.error(e.getMessage());
         return createErrorResponse("Error", "Something went wrong.",
                 HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR_INTERNAL_SERVER_ERROR);

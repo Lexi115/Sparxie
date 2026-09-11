@@ -1,0 +1,37 @@
+info:
+  name: Create user
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{supabaseUri}}/admin/users"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{$randomEmail}}",
+        "password": "{{$randomPassword}}",
+        "email_confirm": true,
+        "user_metadata": {
+          "username": "{{$randomUserName}}}"
+        },
+        "app_metadata": {
+          "roles": ["MEMBER", "ADMIN"]
+        }
+      }
+  auth:
+    type: bearer
+    token: "{{supabaseServiceToken}}"
+
+runtime:
+  variables:
+    - name: supabaseServiceToken
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJleHAiOjE4MjA0MjQyOTl9.T-tpSmfx2zvRez-pUaarQPpOyqGvahRtt6Oiy4QNDBk
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
