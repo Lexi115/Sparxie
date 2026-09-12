@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
+import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
 
 import java.net.URI;
 import java.util.Map;

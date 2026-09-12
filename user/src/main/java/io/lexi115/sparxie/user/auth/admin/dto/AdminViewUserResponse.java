@@ -1,17 +1,18 @@
-package io.lexi115.sparxie.user.auth.dto;
+package io.lexi115.sparxie.user.auth.admin.dto;
 
+import io.lexi115.sparxie.user.auth.UserRole;
 import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public record LoginResponse(
+public record AdminViewUserResponse(
         UUID userId,
+        String username,
         String email,
-        Instant createdAt,
+        List<UserRole> roles,
         List<IdentityProvider> providers,
-        String accessToken,
-        String refreshToken
+        Instant createdAt
 ) {
 }

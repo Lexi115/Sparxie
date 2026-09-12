@@ -3,11 +3,10 @@ package io.lexi115.sparxie.user.auth.admin;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
-import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
-import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
-import io.lexi115.sparxie.user.event.OutboxEventService;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminViewUserResponse;
+import io.lexi115.sparxie.user.auth.event.UserEventService;
+import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,16 +16,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AdminAuthenticationService {
     private final AdminAuthenticationAdapter adminAuthenticationAdapter;
-    private final OutboxEventService outboxEventService;
+    private final UserEventService userEventService;
 
-    @Value("${app.kafka.topic.user}")
-    private String userTopicName;
+    public AdminViewUserResponse viewUser(final UUID userId) {
+        return adminAuthenticationAdapter.viewUser(userId);
+    }
 
     public AdminCreateUserResponse createUser(final AdminCreateUserRequest request) {
         var response = adminAuthenticationAdapter.createUser(request);
-        var userId = response.userId();
-        var event = new UserCreatedEvent(userId, response.username(), response.createdAt());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userCreated(response.userId(), response.username(), response.createdAt(), IdentityProvider.EMAIL);
         return response;
     }
 
@@ -36,7 +34,6 @@ public class AdminAuthenticationService {
 
     public void deleteUser(final UUID userId) {
         adminAuthenticationAdapter.deleteUser(userId);
-        var event = new UserDeletedEvent(userId, Instant.now());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userDeleted(userId, Instant.now());
     }
 }

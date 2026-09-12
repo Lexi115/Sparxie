@@ -11,7 +11,7 @@ http:
 runtime:
   variables:
     - name: provider
-      value: github
+      value: email
 
 settings:
   encodeUrl: true

@@ -3,6 +3,7 @@ package io.lexi115.sparxie.user.auth.admin;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
+import io.lexi115.sparxie.user.auth.admin.dto.AdminViewUserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AdminAuthenticationController {
     private final AdminAuthenticationService adminAuthenticationService;
+
+    @GetMapping("/users/{userId}")
+    public AdminViewUserResponse viewUser(@PathVariable final UUID userId) {
+        return adminAuthenticationService.viewUser(userId);
+    }
 
     @PostMapping("/users")
     public AdminCreateUserResponse createUser(@Valid @RequestBody final AdminCreateUserRequest request) {

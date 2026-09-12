@@ -1,11 +1,10 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
-import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
-import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
-import io.lexi115.sparxie.user.event.OutboxEventService;
+import io.lexi115.sparxie.user.auth.event.UserEventService;
+import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
+import io.lexi115.sparxie.user.auth.provider.InvalidProviderException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -17,16 +16,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationAdapter authenticationAdapter;
-    private final OutboxEventService outboxEventService;
-
-    @Value("${app.kafka.topic.user}")
-    private String userTopicName;
+    private final UserEventService userEventService;
 
     public RegisterResponse register(final RegisterRequest request) {
         var response = authenticationAdapter.register(request);
-        var userId = response.userId();
-        var event = new UserCreatedEvent(userId, request.username(), response.createdAt());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userCreated(response.userId(), response.username(), response.createdAt(), IdentityProvider.EMAIL);
         return response;
     }
 
@@ -44,19 +38,19 @@ public class AuthenticationService {
 
     public void delete(final UUID userId) {
         authenticationAdapter.delete(userId);
-        var event = new UserDeletedEvent(userId, Instant.now());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userDeleted(userId, Instant.now());
     }
 
     public URI getAuthorizeUri(final IdentityProvider provider) {
+        if (provider == IdentityProvider.EMAIL) {
+            throw new InvalidProviderException(provider.name().toLowerCase());
+        }
         return authenticationAdapter.getAuthorizeUri(provider);
     }
 
-    public CallbackResponse callback(final Map<String, String> params) {
+    public CallbackResponse callback(final Map<String, String> params, final IdentityProvider provider) {
         var response = authenticationAdapter.callback(params);
-        var userId = response.userId();
-        var event = new UserCreatedEvent(userId, response.username(), response.createdAt());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userCreated(response.userId(), response.username(), response.createdAt(), provider);
         return response;
     }
 }

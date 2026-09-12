@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.user.exception;
 
 import io.lexi115.sparxie.user.auth.exception.*;
+import io.lexi115.sparxie.user.auth.provider.InvalidProviderException;
 import io.lexi115.sparxie.user.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,8 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class,
             HttpMessageConversionException.class,
             HttpMessageNotReadableException.class,
-            InvalidRequestException.class
+            InvalidRequestException.class,
+            InvalidProviderException.class
     })
     public ProblemDetail requestValidationError() {
         return createErrorResponse("Validation Failed", "One or more arguments are invalid.",

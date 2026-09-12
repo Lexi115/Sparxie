@@ -4,6 +4,7 @@ import io.lexi115.sparxie.user.auth.adapter.supabase.error.SupabaseErrorDecoder;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminUpdatePasswordRequest;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminViewUserResponse;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ import java.util.UUID;
         }
 )
 public interface SupabaseAdminClient {
+    @GetMapping("/admin/users/{userId}")
+    SupabaseAdminViewUserResponse viewUser(@PathVariable UUID userId);
+
     @PostMapping("/admin/users")
     SupabaseAdminCreateUserResponse createUser(@Valid @RequestBody SupabaseAdminCreateUserRequest request);
 

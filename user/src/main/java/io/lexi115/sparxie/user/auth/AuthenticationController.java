@@ -1,6 +1,7 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
+import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,9 +55,12 @@ public class AuthenticationController {
                 .build();
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<CallbackResponse> callback(@RequestParam Map<String, String> params) {
-        var response = authenticationService.callback(params);
+    @GetMapping("/callback/{provider}")
+    public ResponseEntity<CallbackResponse> callback(
+            @RequestParam final Map<String, String> params,
+            @PathVariable final IdentityProvider provider
+    ) {
+        var response = authenticationService.callback(params, provider);
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(response.location())
                 .body(response);

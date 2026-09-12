@@ -1,11 +1,10 @@
 package io.lexi115.sparxie.user.auth.adapter.supabase;
 
 import io.lexi115.sparxie.user.auth.AuthenticationAdapter;
-import io.lexi115.sparxie.user.auth.IdentityProvider;
-import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseMapper;
 import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseUserMetadata;
-import io.lexi115.sparxie.user.auth.admin.adapter.supabase.SupabaseAdminClient;
+import io.lexi115.sparxie.user.auth.admin.adapter.supabase.SupabaseAdminAdapter;
 import io.lexi115.sparxie.user.auth.dto.*;
+import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
 import io.lexi115.sparxie.user.util.CookieHelper;
 import io.lexi115.sparxie.user.util.JwtHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class SupabaseAdapter implements AuthenticationAdapter {
 
     private final SupabaseClient supabaseClient;
-    private final SupabaseAdminClient supabaseAdminClient;
+    private final SupabaseAdminAdapter adminAdapter; // Necessary for delete operation.
     private final SupabaseAdapterConfig supabaseAdapterConfig;
     private final SupabaseMapper supabaseMapper;
     private final CookieHelper cookieHelper;
@@ -46,6 +45,7 @@ public class SupabaseAdapter implements AuthenticationAdapter {
         var supabaseRequest = supabaseMapper.toSupabaseRequest(request);
         var supabaseResponse = supabaseClient.refreshToken(supabaseRequest);
         return supabaseMapper.toClientResponse(supabaseResponse);
+
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SupabaseAdapter implements AuthenticationAdapter {
 
     @Override
     public void delete(final UUID userId) {
-        supabaseAdminClient.deleteUser(userId);
+        adminAdapter.deleteUser(userId);
     }
 
     @Override

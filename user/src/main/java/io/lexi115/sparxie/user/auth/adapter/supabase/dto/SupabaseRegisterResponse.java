@@ -3,6 +3,7 @@ package io.lexi115.sparxie.user.auth.adapter.supabase.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public record SupabaseRegisterResponse(
@@ -13,7 +14,8 @@ public record SupabaseRegisterResponse(
     public record User(
             UUID id,
             String email,
-            @JsonProperty("created_at") Instant createdAt
+            @JsonProperty("created_at") Instant createdAt,
+            List<SupabaseIdentity> identities
     ) {
     }
 }
