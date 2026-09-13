@@ -58,7 +58,7 @@ function ask_question() {
   local return_var=$4
 
   local choices
-  eval "choices=( \"\${$array_name[@]}\" )"
+  eval "choices=( \"\${${array_name}[@]}\" )"
 
   local array_length=${#choices[@]}
 
@@ -189,8 +189,8 @@ function setup_gateway() {
 cat <<EOF > ./${module_name}/.env
 GAME_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
 BANNER_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
-CHARACTER_SERVICE_BASE_URI=${INVENTORY_SERVICE_BASE_URI}
-WEAPON_SERVICE_BASE_URI=${INVENTORY_SERVICE_BASE_URI}
+CHARACTER_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
+WEAPON_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
 USER_SERVICE_BASE_URI=${USER_SERVICE_BASE_URI}
 AUTH_SERVICE_BASE_URI=${USER_SERVICE_BASE_URI}
 

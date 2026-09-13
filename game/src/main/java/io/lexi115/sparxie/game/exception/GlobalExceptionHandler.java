@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.error;
+package io.lexi115.sparxie.game.exception;
 
 import io.lexi115.sparxie.game.banner.exception.BannerNotFoundException;
 import io.lexi115.sparxie.game.character.exception.CharacterNotFoundException;

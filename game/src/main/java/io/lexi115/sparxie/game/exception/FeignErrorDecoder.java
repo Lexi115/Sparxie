@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.game.error;
+package io.lexi115.sparxie.game.exception;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;

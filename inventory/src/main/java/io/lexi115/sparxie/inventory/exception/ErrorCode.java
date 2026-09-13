@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.inventory.error;
+package io.lexi115.sparxie.inventory.exception;
 
 public enum ErrorCode {
     ERR_INVENTORY_LOCKED,

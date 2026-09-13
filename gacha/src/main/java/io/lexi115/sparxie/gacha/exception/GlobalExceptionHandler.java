@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.error;
+package io.lexi115.sparxie.gacha.exception;
 
 import io.lexi115.sparxie.gacha.banner.exception.BannerNotFoundException;
 import io.lexi115.sparxie.gacha.player.exception.PlayerNotFoundException;

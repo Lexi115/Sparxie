@@ -28,6 +28,10 @@ spring:
       database: ${REDIS_DATABASE:1}
       host: ${REDIS_HOST:redis}
       port: ${REDIS_PORT:6379}
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
   mongodb:
     uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
     representation:

@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.inventory.error;
+package io.lexi115.sparxie.inventory.exception;
 
 import io.lexi115.sparxie.inventory.character.exception.CharacterNotFoundException;
 import io.lexi115.sparxie.inventory.inventory.exception.InventoryLockedException;
@@ -6,6 +6,7 @@ import io.lexi115.sparxie.inventory.inventory.exception.NotEnoughItemsException;
 import io.lexi115.sparxie.inventory.materials.exception.MaterialNotFoundException;
 import io.lexi115.sparxie.inventory.player.exception.PlayerNotFoundException;
 import io.lexi115.sparxie.inventory.weapon.exception.WeaponNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -74,7 +75,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             HttpMessageConversionException.class,
-            HttpMessageNotReadableException.class
+            HttpMessageNotReadableException.class,
+            ConstraintViolationException.class
     })
     public ProblemDetail requestValidationError() {
         return createErrorResponse("Validation Failed", "One or more arguments are invalid.",

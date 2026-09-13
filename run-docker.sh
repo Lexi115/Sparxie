@@ -35,7 +35,7 @@ function ask_question() {
   local return_var=$4
 
   local choices
-  eval "choices=( \"\${$array_name[@]}\" )"
+  eval "choices=( \"\${${array_name}[@]}\" )"
 
   local array_length=${#choices[@]}
 
@@ -128,7 +128,7 @@ function main() {
       echo -e "${ERROR} ${ANSI_BOLD}An error occurred while executing this operation."
     fi
 
-    ask_question "Would you like to make another action?" continue_choices 1 continue_choice
+    ask_question "Would you like to perform another action?" continue_choices 1 continue_choice
     clear_screen
 
     if [[ "$continue_choice" -eq 0 ]]; then

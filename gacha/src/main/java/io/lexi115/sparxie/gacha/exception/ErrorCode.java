@@ -1,4 +1,4 @@
-package io.lexi115.sparxie.gacha.error;
+package io.lexi115.sparxie.gacha.exception;
 
 public enum ErrorCode {
     ERR_WARP_LOCKED,
