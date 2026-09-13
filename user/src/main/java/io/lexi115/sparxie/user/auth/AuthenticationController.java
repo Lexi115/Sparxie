@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
-import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,7 +31,7 @@ public class AuthenticationController {
         return authenticationService.refreshToken(request);
     }
 
-    @PostMapping("/password")
+    @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(
             @Valid @RequestBody final UpdatePasswordRequest request,
             @RequestHeader("Authorization") final String authToken
@@ -41,9 +40,9 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestHeader("X-User-Id") final UUID userId) {
-        authenticationService.delete(userId);
+    @DeleteMapping("/account")
+    public ResponseEntity<Void> deleteAccount(@RequestHeader("Authorization") final String authToken) {
+        authenticationService.deleteAccount(authToken);
         return ResponseEntity.noContent().build();
     }
 

@@ -49,6 +49,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
       kafka:
@@ -72,6 +74,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
       kafka:
@@ -97,6 +101,8 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
     profiles:
       - all
       - game
@@ -118,6 +124,8 @@ services:
         condition: service_healthy
       supabase:
         condition: service_healthy
+      supabase-setup:
+        condition: service_completed_successfully
     profiles:
       - all
       - user
@@ -135,6 +143,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 20s
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -151,8 +160,6 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
       - GLIBC_TUNABLES=glibc.pthread.rseq=1
     restart: always
@@ -161,10 +168,29 @@ services:
       - mongo_config:/data/configdb
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--quiet" ]
     healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }" | mongosh --port 27017 --quiet
+      test: [ "CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/27017' || exit 1" ]
       interval: 10s
-      timeout: 10s
-      retries: 10
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    profiles:
+      - all
+      - game
+      - gacha
+      - inventory
+      - shop
+
+  mongo-setup:
+    image: mongo:8.3-noble
+    container_name: mongo-setup
+    tmpfs:
+      - /data/db
+      - /data/configdb
+    command: >
+      bash -c "sleep 3 && mongosh --host mongo --port 27017 --quiet --eval \"try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }\""
+    depends_on:
+      mongo:
+        condition: service_healthy
     profiles:
       - all
       - game
@@ -196,8 +222,9 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "nc -z localhost 9092 || exit 1" ]
       interval: 10s
-      timeout: 10s
-      retries: 10
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - kafka_data:/var/lib/kafka/data
       - kafka_config:/mnt/shared/config
@@ -219,8 +246,9 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
-      timeout: 10s
-      retries: 10
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - redis_data:/data
     profiles:
@@ -271,8 +299,9 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9999/health || exit 1" ]
       interval: 10s
-      timeout: 10s
-      retries: 10
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       postgres:
         condition: service_healthy

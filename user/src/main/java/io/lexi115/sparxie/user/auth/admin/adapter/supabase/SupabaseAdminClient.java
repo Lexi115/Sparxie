@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.user.auth.admin.adapter.supabase;
 
-import io.lexi115.sparxie.user.auth.adapter.supabase.error.SupabaseErrorDecoder;
+import io.lexi115.sparxie.user.auth.adapters.supabase.error.SupabaseErrorDecoder;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto.SupabaseAdminUpdatePasswordRequest;
@@ -17,24 +17,22 @@ import java.util.UUID;
         name = "user",
         contextId = "supabaseAdminClient",
         url = "${app.http.client-uri.supabase}",
+        path = "/admin",
         configuration = {
                 SupabaseAdminClientConfig.class,
                 SupabaseErrorDecoder.class
         }
 )
 public interface SupabaseAdminClient {
-    @GetMapping("/admin/users/{userId}")
+    @GetMapping("/users/{userId}")
     SupabaseAdminViewUserResponse viewUser(@PathVariable UUID userId);
 
-    @PostMapping("/admin/users")
+    @PostMapping("/users")
     SupabaseAdminCreateUserResponse createUser(@Valid @RequestBody SupabaseAdminCreateUserRequest request);
 
-    @PutMapping("/admin/users/{userId}")
-    void updatePassword(
-            @Valid @RequestBody SupabaseAdminUpdatePasswordRequest request,
-            @PathVariable UUID userId
-    );
+    @PutMapping("/users/{userId}")
+    void updatePassword(@Valid @RequestBody SupabaseAdminUpdatePasswordRequest request, @PathVariable UUID userId);
 
-    @DeleteMapping("/admin/users/{userId}")
+    @DeleteMapping("/users/{userId}")
     void deleteUser(@PathVariable UUID userId);
 }

@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.user.auth.admin.adapter.supabase;
 
-import io.lexi115.sparxie.user.auth.adapter.supabase.SupabaseMapper;
+import io.lexi115.sparxie.user.auth.adapters.supabase.SupabaseMapper;
 import io.lexi115.sparxie.user.auth.admin.AdminAuthenticationAdapter;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;

@@ -1,8 +1,8 @@
 package io.lexi115.sparxie.shop.shop.dto;
 
 import io.lexi115.sparxie.shop.shop.ShopCurrency;
-import io.lexi115.sparxie.shop.shop.item.ShopItem;
-import io.lexi115.sparxie.shop.shop.item.dto.ShopItemDto;
+import io.lexi115.sparxie.shop.shop.items.ShopItem;
+import io.lexi115.sparxie.shop.shop.items.dto.ShopItemDto;
 import org.mapstruct.EnumMapping;
 import org.mapstruct.Mapper;
 

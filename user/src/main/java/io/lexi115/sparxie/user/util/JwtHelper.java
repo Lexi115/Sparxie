@@ -15,13 +15,17 @@ import java.util.Map;
 public class JwtHelper {
     private final ObjectMapper objectMapper;
 
+    public <T> T extractSubject(final String token, final Class<T> targetClass) {
+        return extractClaim(token, "sub", targetClass);
+    }
+
     public <T> T extractClaim(final String token, final String claimName, final Class<T> targetClass) {
-        var jwt = JWT.decode(token);
+        var jwt = JWT.decode(stripPrefixes(token));
         return jwt.getClaim(claimName).as(targetClass);
     }
 
     public <T> T extractNestedClaim(final String token, final String claimName, final Class<T> targetClass) {
-        var jwt = JWT.decode(token);
+        var jwt = JWT.decode(stripPrefixes(token));
         var claimMap = jwt.getClaim(claimName).asMap();
         return objectMapper.convertValue(claimMap, targetClass);
     }
@@ -56,5 +60,10 @@ public class JwtHelper {
             case "HS512" -> Algorithm.HMAC512(secret);
             default -> Algorithm.none();
         };
+    }
+
+    private String stripPrefixes(final String token) {
+        var split = token.trim().split(" ");
+        return split[split.length - 1];
     }
 }

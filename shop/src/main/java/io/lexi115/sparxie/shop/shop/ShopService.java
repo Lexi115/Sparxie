@@ -1,11 +1,11 @@
 package io.lexi115.sparxie.shop.shop;
 
 import io.lexi115.sparxie.shop.concurrent.Lock;
-import io.lexi115.sparxie.shop.payment.PaymentGateway;
+import io.lexi115.sparxie.shop.payments.PaymentGateway;
 import io.lexi115.sparxie.shop.shop.dto.PurchaseResponse;
-import io.lexi115.sparxie.shop.shop.exception.ShopLockedException;
-import io.lexi115.sparxie.shop.shop.item.ShopItem;
-import io.lexi115.sparxie.shop.shop.item.ShopItemService;
+import io.lexi115.sparxie.shop.shop.exceptions.ShopLockedException;
+import io.lexi115.sparxie.shop.shop.items.ShopItem;
+import io.lexi115.sparxie.shop.shop.items.ShopItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -18,9 +18,6 @@ http:
           "ADMIN", "MEMBER"
         ]
       }
-  auth:
-    type: bearer
-    token: "{{accessToken}}"
 
 settings:
   encodeUrl: true

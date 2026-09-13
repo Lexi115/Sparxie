@@ -4,8 +4,8 @@ import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminCreateUserResponse;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminUpdatePasswordRequest;
 import io.lexi115.sparxie.user.auth.admin.dto.AdminViewUserResponse;
-import io.lexi115.sparxie.user.auth.event.UserEventService;
-import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
+import io.lexi115.sparxie.user.auth.events.UserEventService;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

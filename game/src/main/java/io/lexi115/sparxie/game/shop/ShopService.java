@@ -3,9 +3,8 @@ package io.lexi115.sparxie.game.shop;
 import io.lexi115.sparxie.game.game.dto.PurchasableItem;
 import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
 import io.lexi115.sparxie.game.game.dto.PurchaseResponse;
-import io.lexi115.sparxie.game.shop.dto.ShopMapper;
-import io.lexi115.sparxie.game.shop.transaction.ShopTransaction;
-import io.lexi115.sparxie.game.shop.transaction.ShopTransactionService;
+import io.lexi115.sparxie.game.shop.transactions.ShopTransaction;
+import io.lexi115.sparxie.game.shop.transactions.ShopTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,8 @@ public class ShopService {
     private final ShopTransactionService shopTransactionService;
     private final ShopMapper shopMapper;
 
-    public PurchasableItem getItemById(final String id) {
-        var item = shopClient.getItemById(id);
+    public PurchasableItem getItemById(final String itemId) {
+        var item = shopClient.getItemById(itemId);
         return shopMapper.toClientItem(item);
     }
 
@@ -31,9 +30,9 @@ public class ShopService {
         shopTransactionService.commit(transaction);
     }
 
-    public PurchaseResponse purchaseItem(final UUID playerId, final PurchaseRequest request) {
-        var shopRequest = shopMapper.toShopRequest(playerId, request);
-        var shopResponse = shopClient.purchaseItem(shopRequest);
+    public PurchaseResponse purchaseItem(final PurchaseRequest request, final UUID playerId) {
+        var shopRequest = shopMapper.toShopRequest(request);
+        var shopResponse = shopClient.purchaseItem(shopRequest, playerId);
         return shopMapper.toClientResponse(shopResponse);
     }
 }

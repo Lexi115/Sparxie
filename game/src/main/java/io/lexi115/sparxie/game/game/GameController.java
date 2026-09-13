@@ -16,19 +16,19 @@ import java.util.UUID;
 public class GameController {
     private final GameService gameService;
 
-    @PostMapping("/warp/pull")
+    @PostMapping("/warps")
     public WarpResponse performWarp(
-            @RequestHeader("X-User-Id") UUID playerId,
-            @Valid @RequestBody final WarpRequest request
+            @Valid @RequestBody final WarpRequest request,
+            @RequestHeader("X-User-Id") UUID playerId
     ) {
-        return gameService.performWarp(playerId, request);
+        return gameService.performWarp(request, playerId);
     }
 
-    @PostMapping("/shop/purchase")
+    @PostMapping("/purchases")
     public PurchaseResponse performPurchase(
             @RequestHeader("X-User-Id") UUID playerId,
             @Valid @RequestBody final PurchaseRequest request
     ) {
-        return gameService.performPurchase(playerId, request);
+        return gameService.performPurchase(request, playerId);
     }
 }

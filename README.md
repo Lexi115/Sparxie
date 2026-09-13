@@ -14,6 +14,7 @@ production environment.**
 - **Inventory** tracking
 - Mock **shop** to "purchase" items
 - **Banner**, **character**, **weapon** and **material** lookup
+- 3rd-party **OAuth2 authentication** (Google, GitHub, Discord, Twitch) supported
 
 ## Technologies
 
@@ -21,7 +22,7 @@ production environment.**
 - PostgreSQL
 - MongoDB
 - Database migration tools (Liquibase, Flamingock)
-- 3rd-party user authentication management (Supabase)
+- 3rd-party profile authentication management (Supabase)
 - Apache Kafka
 - Redis caching (through Redisson client)
 

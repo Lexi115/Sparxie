@@ -1,7 +1,7 @@
 info:
   name: Inventory Microservice
   type: folder
-  seq: 4
+  seq: 5
 
 request:
   auth: inherit

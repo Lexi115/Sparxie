@@ -8,44 +8,58 @@ spring:
           routes:
             # Game
             - id: game
-              uri: ${GAME_SERVICE_BASE_URI:http://game:8080}
+              uri: ${GAME_SERVICE_BASE_URI}
               predicates:
                 - Path=/api/game/**
               filters:
                 - StripPrefix=1
-            # Banner
-            - id: banner
-              uri: ${BANNER_SERVICE_BASE_URI:http://game:8080}
+            # Banners
+            - id: banners
+              uri: ${GAME_SERVICE_BASE_URI}
               predicates:
-                - Path=/api/banner/**
+                - Path=/api/banners/**
               filters:
                 - StripPrefix=1
-            # User
-            - id: user
-              uri: ${USER_SERVICE_BASE_URI:http://user:8080}
+            # Inventories
+            - id: inventories
+              uri: ${GAME_SERVICE_BASE_URI}
               predicates:
-                - Path=/api/user/**
+                - Path=/api/inventories/**
+              filters:
+                - StripPrefix=1
+            # Characters
+            - id: characters
+              uri: ${GAME_SERVICE_BASE_URI}
+              predicates:
+                - Path=/api/characters/**
+              filters:
+                - StripPrefix=1
+            # Weapons
+            - id: weapons
+              uri: ${GAME_SERVICE_BASE_URI}
+              predicates:
+                - Path=/api/weapons/**
+              filters:
+                - StripPrefix=1
+            # Materials
+            - id: materials
+              uri: ${GAME_SERVICE_BASE_URI}
+              predicates:
+                - Path=/api/materials/**
+              filters:
+                - StripPrefix=1
+            # Profiles
+            - id: profiles
+              uri: ${USER_SERVICE_BASE_URI}
+              predicates:
+                - Path=/api/profiles/**
               filters:
                 - StripPrefix=1
             # Authentication
             - id: auth
-              uri: ${AUTH_SERVICE_BASE_URI:http://user:8080}
+              uri: ${USER_SERVICE_BASE_URI}
               predicates:
                 - Path=/api/auth/**
-              filters:
-                - StripPrefix=1
-            # Character
-            - id: character
-              uri: ${CHARACTER_SERVICE_BASE_URI:http://inventory:8080}
-              predicates:
-                - Path=/api/character/**
-              filters:
-                - StripPrefix=1
-            # Weapon
-            - id: weapon
-              uri: ${WEAPON_SERVICE_BASE_URI:http://inventory:8080}
-              predicates:
-                - Path=/api/weapon/**
               filters:
                 - StripPrefix=1
 

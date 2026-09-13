@@ -1,18 +1,19 @@
 package io.lexi115.sparxie.gacha.warp;
 
-import io.lexi115.sparxie.gacha.banner.Banner;
-import io.lexi115.sparxie.gacha.banner.BannerService;
+import io.lexi115.sparxie.gacha.banners.Banner;
+import io.lexi115.sparxie.gacha.banners.BannerService;
 import io.lexi115.sparxie.gacha.concurrent.Lock;
-import io.lexi115.sparxie.gacha.player.Player;
-import io.lexi115.sparxie.gacha.player.PlayerService;
+import io.lexi115.sparxie.gacha.players.Player;
+import io.lexi115.sparxie.gacha.players.PlayerService;
 import io.lexi115.sparxie.gacha.warp.dto.WarpRequest;
-import io.lexi115.sparxie.gacha.warp.exception.WarpLockedException;
-import io.lexi115.sparxie.gacha.warp.transaction.WarpTransactionService;
+import io.lexi115.sparxie.gacha.warp.exceptions.WarpLockedException;
+import io.lexi115.sparxie.gacha.warp.transactions.WarpTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +24,8 @@ public class WarpService {
     private final Lock playerLock;
 
     @Transactional
-    public WarpResult performWarp(final WarpRequest request) {
+    public WarpResult pull(final WarpRequest request, final UUID playerId) {
         var transactionId = request.transactionId();
-        var playerId = request.playerId();
         var lockName = "warp_lock_" + playerId;
         if (!playerLock.acquire(lockName)) {
             throw new WarpLockedException("Please wait a bit before making another pull!");

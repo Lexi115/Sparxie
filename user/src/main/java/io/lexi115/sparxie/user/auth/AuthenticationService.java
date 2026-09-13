@@ -1,16 +1,15 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
-import io.lexi115.sparxie.user.auth.event.UserEventService;
-import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
-import io.lexi115.sparxie.user.auth.provider.InvalidProviderException;
+import io.lexi115.sparxie.user.auth.events.UserEventService;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
+import io.lexi115.sparxie.user.auth.providers.InvalidProviderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +35,9 @@ public class AuthenticationService {
         authenticationAdapter.updatePassword(request, authToken);
     }
 
-    public void delete(final UUID userId) {
-        authenticationAdapter.delete(userId);
-        userEventService.userDeleted(userId, Instant.now());
+    public void deleteAccount(final String authToken) {
+        var deletedUserId = authenticationAdapter.deleteAccount(authToken);
+        userEventService.userDeleted(deletedUserId, Instant.now());
     }
 
     public URI getAuthorizeUri(final IdentityProvider provider) {

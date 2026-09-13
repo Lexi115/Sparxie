@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.user.auth.admin.dto;
 
 import io.lexi115.sparxie.user.auth.UserRole;
-import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
 
 import java.time.Instant;
 import java.util.List;

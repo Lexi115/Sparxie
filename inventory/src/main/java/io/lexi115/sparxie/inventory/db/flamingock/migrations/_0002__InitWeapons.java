@@ -6,7 +6,7 @@ import io.flamingock.api.annotations.Rollback;
 import io.flamingock.api.annotations.TargetSystem;
 import io.lexi115.sparxie.inventory.db.flamingock.MigrationConstants;
 import io.lexi115.sparxie.inventory.util.JsonHelper;
-import io.lexi115.sparxie.inventory.weapon.Weapon;
+import io.lexi115.sparxie.inventory.weapons.Weapon;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.io.IOException;

@@ -1,8 +1,8 @@
 package io.lexi115.sparxie.game.game;
 
-import io.lexi115.sparxie.game.banner.BannerService;
+import io.lexi115.sparxie.game.banners.BannerService;
 import io.lexi115.sparxie.game.game.dto.*;
-import io.lexi115.sparxie.game.inventory.InventoryService;
+import io.lexi115.sparxie.game.inventories.InventoryService;
 import io.lexi115.sparxie.game.shop.ShopService;
 import io.lexi115.sparxie.game.warp.WarpService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class GameService {
     private final ShopService shopService;
 
     @Transactional
-    public WarpResponse performWarp(final UUID playerId, final WarpRequest request) {
+    public WarpResponse performWarp(final WarpRequest request, final UUID playerId) {
         var bannerDetails = bannerService.getDetailsById(request.bannerId());
         var transactionId = request.transactionId();
 
@@ -35,7 +35,7 @@ public class GameService {
         inventoryService.consumeItems(transactionId, playerId, Map.of(
                 bannerDetails.currency(), bannerDetails.getCost(request.amount())));
 
-        var response = warpService.performWarp(playerId, request);
+        var response = warpService.performWarp(request, playerId);
         var groupedItems = groupItems(response.items());
         inventoryService.giveItems(transactionId, playerId, groupedItems);
         transaction.setResult(response);
@@ -53,7 +53,7 @@ public class GameService {
     }
 
     @Transactional
-    public PurchaseResponse performPurchase(final UUID playerId, final PurchaseRequest request) {
+    public PurchaseResponse performPurchase(final PurchaseRequest request, final UUID playerId) {
         var transactionId = request.transactionId();
         var itemId = request.itemId();
         var itemAmount = request.amount();
@@ -63,7 +63,7 @@ public class GameService {
         }
 
         var shopItem = shopService.getItemById(itemId);
-        var response = shopService.purchaseItem(playerId, request);
+        var response = shopService.purchaseItem(request, playerId);
         var currency = shopItem.currency();
 
         // If item was bought with money, skip item consumption inside player's inventory.

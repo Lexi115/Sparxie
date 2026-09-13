@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.inventory.materials;
 
-import io.lexi115.sparxie.inventory.materials.exception.MaterialNotFoundException;
+import io.lexi115.sparxie.inventory.materials.exceptions.MaterialNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

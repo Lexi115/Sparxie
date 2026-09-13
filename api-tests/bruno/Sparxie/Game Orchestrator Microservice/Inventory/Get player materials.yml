@@ -1,0 +1,33 @@
+info:
+  name: Get player materials
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{gameBaseUri}}/inventories/materials?page={{page}}"
+  headers:
+    - name: X-User-Id
+      value: "{{userId}}"
+  params:
+    - name: page
+      value: "{{page}}"
+      type: query
+    - name: size
+      value: "{{size}}"
+      type: query
+      disabled: true
+
+runtime:
+  variables:
+    - name: page
+      value: "0"
+    - name: size
+      value: "1"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

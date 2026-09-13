@@ -1,9 +1,9 @@
 package io.lexi115.sparxie.user.auth.admin.adapter.supabase.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseAppMetadata;
-import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseIdentity;
-import io.lexi115.sparxie.user.auth.adapter.supabase.dto.SupabaseUserMetadata;
+import io.lexi115.sparxie.user.auth.adapters.supabase.dto.SupabaseAppMetadata;
+import io.lexi115.sparxie.user.auth.adapters.supabase.dto.SupabaseIdentity;
+import io.lexi115.sparxie.user.auth.adapters.supabase.dto.SupabaseUserMetadata;
 
 import java.time.Instant;
 import java.util.List;

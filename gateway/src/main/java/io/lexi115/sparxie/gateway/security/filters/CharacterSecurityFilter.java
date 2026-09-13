@@ -10,7 +10,7 @@ public class CharacterSecurityFilter implements SecurityFilter {
 
     @Override
     public void filter(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
-        var prefix = "/api/character";
+        var prefix = "/api/characters";
         registry
                 .requestMatchers(HttpMethod.GET, prefix + "/{characterId}").permitAll();
     }

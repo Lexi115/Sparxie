@@ -6,7 +6,7 @@ import io.flamingock.api.annotations.Rollback;
 import io.flamingock.api.annotations.TargetSystem;
 
 import io.lexi115.sparxie.shop.db.flamingock.MigrationConstants;
-import io.lexi115.sparxie.shop.shop.item.ShopItem;
+import io.lexi115.sparxie.shop.shop.items.ShopItem;
 import io.lexi115.sparxie.shop.util.JsonHelper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 

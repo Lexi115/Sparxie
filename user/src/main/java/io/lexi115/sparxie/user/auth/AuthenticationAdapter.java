@@ -1,7 +1,7 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
-import io.lexi115.sparxie.user.auth.provider.IdentityProvider;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
 
 import java.net.URI;
 import java.util.Map;
@@ -16,7 +16,7 @@ public interface AuthenticationAdapter {
 
     void updatePassword(UpdatePasswordRequest request, String authToken);
 
-    void delete(UUID userId);
+    UUID deleteAccount(String authToken);
 
     URI getAuthorizeUri(IdentityProvider provider);
 

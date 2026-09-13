@@ -8,7 +8,6 @@ import java.util.UUID;
 
 public record ShopPurchaseRequest(
         @NotNull UUID transactionId,
-        @NotNull UUID playerId,
         @NotBlank String itemId,
         @NotNull @Min(1) Long amount
 ) {
