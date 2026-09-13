@@ -9,12 +9,12 @@ services:
       - ./gateway/.env
     restart: always
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
-      - user
       - all
+      - user
+      - game
+      - gacha
+      - inventory
+      - shop
 
   game:
     container_name: game
@@ -31,11 +31,11 @@ services:
       postgres:
         condition: service_healthy
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   gacha:
     container_name: gacha
@@ -56,9 +56,9 @@ services:
       postgres:
         condition: service_healthy
     profiles:
-      - gacha
-      - game
       - all
+      - game
+      - gacha
 
   inventory:
     container_name: inventory
@@ -79,9 +79,9 @@ services:
       postgres:
         condition: service_healthy
     profiles:
-      - inventory
-      - game
       - all
+      - game
+      - inventory
 
   shop:
     container_name: shop
@@ -98,9 +98,9 @@ services:
       mongo:
         condition: service_healthy
     profiles:
-      - shop
-      - game
       - all
+      - game
+      - shop
 
   user:
     container_name: user
@@ -119,8 +119,8 @@ services:
       supabase:
         condition: service_healthy
     profiles:
-      - user
       - all
+      - user
 
   postgres:
     image: postgres:18.6
@@ -139,11 +139,12 @@ services:
       - postgres_data:/var/lib/postgresql
       - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     profiles:
-      - inventory
-      - gacha
-      - game
-      - user
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
+      - user
 
   mongo:
     image: mongo:8.3-noble
@@ -165,11 +166,11 @@ services:
       timeout: 10s
       retries: 10
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   kafka:
     image: apache/kafka:4.3.1
@@ -202,11 +203,12 @@ services:
       - kafka_config:/mnt/shared/config
       - kafka_secrets:/etc/kafka/secrets
     profiles:
-      - inventory
-      - gacha
-      - game
-      - user
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
+      - user
 
   redis:
     image: redis:8.10-alpine
@@ -222,11 +224,11 @@ services:
     volumes:
       - redis_data:/data
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   supabase:
     image: supabase/gotrue:v2.158.1
@@ -275,8 +277,8 @@ services:
       postgres:
         condition: service_healthy
     profiles:
-      - user
       - all
+      - user
 
   supabase-setup:
     image: alpine:3.20
@@ -289,8 +291,8 @@ services:
       supabase:
         condition: service_healthy
     profiles:
-      - user
       - all
+      - user
 
 volumes:
   kafka_data:

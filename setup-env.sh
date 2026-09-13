@@ -12,6 +12,7 @@ POSTGRES_PORT=5432
 MONGO_HOST=mongo
 MONGO_PORT=27017
 SUPABASE_CLIENT_URI=http://supabase:9999
+SUPABASE_EXTERNAL_CLIENT_URI=http://localhost:9999
 
 GACHA_SERVICE_BASE_URI=http://gacha:8080
 GAME_SERVICE_BASE_URI=http://game:8080
@@ -33,21 +34,31 @@ ANSI_GRAY="\033[90m"
 ANSI_RESET="\033[0m"
 
 QUESTION="${ANSI_BOLD}${ANSI_MAGENTA}[?]${ANSI_RESET}"
-SUCCESS="${ANSI_BOLD}${ANSI_GREEN}[V]${ANSI_RESET}"
-ERROR="${ANSI_BOLD}${ANSI_RED}[X]${ANSI_RESET}"
+SUCCESS="${ANSI_BOLD}${ANSI_GREEN}[✔]${ANSI_RESET}"
+ERROR="${ANSI_BOLD}${ANSI_RED}[✖]${ANSI_RESET}"
 WARNING="${ANSI_BOLD}${ANSI_YELLOW}[!]${ANSI_RESET}"
 INFO="${ANSI_BOLD}${ANSI_CYAN}[i]${ANSI_RESET}"
 
+function clear_screen() {
+  tput clear || clear
+}
+
 function input() {
-  local -n inputted=$1
-  # shellcheck disable=SC2034
-  read -r -p "> " inputted
+  local target_var=$1
+  local user_input
+  read -r -p "> " user_input
+
+  printf -v "$target_var" "%s" "$user_input"
 }
 
 function ask_question() {
   local message=$1
-  local -n choices=$2
+  local array_name=$2
   local default_choice=$3
+  local return_var=$4
+
+  local choices
+  eval "choices=( \"\${$array_name[@]}\" )"
 
   local array_length=${#choices[@]}
 
@@ -60,22 +71,24 @@ function ask_question() {
     fi
   done
 
-  local -n choice=$4
+  local local_choice
 
   while true; do
-    input choice
+    input local_choice
 
-    if [[ -z "$choice" ]]; then
-      choice="$default_choice"
+    if [[ -z "$local_choice" ]]; then
+      local_choice="$default_choice"
       break
     fi
 
-    if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 0 ]] && [[ "$choice" -lt "$array_length" ]]; then
+    if [[ "$local_choice" =~ ^[0-9]+$ ]] && [[ "$local_choice" -ge 0 ]] && [[ "$local_choice" -lt "$array_length" ]]; then
       break
     fi
 
     echo -e "${ERROR} ${ANSI_BOLD}Invalid input!${ANSI_RESET}"
   done
+
+  printf -v "$return_var" "%s" "$local_choice"
 }
 
 function print_header() {
@@ -112,7 +125,7 @@ TWITCH_CLIENT_ID=
 TWITCH_CLIENT_SECRET=
 TWITCH_CLIENT_REDIRECT_URI=${OAUTH2_REDIRECT_URI}/twitch
 EOF
-  echo -e "${WARNING} ${ANSI_BOLD}3rd-party OAuth2 authentication will ${ANSI_RED}${ANSI_UNDERLINE}NOT${ANSI_RESET}${ANSI_BOLD} work unless the related client IDs and secrets are manually set inside the '.env' file!"
+  echo -e "${WARNING} ${ANSI_BOLD}3rd-party OAuth2 authentication will ${ANSI_RED}${ANSI_UNDERLINE}NOT${ANSI_RESET}${ANSI_BOLD} work unless the related client IDs and secrets are manually set inside the root directory '${ANSI_UNDERLINE}.env${ANSI_RESET}${ANSI_BOLD}' file!"
   echo -e "${SUCCESS} ${ANSI_BOLD}Successfully completed setup for '${ANSI_UNDERLINE}root${ANSI_RESET}${ANSI_BOLD}'!"
 }
 
@@ -170,7 +183,6 @@ function setup_gateway() {
   local module_name="gateway"
   echo -e "${INFO} ${ANSI_BOLD}Setting '${ANSI_UNDERLINE}${module_name}${ANSI_RESET}${ANSI_BOLD}'..."
   if [[ ! -d "./${module_name}" ]]; then
-    # Fixed a small typo here: {$ANSI_BOLD} -> ${ANSI_BOLD}
     echo -e "${ERROR} ${ANSI_BOLD}Directory '${ANSI_UNDERLINE}./${module_name}${ANSI_RESET}${ANSI_BOLD}' not found! Skipping...${ANSI_RESET}"
     return 1
   fi
@@ -241,6 +253,7 @@ function setup_user() {
   fi
 cat <<EOF > ./${module_name}/.env
 SUPABASE_CLIENT_URI=${SUPABASE_CLIENT_URI}
+SUPABASE_EXTERNAL_CLIENT_URI=${SUPABASE_EXTERNAL_CLIENT_URI}
 
 POSTGRES_HOST=${POSTGRES_HOST}
 POSTGRES_PORT=${POSTGRES_PORT}
@@ -252,7 +265,7 @@ KAFKA_SERVER=${KAFKA_SERVER}
 
 JWT_SECRET=${JWT_SECRET}
 EOF
-  echo -e "${WARNING} ${ANSI_BOLD}3rd-party OAuth2 authentication will ${ANSI_RED}${ANSI_UNDERLINE}NOT${ANSI_RESET}${ANSI_BOLD} work unless the related client IDs and secrets are manually set inside the '.env' file!"
+  echo -e "${WARNING} ${ANSI_BOLD}3rd-party OAuth2 authentication will ${ANSI_RED}${ANSI_UNDERLINE}NOT${ANSI_RESET}${ANSI_BOLD} work unless the related client IDs and secrets are manually set inside the root directory '${ANSI_UNDERLINE}.env${ANSI_RESET}${ANSI_BOLD}' file!"
   echo -e "${SUCCESS} ${ANSI_BOLD}Successfully completed setup for '${ANSI_UNDERLINE}${module_name}${ANSI_RESET}${ANSI_BOLD}'!"
 }
 
@@ -270,14 +283,16 @@ function delete_all() {
   local continue_choice=""
   # shellcheck disable=SC2034
   local continue_choices=('No' 'Yes')
-  ask_question "Are you sure you want to delete all '.env' files in the project?" continue_choices 0 continue_choice
+  ask_question "Are you sure you want to delete all '${ANSI_UNDERLINE}.env${ANSI_RESET}${ANSI_BOLD}' files in the project?" continue_choices 0 continue_choice
   if [[ "$continue_choice" -eq 1 ]]; then
     find . -name ".env" -type f -delete
   fi
+  clear_screen
 }
 
 function execute_setup() {
-  local -n choice=$1
+  local target_var=$1
+  local choice="${!target_var}"
 
   case "$choice" in
     1) setup_everything ;;
@@ -294,6 +309,7 @@ function execute_setup() {
 }
 
 function main() {
+  clear_screen
   print_header
 
   local env_choice=""
@@ -304,7 +320,8 @@ function main() {
   local continue_choices=('No' 'Yes')
 
   while true; do
-    ask_question "Please choose the '.env' file you want to set up:" operation_choices 1 env_choice
+    ask_question "Please choose the '${ANSI_UNDERLINE}.env${ANSI_RESET}${ANSI_BOLD}' file you want to set up:" operation_choices 1 env_choice
+    clear_screen
     if [[ "$env_choice" -eq 0 ]]; then
       exit_program
     fi
@@ -312,6 +329,7 @@ function main() {
     execute_setup env_choice
     echo -e "${SUCCESS} ${ANSI_BOLD}All operations completed!"
     ask_question "Would you like to set up more files?" continue_choices 1 continue_choice
+    clear_screen
     if [[ "$continue_choice" -eq 0 ]]; then
       exit_program
     fi
