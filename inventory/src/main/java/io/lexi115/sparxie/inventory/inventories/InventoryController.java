@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,7 +46,11 @@ public class InventoryController {
     }
 
     @GetMapping("/{playerId}/materials")
-    public Map<String, Long> getMaterials(@PathVariable final UUID playerId, final Pageable pageable) {
-        return inventoryService.getMaterials(playerId, pageable);
+    public Map<String, Long> getMaterials(
+            @PathVariable final UUID playerId,
+            final Pageable pageable,
+            @RequestParam(required = false) final List<String> itemIds
+    ) {
+        return inventoryService.getMaterials(playerId, pageable, itemIds == null ? null : itemIds::contains);
     }
 }

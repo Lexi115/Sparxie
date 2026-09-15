@@ -25,7 +25,7 @@ runtime:
     - name: itemId
       value: limited_ticket
     - name: itemAmount
-      value: "160"
+      value: "30"
 
 settings:
   encodeUrl: true

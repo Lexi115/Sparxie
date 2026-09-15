@@ -40,7 +40,7 @@ WARNING="${ANSI_BOLD}${ANSI_YELLOW}[!]${ANSI_RESET}"
 INFO="${ANSI_BOLD}${ANSI_CYAN}[i]${ANSI_RESET}"
 
 function clear_screen() {
-  tput clear || clear
+  clear -x || tput clear || clear
 }
 
 function input() {

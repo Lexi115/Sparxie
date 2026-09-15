@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @Component
 public class CollectionHelper {
@@ -21,5 +22,16 @@ public class CollectionHelper {
             }
         }
         return subMap;
+    }
+
+    public <K, V> Map<K, V> filterMapKeys(final Map<K, V> original, final Predicate<K> predicate) {
+        var filteredMap = new HashMap<K, V>();
+        for (var entry : original.entrySet()) {
+            var entryKey = entry.getKey();
+            if (predicate.test(entryKey)) {
+                filteredMap.put(entryKey, entry.getValue());
+            }
+        }
+        return filteredMap;
     }
 }

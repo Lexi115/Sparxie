@@ -2,10 +2,7 @@ package io.lexi115.sparxie.game.warp.transactions;
 
 import io.lexi115.sparxie.game.game.dto.WarpResponse;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "warp_transactions")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class WarpTransaction {

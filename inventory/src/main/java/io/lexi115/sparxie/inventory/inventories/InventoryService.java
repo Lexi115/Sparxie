@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -95,18 +96,27 @@ public class InventoryService {
     }
 
     public Map<String, Long> getCharacters(final UUID playerId, final Pageable pageable) {
-        return getItems(playerId, ItemType.CHARACTER, pageable);
+        return getItems(playerId, ItemType.CHARACTER, pageable, null);
     }
 
     public Map<String, Long> getWeapons(final UUID playerId, final Pageable pageable) {
-        return getItems(playerId, ItemType.WEAPON, pageable);
+        return getItems(playerId, ItemType.WEAPON, pageable, null);
     }
 
-    public Map<String, Long> getMaterials(final UUID playerId, final Pageable pageable) {
-        return getItems(playerId, ItemType.MATERIAL, pageable);
+    public Map<String, Long> getMaterials(
+            final UUID playerId,
+            final Pageable pageable,
+            final Predicate<String> idFilter
+    ) {
+        return getItems(playerId, ItemType.MATERIAL, pageable, idFilter);
     }
 
-    private Map<String, Long> getItems(final UUID playerId, final ItemType itemType, final Pageable pageable) {
+    private Map<String, Long> getItems(
+            final UUID playerId,
+            final ItemType itemType,
+            final Pageable pageable,
+            final Predicate<String> idFilter
+    ) {
         var pageIndex = pageable.getPageNumber();
         if (pageIndex < 0) {
             throw new IllegalArgumentException("Page index must be at least 0");
@@ -121,6 +131,9 @@ public class InventoryService {
             case WEAPON -> player.getWeapons();
             case MATERIAL -> player.getMaterials();
         };
+        if (idFilter != null) {
+            itemMap = collectionHelper.filterMapKeys(itemMap, idFilter);
+        }
         var startIndex = pageIndex * pageSize;
         var endIndex = startIndex + (pageSize - 1);
         return collectionHelper.subMap(itemMap, startIndex, endIndex);

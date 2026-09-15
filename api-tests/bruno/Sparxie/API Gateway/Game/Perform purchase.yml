@@ -21,7 +21,7 @@ http:
 runtime:
   variables:
     - name: itemId
-      value: oneiric_shard
+      value: stellar_jade
     - name: itemAmount
       value: "100"
 
