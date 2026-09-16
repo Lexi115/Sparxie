@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{gatewayBaseUri}}/api/inventories/materials?page={{page}}&itemIds=limited_ticket"
+  url: "{{gatewayBaseUri}}/api/inventories/materials?page={{page}}&itemIds={{itemIds}}"
   params:
     - name: page
       value: "{{page}}"
@@ -15,7 +15,7 @@ http:
       type: query
       disabled: true
     - name: itemIds
-      value: limited_ticket
+      value: "{{itemIds}}"
       type: query
   auth:
     type: bearer
@@ -27,6 +27,8 @@ runtime:
       value: "0"
     - name: size
       value: "1"
+    - name: itemIds
+      value: limited_ticket
 
 settings:
   encodeUrl: true

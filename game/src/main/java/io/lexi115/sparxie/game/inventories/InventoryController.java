@@ -30,7 +30,6 @@ public class InventoryController {
             final Pageable pageable,
             @RequestParam(required = false) final List<String> itemIds
     ) {
-        System.out.println(itemIds);
         return inventoryService.getMaterials(playerId, pageable, itemIds);
     }
 }

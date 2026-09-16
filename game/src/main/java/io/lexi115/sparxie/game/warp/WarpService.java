@@ -24,7 +24,7 @@ public class WarpService {
         return warpMapper.toClientResponse(gachaResponse);
     }
 
-    public WarpTransaction getOrCreateTransaction(final UUID transactionId, final UUID playerId) {
+    public WarpTransaction getTransaction(final UUID transactionId, final UUID playerId) {
         var oldTransaction = warpTransactionService.getById(transactionId);
         if (oldTransaction != null) {
             if (!playerId.equals(oldTransaction.getPlayerId())) {
@@ -32,6 +32,10 @@ public class WarpService {
             }
             return oldTransaction;
         }
+        return null;
+    }
+
+    public WarpTransaction createTransaction(final UUID transactionId, final UUID playerId) {
         return warpTransactionService.create(transactionId, playerId);
     }
 

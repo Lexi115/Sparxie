@@ -25,8 +25,13 @@ public class GameService {
 
     @Transactional
     public WarpResponse performWarp(final WarpRequest request, final UUID playerId) {
-        var bannerDetails = bannerService.getDetailsById(request.bannerId());
         var transactionId = request.transactionId();
+        var transaction = warpService.getTransaction(transactionId, playerId);
+        if (transaction != null && transaction.isCompleted()) {
+            return transaction.getResult();
+        }
+
+        var bannerDetails = bannerService.getDetailsById(request.bannerId());
         var currency = bannerDetails.currency();
         var cost = bannerDetails.getCost(request.amount());
         var possessedCurrencyAmount = inventoryService.getMaterialAmount(playerId, currency);
@@ -36,11 +41,9 @@ public class GameService {
             throw new NotEnoughItemsException(currency, possessedCurrencyAmount, cost);
         }
 
-        var transaction = warpService.getOrCreateTransaction(transactionId, playerId);
-        if (transaction.isCompleted()) {
-            return transaction.getResult();
+        if (transaction == null) {
+            transaction = warpService.createTransaction(transactionId, playerId);
         }
-
         inventoryService.consumeItem(transactionId, playerId, currency, cost);
 
         var response = warpService.performWarp(request, playerId);
@@ -66,9 +69,7 @@ public class GameService {
         var transactionId = request.transactionId();
         var transaction = shopService.getTransaction(transactionId, playerId);
         if (transaction != null && transaction.isCompleted()) {
-            if (transaction.isCompleted()) {
-                return transaction.getResult();
-            }
+            return transaction.getResult();
         }
 
         var itemId = request.itemId();
@@ -83,6 +84,7 @@ public class GameService {
                 throw new NotEnoughItemsException(currency, possessedCurrencyAmount, cost);
             }
         }
+
         if (transaction == null) {
             transaction = shopService.createTransaction(transactionId, playerId);
         }

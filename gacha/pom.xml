@@ -158,6 +158,7 @@
                     <release>${java.version}</release>
                     <compilerArgs>
                         <arg>-Xlint:-processing</arg>
+                        <arg>-Xlint:-options</arg>
                     </compilerArgs>
                 </configuration>
                 <executions>

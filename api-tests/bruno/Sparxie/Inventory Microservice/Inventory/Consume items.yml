@@ -23,9 +23,9 @@ runtime:
     - name: playerId
       value: "{{userId}}"
     - name: itemId
-      value: oneiric_shard
+      value: limited_ticket
     - name: itemAmount
-      value: "1600"
+      value: "10"
 
 settings:
   encodeUrl: true

@@ -16,7 +16,6 @@ public class KafkaUserConsumer {
 
     @KafkaHandler
     public void onUserCreated(final UserCreatedEvent event) {
-        System.out.println("user created event " + event.userId());
         var userId = event.userId();
         if (!profileService.existsById(userId)) {
             profileService.create(userId, event.username());
@@ -25,7 +24,6 @@ public class KafkaUserConsumer {
 
     @KafkaHandler
     public void onUserDeleted(final UserDeletedEvent event) {
-        System.out.println("user deleted event " + event.userId());
         profileService.deleteById(event.userId());
     }
 }
