@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>io.lexi115.sparxie</groupId>
-    <artifactId>user</artifactId>
+    <artifactId>profile</artifactId>
     <version>1.0</version>
     <name>User</name>
     <description>User Microservice</description>
@@ -103,6 +103,12 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>
         </dependency>
     </dependencies>
 

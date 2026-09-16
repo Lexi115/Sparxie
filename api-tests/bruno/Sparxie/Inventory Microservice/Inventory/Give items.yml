@@ -1,11 +1,11 @@
 info:
   name: Give items
   type: http
-  seq: 1
+  seq: 4
 
 http:
   method: POST
-  url: "{{inventoryBaseUri}}/inventory/give"
+  url: "{{inventoryBaseUri}}/inventories/{{userId}}/give"
   body:
     type: json
     data: |-
@@ -25,7 +25,7 @@ runtime:
     - name: itemId
       value: limited_ticket
     - name: itemAmount
-      value: "160"
+      value: "10"
 
 settings:
   encodeUrl: true

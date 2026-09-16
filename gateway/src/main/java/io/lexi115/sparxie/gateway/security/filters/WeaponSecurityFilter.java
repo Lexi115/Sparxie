@@ -10,7 +10,7 @@ public class WeaponSecurityFilter implements SecurityFilter {
 
     @Override
     public void filter(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
-        var prefix = "/api/weapon";
+        var prefix = "/api/weapons";
         registry
                 .requestMatchers(HttpMethod.GET, prefix + "/{weaponId}").permitAll();
     }

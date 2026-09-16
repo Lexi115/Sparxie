@@ -17,20 +17,26 @@ spring:
     properties:
       spring.json.trusted.packages: "*"
       spring.json.type.mapping: >
-        USER_CREATED:io.lexi115.sparxie.user.auth.event.UserCreatedEvent,
-        USER_DELETED:io.lexi115.sparxie.user.auth.event.UserDeletedEvent
+        USER_CREATED:io.lexi115.sparxie.user.auth.events.UserCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.user.auth.events.UserDeletedEvent
     bootstrap-servers:
-      - ${KAFKA_SERVER:kafka:9092}
+      - ${KAFKA_SERVER}
+  cloud:
+    openfeign:
+      client:
+        config:
+          supabaseClient:
+            follow-redirects: false
 
 app:
   http:
     client-uri:
-      supabase: ${SUPABASE_CLIENT_URI:http://supabase:9999}
+      supabase: ${SUPABASE_CLIENT_URI}
+      supabase-external: ${SUPABASE_EXTERNAL_CLIENT_URI}
   kafka:
     topic:
       user: user-topic
     group:
       user: user-group
   supabase:
-    jwt:
-      service: ${JWT_SERVICE}
+    jwt-secret: ${JWT_SECRET}

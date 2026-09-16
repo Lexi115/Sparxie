@@ -1,11 +1,11 @@
 info:
   name: Consume items
   type: http
-  seq: 2
+  seq: 5
 
 http:
   method: POST
-  url: "{{inventoryBaseUri}}/inventory/consume"
+  url: "{{inventoryBaseUri}}/inventories/{{userId}}/consume"
   body:
     type: json
     data: |-
@@ -23,9 +23,9 @@ runtime:
     - name: playerId
       value: "{{userId}}"
     - name: itemId
-      value: oneiric_shard
+      value: limited_ticket
     - name: itemAmount
-      value: "1600"
+      value: "10"
 
 settings:
   encodeUrl: true

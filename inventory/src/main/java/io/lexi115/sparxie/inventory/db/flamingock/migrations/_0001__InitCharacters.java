@@ -4,7 +4,7 @@ import io.flamingock.api.annotations.Apply;
 import io.flamingock.api.annotations.Change;
 import io.flamingock.api.annotations.Rollback;
 import io.flamingock.api.annotations.TargetSystem;
-import io.lexi115.sparxie.inventory.character.Character;
+import io.lexi115.sparxie.inventory.characters.Character;
 import io.lexi115.sparxie.inventory.db.flamingock.MigrationConstants;
 import io.lexi115.sparxie.inventory.util.JsonHelper;
 import org.springframework.data.mongodb.core.MongoTemplate;

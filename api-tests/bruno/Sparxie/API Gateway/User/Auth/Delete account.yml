@@ -5,7 +5,7 @@ info:
 
 http:
   method: DELETE
-  url: "{{gatewayBaseUri}}/api/auth/delete"
+  url: "{{gatewayBaseUri}}/api/auth/account"
   auth:
     type: bearer
     token: "{{accessToken}}"

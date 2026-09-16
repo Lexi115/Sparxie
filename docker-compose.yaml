@@ -9,12 +9,12 @@ services:
       - ./gateway/.env
     restart: always
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
-      - user
       - all
+      - user
+      - game
+      - gacha
+      - inventory
+      - shop
 
   game:
     container_name: game
@@ -26,14 +26,16 @@ services:
       - ./game/.env
     restart: always
     depends_on:
-      - kafka
-      - postgres
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   gacha:
     container_name: gacha
@@ -45,14 +47,20 @@ services:
       - ./gacha/.env
     restart: always
     depends_on:
-      - mongo
-      - redis
-      - kafka
-      - postgres
+      mongo:
+        condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
-      - gacha
-      - game
       - all
+      - game
+      - gacha
 
   inventory:
     container_name: inventory
@@ -64,14 +72,20 @@ services:
       - ./inventory/.env
     restart: always
     depends_on:
-      - mongo
-      - redis
-      - kafka
-      - postgres
+      mongo:
+        condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     profiles:
-      - inventory
-      - game
       - all
+      - game
+      - inventory
 
   shop:
     container_name: shop
@@ -83,12 +97,16 @@ services:
       - ./shop/.env
     restart: always
     depends_on:
-      - redis
-      - mongo
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      mongo-setup:
+        condition: service_completed_successfully
     profiles:
-      - shop
-      - game
       - all
+      - game
+      - shop
 
   user:
     container_name: user
@@ -100,12 +118,17 @@ services:
       - ./user/.env
     restart: always
     depends_on:
-      - kafka
-      - postgres
-      - supabase
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      supabase:
+        condition: service_healthy
+      supabase-setup:
+        condition: service_completed_successfully
     profiles:
-      - user
       - all
+      - user
 
   postgres:
     image: postgres:18.6
@@ -120,23 +143,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 20s
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     profiles:
-      - inventory
-      - gacha
-      - game
-      - user
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
+      - user
 
   mongo:
     image: mongo:8.3-noble
     container_name: mongo
     ports:
       - "27017:27017"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
       - GLIBC_TUNABLES=glibc.pthread.rseq=1
     restart: always
@@ -145,18 +168,35 @@ services:
       - mongo_config:/data/configdb
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--quiet" ]
     healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
-      interval: 30s
-      timeout: 10s
-      start_period: 5s
-      start_interval: 2s
-      retries: 10
+      test: [ "CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/27017' || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
+
+  mongo-setup:
+    image: mongo:8.3-noble
+    container_name: mongo-setup
+    tmpfs:
+      - /data/db
+      - /data/configdb
+    command: >
+      bash -c "sleep 3 && mongosh --host mongo --port 27017 --quiet --eval \"try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}) }\""
+    depends_on:
+      mongo:
+        condition: service_healthy
+    profiles:
+      - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   kafka:
     image: apache/kafka:4.3.1
@@ -179,16 +219,23 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z localhost 9092 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - kafka_data:/var/lib/kafka/data
       - kafka_config:/mnt/shared/config
       - kafka_secrets:/etc/kafka/secrets
     profiles:
-      - inventory
-      - gacha
-      - game
-      - user
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
+      - user
 
   redis:
     image: redis:8.10-alpine
@@ -196,14 +243,20 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - redis_data:/data
     profiles:
-      - inventory
-      - gacha
-      - shop
-      - game
       - all
+      - game
+      - gacha
+      - inventory
+      - shop
 
   supabase:
     image: supabase/gotrue:v2.158.1
@@ -213,7 +266,7 @@ services:
     environment:
       GOTRUE_API_HOST: 0.0.0.0
       GOTRUE_API_PORT: 9999
-      API_EXTERNAL_URL: http://localhost:9999
+      API_EXTERNAL_URL: http://localhost:8080/api/auth
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://postgres:postgres@postgres:5432/supabase_db?options=-c%20search_path%3Dauth
       GOTRUE_JWT_SECRET: ${JWT_SECRET}
@@ -222,13 +275,53 @@ services:
       GOTRUE_URI_ALLOW_LIST: "*"
       GOTRUE_DISABLE_SIGNUP: "false"
       GOTRUE_MAILER_AUTOCONFIRM: "true"
+      # Google Authentication
+      GOTRUE_EXTERNAL_GOOGLE_ENABLED: "true"
+      GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOTRUE_EXTERNAL_GOOGLE_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI: ${GOOGLE_CLIENT_REDIRECT_URI}
+      # GitHub Authentication
+      GOTRUE_EXTERNAL_GITHUB_ENABLED: "true"
+      GOTRUE_EXTERNAL_GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GOTRUE_EXTERNAL_GITHUB_SECRET: ${GITHUB_CLIENT_SECRET}
+      GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI: ${GITHUB_CLIENT_REDIRECT_URI}
+      # Discord Authentication
+      GOTRUE_EXTERNAL_DISCORD_ENABLED: "true"
+      GOTRUE_EXTERNAL_DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      GOTRUE_EXTERNAL_DISCORD_SECRET: ${DISCORD_CLIENT_SECRET}
+      GOTRUE_EXTERNAL_DISCORD_REDIRECT_URI: ${DISCORD_CLIENT_REDIRECT_URI}
+      # Twitch Authentication
+      GOTRUE_EXTERNAL_TWITCH_ENABLED: "true"
+      GOTRUE_EXTERNAL_TWITCH_CLIENT_ID: ${TWITCH_CLIENT_ID}
+      GOTRUE_EXTERNAL_TWITCH_SECRET: ${TWITCH_CLIENT_SECRET}
+      GOTRUE_EXTERNAL_TWITCH_REDIRECT_URI: ${TWITCH_CLIENT_REDIRECT_URI}
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9999/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       postgres:
         condition: service_healthy
     profiles:
-      - user
       - all
+      - user
+
+  supabase-setup:
+    image: alpine:3.20
+    container_name: supabase-setup
+    volumes:
+      - ./db/postgres/supabase-init.sql:/supabase-init.sql
+    command: >
+      sh -c "apk add --no-cache postgresql-client && PGPASSWORD=postgres psql -h postgres -U postgres -d supabase_db -f /supabase-init.sql"
+    depends_on:
+      supabase:
+        condition: service_healthy
+    profiles:
+      - all
+      - user
 
 volumes:
   kafka_data:

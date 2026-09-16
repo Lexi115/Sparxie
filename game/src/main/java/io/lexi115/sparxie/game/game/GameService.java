@@ -1,8 +1,9 @@
 package io.lexi115.sparxie.game.game;
 
-import io.lexi115.sparxie.game.banner.BannerService;
+import io.lexi115.sparxie.game.banners.BannerService;
 import io.lexi115.sparxie.game.game.dto.*;
-import io.lexi115.sparxie.game.inventory.InventoryService;
+import io.lexi115.sparxie.game.inventories.InventoryService;
+import io.lexi115.sparxie.game.inventories.exception.NotEnoughItemsException;
 import io.lexi115.sparxie.game.shop.ShopService;
 import io.lexi115.sparxie.game.warp.WarpService;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,29 @@ public class GameService {
     private final ShopService shopService;
 
     @Transactional
-    public WarpResponse performWarp(final UUID playerId, final WarpRequest request) {
-        var bannerDetails = bannerService.getDetailsById(request.bannerId());
+    public WarpResponse performWarp(final WarpRequest request, final UUID playerId) {
         var transactionId = request.transactionId();
-
-        var transaction = warpService.startTransaction(transactionId, playerId);
-        if (transaction.isCompleted()) {
+        var transaction = warpService.getTransaction(transactionId, playerId);
+        if (transaction != null && transaction.isCompleted()) {
             return transaction.getResult();
         }
 
-        inventoryService.consumeItems(transactionId, playerId, Map.of(
-                bannerDetails.currency(), bannerDetails.getCost(request.amount())));
+        var bannerDetails = bannerService.getDetailsById(request.bannerId());
+        var currency = bannerDetails.currency();
+        var cost = bannerDetails.getCost(request.amount());
+        var possessedCurrencyAmount = inventoryService.getMaterialAmount(playerId, currency);
 
-        var response = warpService.performWarp(playerId, request);
+        // Check if player has enough balance first.
+        if (possessedCurrencyAmount < cost) {
+            throw new NotEnoughItemsException(currency, possessedCurrencyAmount, cost);
+        }
+
+        if (transaction == null) {
+            transaction = warpService.createTransaction(transactionId, playerId);
+        }
+        inventoryService.consumeItem(transactionId, playerId, currency, cost);
+
+        var response = warpService.performWarp(request, playerId);
         var groupedItems = groupItems(response.items());
         inventoryService.giveItems(transactionId, playerId, groupedItems);
         transaction.setResult(response);
@@ -52,27 +63,40 @@ public class GameService {
         return map;
     }
 
+    // todo refactor logic
     @Transactional
-    public PurchaseResponse performPurchase(final UUID playerId, final PurchaseRequest request) {
+    public PurchaseResponse performPurchase(final PurchaseRequest request, final UUID playerId) {
         var transactionId = request.transactionId();
-        var itemId = request.itemId();
-        var itemAmount = request.amount();
-        var transaction = shopService.startTransaction(transactionId, playerId);
-        if (transaction.isCompleted()) {
+        var transaction = shopService.getTransaction(transactionId, playerId);
+        if (transaction != null && transaction.isCompleted()) {
             return transaction.getResult();
         }
 
+        var itemId = request.itemId();
+        var itemAmount = request.amount();
         var shopItem = shopService.getItemById(itemId);
-        var response = shopService.purchaseItem(playerId, request);
         var currency = shopItem.currency();
+        var cost = shopItem.cost() * itemAmount;
+
+        if (!currency.equals("money")) {
+            var possessedCurrencyAmount = inventoryService.getMaterialAmount(playerId, currency);
+            if (possessedCurrencyAmount < cost) {
+                throw new NotEnoughItemsException(currency, possessedCurrencyAmount, cost);
+            }
+        }
+
+        if (transaction == null) {
+            transaction = shopService.createTransaction(transactionId, playerId);
+        }
+        var response = shopService.purchaseItem(request, playerId);
 
         // If item was bought with money, skip item consumption inside player's inventory.
         if (!currency.equals("money")) {
-            inventoryService.consumeItems(transactionId, playerId, Map.of(currency, shopItem.cost() * itemAmount));
+            inventoryService.consumeItem(transactionId, playerId, currency, cost);
         }
 
         transaction.setResult(response);
-        inventoryService.giveItems(transactionId, playerId, Map.of(itemId, itemAmount));
+        inventoryService.giveItem(transactionId, playerId, itemId, itemAmount);
         shopService.commitTransaction(transaction);
         return response;
     }

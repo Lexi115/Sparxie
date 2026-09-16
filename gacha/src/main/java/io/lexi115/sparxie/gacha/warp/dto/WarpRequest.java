@@ -9,7 +9,6 @@ import java.util.UUID;
 public record WarpRequest(
         @NotNull UUID transactionId,
         @NotBlank String bannerId,
-        @NotNull UUID playerId,
         @Range(min = 1, max = 10) Integer amount
 ) {
     public WarpRequest {

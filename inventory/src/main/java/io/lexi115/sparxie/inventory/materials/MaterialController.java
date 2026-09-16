@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/material")
+@RequestMapping("/materials")
 @RequiredArgsConstructor
 public class MaterialController {
     private final MaterialService materialService;

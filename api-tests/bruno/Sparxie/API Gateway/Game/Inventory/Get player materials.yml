@@ -1,0 +1,38 @@
+info:
+  name: Get player materials
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{gatewayBaseUri}}/api/inventories/materials?page={{page}}&itemIds={{itemIds}}"
+  params:
+    - name: page
+      value: "{{page}}"
+      type: query
+    - name: size
+      value: "{{size}}"
+      type: query
+      disabled: true
+    - name: itemIds
+      value: "{{itemIds}}"
+      type: query
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+
+runtime:
+  variables:
+    - name: page
+      value: "0"
+    - name: size
+      value: "1"
+    - name: itemIds
+      value: limited_ticket
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -5,11 +5,13 @@ info:
 
 http:
   method: DELETE
-  url: "{{userBaseUri}}/auth/delete"
+  url: "{{userBaseUri}}/auth/account"
   headers:
     - name: X-User-Id
       value: "{{userId}}"
-  auth: inherit
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
 
 settings:
   encodeUrl: true

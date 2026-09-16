@@ -12,17 +12,18 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     bootstrap-servers:
-      - ${KAFKA_SERVER:kafka:9092}
+      - ${KAFKA_SERVER}
 
 app:
   http:
     client-uri:
-      warp: ${WARP_CLIENT_URI:http://gacha:8080/warp}
-      banner: ${BANNER_CLIENT_URI:http://gacha:8080/banner}
-      inventory: ${INVENTORY_CLIENT_URI:http://inventory:8080/inventory}
-      character: ${CHARACTER_CLIENT_URI:http://inventory:8080/character}
-      weapon: ${WEAPON_CLIENT_URI:http://inventory:8080/weapon}
-      shop: ${SHOP_CLIENT_URI:http://shop:8080/shop}
+      warp: ${WARP_CLIENT_URI}
+      banners: ${BANNER_CLIENT_URI}
+      inventories: ${INVENTORY_CLIENT_URI}
+      characters: ${CHARACTER_CLIENT_URI}
+      weapons: ${WEAPON_CLIENT_URI}
+      materials: ${MATERIAL_CLIENT_URI}
+      shop: ${SHOP_CLIENT_URI}
   kafka:
     topic:
       warp: warp-topic

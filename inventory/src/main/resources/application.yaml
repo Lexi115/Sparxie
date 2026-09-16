@@ -19,15 +19,19 @@ spring:
     properties:
       spring.json.trusted.packages: "*"
       spring.json.type.mapping: >
-        USER_CREATED:io.lexi115.sparxie.inventory.player.event.PlayerCreatedEvent,
-        USER_DELETED:io.lexi115.sparxie.inventory.player.event.PlayerDeletedEvent
+        USER_CREATED:io.lexi115.sparxie.inventory.players.events.UserCreatedEvent,
+        USER_DELETED:io.lexi115.sparxie.inventory.players.events.UserDeletedEvent
     bootstrap-servers:
-      - ${KAFKA_SERVER:kafka:9092}
+      - ${KAFKA_SERVER}
   data:
     redis:
-      database: ${REDIS_DATABASE:1}
-      host: ${REDIS_HOST:redis}
-      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
   mongodb:
     uri: mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin&replicaSet=rs0
     representation:

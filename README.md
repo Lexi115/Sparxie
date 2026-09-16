@@ -14,6 +14,7 @@ production environment.**
 - **Inventory** tracking
 - Mock **shop** to "purchase" items
 - **Banner**, **character**, **weapon** and **material** lookup
+- 3rd-party **OAuth2 authentication** (Google, GitHub, Discord, Twitch) supported
 
 ## Technologies
 
@@ -21,7 +22,7 @@ production environment.**
 - PostgreSQL
 - MongoDB
 - Database migration tools (Liquibase, Flamingock)
-- 3rd-party user authentication management (Supabase)
+- 3rd-party profile authentication management (Supabase)
 - Apache Kafka
 - Redis caching (through Redisson client)
 
@@ -34,23 +35,18 @@ This section will guide you through the installation process.
 - Docker
 - A UNIX shell (like Git Bash)
 - Apache Maven
-- Python 3.x (for automatic environment setup)
 
 ### Guide
 
 1. Manually set the environment variables inside `.env` files or run the `setup-env.sh` script to do the job for you.
-
-> [!WARNING]
-> `setup-env.sh` requires **Python 3.x** to be installed in order to work!
-
-2. Run `docker compose up -d` to start all services.
+2. Run the `run-docker.sh` script to start the services.
 3. Make HTTP calls to the available endpoints.
 
 > [!TIP]
 > If you have an HTTP client like **Bruno** (or Postman), you can import the whole request collection at
 `api-tests/bruno/Sparxie` and try them out easily.
 
-4. Run `docker compose down` to stop all services.
+4. Run the `run-docker.sh` script again, but this time to stop the services.
 
 ## License
 

@@ -1,30 +1,25 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
-import io.lexi115.sparxie.user.auth.event.UserCreatedEvent;
-import io.lexi115.sparxie.user.auth.event.UserDeletedEvent;
-import io.lexi115.sparxie.user.event.OutboxEventService;
+import io.lexi115.sparxie.user.auth.events.UserEventService;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
+import io.lexi115.sparxie.user.auth.providers.InvalidProviderException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.time.Instant;
-import java.util.UUID;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationAdapter authenticationAdapter;
-    private final OutboxEventService outboxEventService;
-
-    @Value("${app.kafka.topic.user}")
-    private String userTopicName;
+    private final UserEventService userEventService;
 
     public RegisterResponse register(final RegisterRequest request) {
         var response = authenticationAdapter.register(request);
-        var userId = response.userId();
-        var event = new UserCreatedEvent(userId, request.username(), Instant.now());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+        userEventService.userCreated(response.userId(), response.username(), response.createdAt(), IdentityProvider.EMAIL);
         return response;
     }
 
@@ -36,17 +31,25 @@ public class AuthenticationService {
         return authenticationAdapter.refreshToken(request);
     }
 
-    public void updatePassword(final UpdatePasswordRequest request, final String bearerToken) {
-        authenticationAdapter.updatePassword(request, bearerToken);
+    public void updatePassword(final UpdatePasswordRequest request, final String authToken) {
+        authenticationAdapter.updatePassword(request, authToken);
     }
 
-    public void adminUpdatePassword(final UpdatePasswordRequest request, final UUID userId) {
-        authenticationAdapter.adminUpdatePassword(request, userId);
+    public void deleteAccount(final String authToken) {
+        var deletedUserId = authenticationAdapter.deleteAccount(authToken);
+        userEventService.userDeleted(deletedUserId, Instant.now());
     }
 
-    public void adminDelete(final UUID userId) {
-        authenticationAdapter.adminDelete(userId);
-        var event = new UserDeletedEvent(userId, Instant.now());
-        outboxEventService.scheduleEvent(event, userId.toString(), userTopicName);
+    public URI getAuthorizeUri(final IdentityProvider provider) {
+        if (provider == IdentityProvider.EMAIL) {
+            throw new InvalidProviderException(provider.name().toLowerCase());
+        }
+        return authenticationAdapter.getAuthorizeUri(provider);
+    }
+
+    public CallbackResponse callback(final Map<String, String> params, final IdentityProvider provider) {
+        var response = authenticationAdapter.callback(params);
+        userEventService.userCreated(response.userId(), response.username(), response.createdAt(), provider);
+        return response;
     }
 }

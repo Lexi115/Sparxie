@@ -1,12 +1,14 @@
 package io.lexi115.sparxie.user.auth;
 
 import io.lexi115.sparxie.user.auth.dto.*;
+import io.lexi115.sparxie.user.auth.providers.IdentityProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,27 +31,37 @@ public class AuthenticationController {
         return authenticationService.refreshToken(request);
     }
 
-    @PostMapping("/update-password")
+    @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(
             @Valid @RequestBody final UpdatePasswordRequest request,
-            @RequestHeader("Authorization") final String bearerToken
+            @RequestHeader("Authorization") final String authToken
     ) {
-        authenticationService.updatePassword(request, bearerToken);
+        authenticationService.updatePassword(request, authToken);
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("/admin/change-password")
-//    public ResponseEntity<Void> adminUpdatePassword(
-//            @Valid @RequestBody final UpdatePasswordRequest request,
-//            @RequestHeader("X-User-Id") final UUID userId
-//    ) {
-//        authenticationService.adminUpdatePassword(request, userId);
-//        return ResponseEntity.noContent().build();
-//    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestHeader("X-User-Id") final UUID userId) {
-        authenticationService.adminDelete(userId);
+    @DeleteMapping("/account")
+    public ResponseEntity<Void> deleteAccount(@RequestHeader("Authorization") final String authToken) {
+        authenticationService.deleteAccount(authToken);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/authorize/{provider}")
+    public ResponseEntity<Void> authorize(@PathVariable final IdentityProvider provider) {
+        var redirectUri = authenticationService.getAuthorizeUri(provider);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(redirectUri)
+                .build();
+    }
+
+    @GetMapping("/callback/{provider}")
+    public ResponseEntity<CallbackResponse> callback(
+            @RequestParam final Map<String, String> params,
+            @PathVariable final IdentityProvider provider
+    ) {
+        var response = authenticationService.callback(params, provider);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(response.location())
+                .body(response);
     }
 }

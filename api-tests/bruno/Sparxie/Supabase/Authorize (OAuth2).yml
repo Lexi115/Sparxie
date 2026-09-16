@@ -1,0 +1,20 @@
+info:
+  name: Authorize (OAuth2)
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{supabaseUri}}/authorize?provider={{provider}}"
+  params:
+    - name: provider
+      value: "{{provider}}"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

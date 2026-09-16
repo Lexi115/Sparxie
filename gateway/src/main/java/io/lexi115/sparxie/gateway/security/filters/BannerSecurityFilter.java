@@ -10,9 +10,9 @@ public class BannerSecurityFilter implements SecurityFilter {
 
     @Override
     public void filter(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
-        var prefix = "/api/banner";
+        var prefix = "/api/banners";
         registry
                 .requestMatchers(HttpMethod.GET, prefix + "/{bannerId}").permitAll()
-                .requestMatchers(HttpMethod.GET, prefix + "/details/{bannerId}").permitAll();
+                .requestMatchers(HttpMethod.GET, prefix + "/{bannerId}/details").permitAll();
     }
 }
