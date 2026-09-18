@@ -2,7 +2,7 @@ package io.lexi115.sparxie.gacha.exceptions;
 
 import io.lexi115.sparxie.gacha.banners.exceptions.BannerNotFoundException;
 import io.lexi115.sparxie.gacha.players.exceptions.PlayerNotFoundException;
-import io.lexi115.sparxie.gacha.warp.exceptions.WarpLockedException;
+import io.lexi115.sparxie.gacha.warps.exceptions.WarpLockedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;

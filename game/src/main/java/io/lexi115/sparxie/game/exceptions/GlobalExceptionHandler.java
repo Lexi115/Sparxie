@@ -8,7 +8,7 @@ import io.lexi115.sparxie.game.materials.exception.MaterialNotFoundException;
 import io.lexi115.sparxie.game.players.exceptions.PlayerNotFoundException;
 import io.lexi115.sparxie.game.shop.exceptions.ShopLockedException;
 import io.lexi115.sparxie.game.shop.items.ShopItemNotFoundException;
-import io.lexi115.sparxie.game.warp.exceptions.WarpLockedException;
+import io.lexi115.sparxie.game.warps.exceptions.WarpLockedException;
 import io.lexi115.sparxie.game.weapons.exceptions.WeaponNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

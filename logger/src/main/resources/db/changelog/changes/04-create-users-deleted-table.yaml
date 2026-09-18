@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-create-users-deleted-table
+      author: Lexi115
+      changes:
+        - createTable:
+            tableName: users_deleted
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: users_deleted_user_id
+            tableName: users_deleted
+            schemaName: public
+            columns:
+              - column:
+                  name: user_id
+                  descending: true

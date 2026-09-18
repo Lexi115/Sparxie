@@ -1,11 +1,15 @@
 package io.lexi115.sparxie.game.game;
 
 import io.lexi115.sparxie.game.banners.BannerService;
-import io.lexi115.sparxie.game.game.dto.*;
 import io.lexi115.sparxie.game.inventories.InventoryService;
 import io.lexi115.sparxie.game.inventories.exception.NotEnoughItemsException;
 import io.lexi115.sparxie.game.shop.ShopService;
-import io.lexi115.sparxie.game.warp.WarpService;
+import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
+import io.lexi115.sparxie.game.warps.WarpService;
+import io.lexi115.sparxie.game.warps.dto.WarpItem;
+import io.lexi115.sparxie.game.warps.dto.WarpRequest;
+import io.lexi115.sparxie.game.warps.dto.WarpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

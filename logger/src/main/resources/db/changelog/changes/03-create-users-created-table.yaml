@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-create-users-created-table
+      author: Lexi115
+      changes:
+        - createTable:
+            tableName: users_created
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: users_created_user_id
+            tableName: users_created
+            schemaName: public
+            columns:
+              - column:
+                  name: user_id
+                  descending: true

@@ -90,8 +90,9 @@ function execute_run() {
     4) docker compose --profile="inventory" up -d --build || return 1;;
     5) docker compose --profile="gacha" up -d --build || return 1;;
     6) docker compose --profile="shop" up -d --build || return 1;;
-    7) docker compose --profile="all" down --remove-orphans || return 1;;
-    8) docker compose --profile="all" down --remove-orphans -v || return 1;;
+    7) docker compose --profile="logger" up -d --build || return 1;;
+    8) docker compose --profile="all" down --remove-orphans || return 1;;
+    9) docker compose --profile="all" down --remove-orphans -v || return 1;;
     *) echo -e "${ERROR} ${ANSI_BOLD}Unknown choice!" || return 1;;
   esac
   return 0
@@ -104,7 +105,7 @@ function main() {
   local profile_choice=""
   local continue_choice=""
   # shellcheck disable=SC2034
-  local operation_choices=('Exit' 'All services' 'Game' 'User' 'Inventory' 'Gacha' 'Shop' 'Down all services' 'Down all services (+ volumes)')
+  local operation_choices=('Exit' 'All services' 'Game' 'User' 'Inventory' 'Gacha' 'Shop' 'Logger' 'Down all services' 'Down all services (+ volumes)')
   # shellcheck disable=SC2034
   local continue_choices=('No' 'Yes')
 

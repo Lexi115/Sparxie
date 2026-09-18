@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.shop;
 
-import io.lexi115.sparxie.game.game.dto.PurchasableItem;
+import io.lexi115.sparxie.game.shop.dto.PurchasableItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
