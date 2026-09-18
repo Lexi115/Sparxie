@@ -1,7 +1,7 @@
 info:
-  name: Weapon
+  name: Shop
   type: folder
-  seq: 3
+  seq: 6
 
 request:
   auth: inherit

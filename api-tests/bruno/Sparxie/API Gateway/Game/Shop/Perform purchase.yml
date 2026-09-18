@@ -1,18 +1,18 @@
 info:
-  name: Perform warp
+  name: Perform purchase
   type: http
-  seq: 2
+  seq: 7
 
 http:
   method: POST
-  url: "{{gatewayBaseUri}}/api/game/warps"
+  url: "{{gatewayBaseUri}}/api/game/purchases"
   body:
     type: json
     data: |-
       {
         "transactionId": "{{$randomUUID}}",
-        "bannerId": "{{bannerId}}",
-        "amount": {{pullAmount}}
+        "itemId": "{{itemId}}",
+        "amount": {{itemAmount}}
       }
   auth:
     type: bearer
@@ -20,10 +20,10 @@ http:
 
 runtime:
   variables:
-    - name: bannerId
-      value: banner_character_event_sparkle_01
-    - name: pullAmount
-      value: "10"
+    - name: itemId
+      value: oneiric_shard
+    - name: itemAmount
+      value: "100"
 
 settings:
   encodeUrl: true

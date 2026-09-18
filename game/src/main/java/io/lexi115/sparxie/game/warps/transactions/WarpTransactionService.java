@@ -18,10 +18,17 @@ public class WarpTransactionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public WarpTransaction create(final UUID transactionId, final UUID playerId) {
+    public WarpTransaction create(
+            final UUID transactionId,
+            final UUID playerId,
+            final String bannerId,
+            final String bannerType
+    ) {
         var transaction = WarpTransaction.builder()
                 .transactionId(transactionId)
                 .playerId(playerId)
+                .bannerId(bannerId)
+                .bannerType(bannerType)
                 .createdAt(Instant.now())
                 .status(WarpTransactionStatus.PENDING)
                 .build();

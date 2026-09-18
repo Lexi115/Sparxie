@@ -17,6 +17,8 @@ public class KafkaWarpConsumer {
         warpService.createWarpPerformed(
                 event.transactionId(),
                 event.playerId(),
+                event.bannerId(),
+                event.bannerType(),
                 event.createdAt(),
                 event.result()
         );

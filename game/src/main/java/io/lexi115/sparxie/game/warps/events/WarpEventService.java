@@ -22,6 +22,8 @@ public class WarpEventService {
         warpPerformed(
                 transaction.getTransactionId(),
                 transaction.getPlayerId(),
+                transaction.getBannerId(),
+                transaction.getBannerType(),
                 transaction.getCreatedAt(),
                 transaction.getResult()
         );
@@ -30,10 +32,12 @@ public class WarpEventService {
     public void warpPerformed(
             final UUID transactionId,
             final UUID playerId,
+            final String bannerId,
+            final String bannerType,
             final Instant createdAt,
             final WarpResponse result
     ) {
-        var event = new WarpPerformedEvent(transactionId, playerId, createdAt, result);
+        var event = new WarpPerformedEvent(transactionId, playerId, bannerId, bannerType, createdAt, result);
         outboxEventService.scheduleEvent(event, playerId.toString(), warpTopicName);
     }
 }

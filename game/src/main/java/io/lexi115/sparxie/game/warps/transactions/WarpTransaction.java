@@ -24,6 +24,12 @@ public class WarpTransaction {
     @Column(nullable = false, updatable = false)
     private UUID playerId;
 
+    @Column(nullable = false, updatable = false)
+    private String bannerId;
+
+    @Column(nullable = false, updatable = false)
+    private String bannerType;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

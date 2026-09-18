@@ -28,6 +28,12 @@ public class WarpPerformed {
     private UUID playerId;
 
     @Column(updatable = false, nullable = false)
+    private String bannerId;
+
+    @Column(updatable = false, nullable = false)
+    private String bannerType;
+
+    @Column(updatable = false, nullable = false)
     private Instant createdAt;
 
     @JdbcTypeCode(SqlTypes.JSON)

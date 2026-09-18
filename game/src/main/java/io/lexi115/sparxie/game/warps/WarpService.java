@@ -35,8 +35,13 @@ public class WarpService {
         return null;
     }
 
-    public WarpTransaction createTransaction(final UUID transactionId, final UUID playerId) {
-        return warpTransactionService.create(transactionId, playerId);
+    public WarpTransaction createTransaction(
+            final UUID transactionId,
+            final UUID playerId,
+            final String bannerId,
+            final String bannerType
+    ) {
+        return warpTransactionService.create(transactionId, playerId, bannerId, bannerType);
     }
 
     public void commitTransaction(final WarpTransaction transaction) {

@@ -46,7 +46,7 @@ public class GameService {
         }
 
         if (transaction == null) {
-            transaction = warpService.createTransaction(transactionId, playerId);
+            transaction = warpService.createTransaction(transactionId, playerId, bannerDetails.id(), bannerDetails.type());
         }
         inventoryService.consumeItem(transactionId, playerId, currency, cost);
 

@@ -8,6 +8,8 @@ import java.util.UUID;
 public record WarpPerformedEvent(
         UUID transactionId,
         UUID playerId,
+        String bannerId,
+        String bannerType,
         Instant createdAt,
         WarpResponse result
 ) {
