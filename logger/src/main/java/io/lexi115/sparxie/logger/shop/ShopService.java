@@ -1,6 +1,8 @@
 package io.lexi115.sparxie.logger.shop;
 
+import io.lexi115.sparxie.logger.shop.dto.PurchaseHistory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,6 +13,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ShopService {
     private final PurchasePerformedRepository purchasePerformedRepository;
+    private final ShopMapper shopMapper;
+
+    public PurchaseHistory getHistory(final UUID playerId, final Pageable pageable) {
+        var responseList = purchasePerformedRepository.findAll(playerId, pageable);
+        return shopMapper.toHistory(responseList, playerId);
+    }
 
     public void createPurchasePerformed(
             final UUID transactionId,

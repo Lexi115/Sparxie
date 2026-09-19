@@ -1,12 +1,14 @@
 info:
-  name: Get player warp history
+  name: Get warp history
   type: http
   seq: 1
 
 http:
   method: GET
-  url: "{{loggerBaseUri}}/warps/{{userId}}/{{bannerType}}"
-  auth: inherit
+  url: "{{gatewayBaseUri}}/api/histories/warps/{{bannerType}}"
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
 
 runtime:
   variables:

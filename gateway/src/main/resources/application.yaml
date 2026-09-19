@@ -48,6 +48,13 @@ spring:
                 - Path=/api/materials/**
               filters:
                 - StripPrefix=1
+            # Histories
+            - id: histories
+              uri: ${GAME_SERVICE_BASE_URI}
+              predicates:
+                - Path=/api/histories/**
+              filters:
+                - StripPrefix=1
             # Profiles
             - id: profiles
               uri: ${USER_SERVICE_BASE_URI}
