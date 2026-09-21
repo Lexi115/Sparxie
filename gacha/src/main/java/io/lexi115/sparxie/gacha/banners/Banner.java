@@ -1,8 +1,8 @@
 package io.lexi115.sparxie.gacha.banners;
 
 import io.lexi115.sparxie.gacha.players.Pity;
-import io.lexi115.sparxie.gacha.warp.WarpOutcome;
-import io.lexi115.sparxie.gacha.warp.WarpResultItem;
+import io.lexi115.sparxie.gacha.warps.WarpOutcome;
+import io.lexi115.sparxie.gacha.warps.WarpResultItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

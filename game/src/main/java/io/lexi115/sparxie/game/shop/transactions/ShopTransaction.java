@@ -1,6 +1,6 @@
 package io.lexi115.sparxie.game.shop.transactions;
 
-import io.lexi115.sparxie.game.game.dto.PurchaseResponse;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

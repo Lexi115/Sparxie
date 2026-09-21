@@ -2,8 +2,8 @@ package io.lexi115.sparxie.gacha.players;
 
 import io.lexi115.sparxie.gacha.banners.BannerType;
 import io.lexi115.sparxie.gacha.banners.StarRarity;
-import io.lexi115.sparxie.gacha.warp.WarpOutcome;
-import io.lexi115.sparxie.gacha.warp.WarpResultItem;
+import io.lexi115.sparxie.gacha.warps.WarpOutcome;
+import io.lexi115.sparxie.gacha.warps.WarpResultItem;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

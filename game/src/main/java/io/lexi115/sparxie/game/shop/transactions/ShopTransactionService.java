@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -21,6 +22,7 @@ public class ShopTransactionService {
         var transaction = ShopTransaction.builder()
                 .transactionId(transactionId)
                 .playerId(playerId)
+                .createdAt(Instant.now())
                 .status(ShopTransactionStatus.PENDING)
                 .build();
         shopTransactionRepository.save(transaction);

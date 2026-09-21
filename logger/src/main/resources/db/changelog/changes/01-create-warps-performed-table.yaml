@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-warps-performed-table
+      author: Lexi115
+      changes:
+        - createTable:
+            tableName: warps_performed
+            columns:
+              - column:
+                  name: transaction_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: player_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: banner_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: banner_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: result
+                  type: jsonb
+                  constraints:
+                    nullable: false

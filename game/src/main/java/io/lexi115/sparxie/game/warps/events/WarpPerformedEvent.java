@@ -1,0 +1,22 @@
+package io.lexi115.sparxie.game.warps.events;
+
+import io.lexi115.sparxie.game.events.Event;
+import io.lexi115.sparxie.game.events.EventType;
+import io.lexi115.sparxie.game.warps.dto.WarpResponse;
+
+import java.time.Instant;
+import java.util.UUID;
+
+public record WarpPerformedEvent(
+        UUID transactionId,
+        UUID playerId,
+        String bannerId,
+        String bannerType,
+        Instant createdAt,
+        WarpResponse result
+) implements Event {
+    @Override
+    public EventType getEventType() {
+        return EventType.WARP_PERFORMED;
+    }
+}

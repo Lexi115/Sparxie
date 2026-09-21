@@ -24,6 +24,7 @@ app:
       weapons: ${WEAPON_CLIENT_URI}
       materials: ${MATERIAL_CLIENT_URI}
       shop: ${SHOP_CLIENT_URI}
+      histories: ${HISTORIES_CLIENT_URI}
   kafka:
     topic:
       warp: warp-topic

@@ -1,9 +1,9 @@
 package io.lexi115.sparxie.game.game;
 
-import io.lexi115.sparxie.game.game.dto.PurchaseRequest;
-import io.lexi115.sparxie.game.game.dto.PurchaseResponse;
-import io.lexi115.sparxie.game.game.dto.WarpRequest;
-import io.lexi115.sparxie.game.game.dto.WarpResponse;
+import io.lexi115.sparxie.game.shop.dto.PurchaseRequest;
+import io.lexi115.sparxie.game.shop.dto.PurchaseResponse;
+import io.lexi115.sparxie.game.warps.dto.WarpRequest;
+import io.lexi115.sparxie.game.warps.dto.WarpResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

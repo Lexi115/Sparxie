@@ -30,6 +30,13 @@ CREATE DATABASE gacha_db OWNER gacha_user;
 
 
 --
+-- Logger service database
+--
+CREATE USER logger_user WITH PASSWORD 'logger_user';
+CREATE DATABASE logger_db OWNER logger_user;
+
+
+--
 -- Supabase database
 --
 CREATE DATABASE supabase_db;
@@ -40,5 +47,6 @@ CREATE SCHEMA auth;
 CREATE TYPE auth.factor_type AS ENUM ('totp', 'webauthn');
 CREATE TYPE auth.factor_status AS ENUM ('unverified', 'verified');
 CREATE TYPE auth.aal_level AS ENUM ('aal1', 'aal2', 'aal3');
+
 
 -- @formatter:on

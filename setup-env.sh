@@ -19,6 +19,7 @@ GAME_SERVICE_BASE_URI=http://game:8080
 INVENTORY_SERVICE_BASE_URI=http://inventory:8080
 SHOP_SERVICE_BASE_URI=http://shop:8080
 USER_SERVICE_BASE_URI=http://user:8080
+LOGGER_SERVICE_BASE_URI=http://logger:8080
 
 OAUTH2_REDIRECT_URI=http://localhost:8080/api/auth/callback
 
@@ -169,7 +170,9 @@ BANNER_CLIENT_URI=${GACHA_SERVICE_BASE_URI}
 INVENTORY_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}
 CHARACTER_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}
 WEAPON_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}
+MATERIAL_CLIENT_URI=${INVENTORY_SERVICE_BASE_URI}
 SHOP_CLIENT_URI=${SHOP_SERVICE_BASE_URI}
+HISTORIES_CLIENT_URI=${LOGGER_SERVICE_BASE_URI}
 
 KAFKA_SERVER=${KAFKA_SERVER}
 
@@ -192,6 +195,7 @@ function setup_gateway() {
 cat <<EOF > ./${module_name}/.env
 GAME_SERVICE_BASE_URI=${GAME_SERVICE_BASE_URI}
 USER_SERVICE_BASE_URI=${USER_SERVICE_BASE_URI}
+LOGGER_SERVICE_BASE_URI=${LOGGER_SERVICE_BASE_URI}
 
 JWT_SECRET=${JWT_SECRET}
 EOF
@@ -269,6 +273,25 @@ EOF
   echo -e "${SUCCESS} ${ANSI_BOLD}Successfully completed setup for '${ANSI_UNDERLINE}${module_name}${ANSI_RESET}${ANSI_BOLD}'!"
 }
 
+function setup_logger() {
+  local module_name="logger"
+  echo -e "${INFO} ${ANSI_BOLD}Setting '${ANSI_UNDERLINE}${module_name}${ANSI_RESET}${ANSI_BOLD}'..."
+  if [[ ! -d "./${module_name}" ]]; then
+    echo -e "${ERROR} ${ANSI_BOLD}Directory '${ANSI_UNDERLINE}./${module_name}${ANSI_RESET}${ANSI_BOLD}' not found! Skipping...${ANSI_RESET}"
+    return 1
+  fi
+cat <<EOF > ./${module_name}/.env
+POSTGRES_HOST=${POSTGRES_HOST}
+POSTGRES_PORT=${POSTGRES_PORT}
+POSTGRES_USER=logger_user
+POSTGRES_PASSWORD=logger_user
+POSTGRES_DATABASE=logger_db
+
+KAFKA_SERVER=${KAFKA_SERVER}
+EOF
+  echo -e "${SUCCESS} ${ANSI_BOLD}Successfully completed setup for '${ANSI_UNDERLINE}${module_name}${ANSI_RESET}${ANSI_BOLD}'!"
+}
+
 function setup_everything() {
   setup_root
   setup_gacha
@@ -277,6 +300,7 @@ function setup_everything() {
   setup_inventory
   setup_shop
   setup_user
+  setup_logger
 }
 
 function delete_all() {
@@ -303,7 +327,8 @@ function execute_setup() {
     6) setup_inventory ;;
     7) setup_shop ;;
     8) setup_user ;;
-    9) delete_all ;;
+    9) setup_logger ;;
+    10) delete_all ;;
     *) echo -e "${ERROR} ${ANSI_BOLD}Unknown choice!" ;;
   esac
 }
@@ -315,7 +340,7 @@ function main() {
   local env_choice=""
   local continue_choice=""
   # shellcheck disable=SC2034
-  local operation_choices=('Exit' 'Everything' 'Root directory' 'Gacha' 'Game' 'Gateway' 'Inventory' 'Shop' 'User' 'Delete all')
+  local operation_choices=('Exit' 'Everything' 'Root directory' 'Gacha' 'Game' 'Gateway' 'Inventory' 'Shop' 'User' 'Logger' 'Delete all')
   # shellcheck disable=SC2034
   local continue_choices=('No' 'Yes')
 
